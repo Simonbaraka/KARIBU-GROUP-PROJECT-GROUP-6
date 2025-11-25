@@ -1,22 +1,56 @@
 
 h1{
-    font-size: 30px;
+    font-size: 35px;
     font-weight: bold;
-    color: #333333;
+    color: #d09797;
     text-align: center;
+    padding: 20px;
+    text-decoration: underline;
+    
 }
 body{
     font-family: Arial, sans-serif;
-    background-color: #9d9494;
+    background-color: white;
     margin: 20px;
     padding: 20px;
 }
 
 .FormDesign{
     background-color: #f2f2f2;
-    padding: 20px;
-    border-radius: 5px;
-    max-width: 600px;
+    padding: 25px;
+    border-radius: 10px;
+    max-width: 700px;
     margin: auto;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+    font-size: 18px;
+    
 }
+
+input{
+    width: 100%;
+    padding: 1%;
+    margin: 10px 0;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    
+}
+
+button{
+    background-color: #20c217;
+    padding: 7px;
+    font-size:medium;
+    width : 25%;
+    color: white;
+    margin-left: 20%;
+    
+}
+
+button:hover{
+    background-color: #1c2a1d;
+    cursor: pointer;
+}
+
+input:hover{
+    background-color: #bbdf89;
+}
+    

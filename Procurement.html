@@ -8,7 +8,7 @@
 </head>
 <body>
     
-    <h1>The Karbu Business Management System</h1>
+    <h1>THE KARIBU BUSINESS MaANAGEMENT SYSTEM</h1>
 
     <!-- Flexbox and Form  -->
 
@@ -48,21 +48,42 @@
 
             <label for="TotalAmount">Total Amount  </label>
             <input type="number" id="TotalAmount" name="TotalAmount" step="0.01" required><br><br>
-
-            <label for="Payment">	Payment Method  </label><br
-         
+        
             
-            <input type="radio" id="Male" name="gender" value="female"> 
+        <div class ="PaymentMethod">
+            <label for="Payment">Payment Method  </label><br><br>
+            
+            <label for="Male">Male</label>
+            <input type="radio" id="Male" name="gender" value="female" required>
 
+            <label for="Male">Female</label>
+            <input type="radio" id="Male" name="gender" value="female" required> 
+
+            <label for="Male">Male</label>
+            <input type="radio" id="Male" name="gender" value="female" required> <br><br>
+
+        </div>
+
+        <!-- Payment Status -->
+            <label for="Payment">Payment Status </label><br><br>
+            
+            <label for="Male">Paid</label>
+            <input type="radio" id="Male" name="gender" value="female" required>
+
+            <label for="Male">Unpaid</label>
+            <input type="radio" id="Male" name="gender" value="female" required>
+
+            <!-- <label for-->
 
             <label for="DeliveryDate">Delivery Date  </label>
-            <input type="Date " id="DeliveryDate" name="DeliveryDate" step="0.01" required><br><br>
+            <input type="Date" id="DeliveryDate" name="DeliveryDate" step="0.01" required><br><br>
 
-            <label for="Note">Notes/Description  </label>
-            <input type="text" id="Note" name="Note" step="0.01" required><br><br>
+            <label for="Note">Notes/Description  </label><br>
+           <textarea name="message" rows="5" cols="30" placeholder="Additional notes..."></textarea><br><br>
 
             <label for="ReceiptUpload">Receipt Upload  </label>
             <input type="file" id="ReceiptUpload" name="ReceiptUpload" step="0.01" required><br><br>
+            
 
             <button type="reset">Reset</button>
             <button type="submit">Submit</button>

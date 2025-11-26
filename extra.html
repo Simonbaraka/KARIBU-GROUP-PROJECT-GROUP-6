@@ -1,0 +1,145 @@
+doctype html>
+<html lang="en"> 
+<head> 
+    <meta charset="utf-8" /> 
+    <meta name="viewport" content="width=device-width,initial-scale=1" /> 
+    <link rel="stylesheet" href="style.css" />
+    <title>Sales Entry</title> 
+   
+</head> 
+<body> 
+    <h1>Sales Entry</h1>  
+    <form id="saleForm"> 
+        <fieldset> 
+            <legend>Sale Details</legend> 
+            <div class="row"> 
+                <div class="col"> 
+                    <label for="saleId">Sale ID / Receipt Number</label> 
+                    <input id="saleId" name="saleId" type="text" readonly /> 
+                </div> 
+                <div class="col"> 
+                    <label for="saleDate">Sale Date &amp; Time</label>                     <input id="saleDate" name="saleDate" type="datetime-local" required />                 </div> 
+        <div class="col"> 
+            <label>Sales Person</label> 
+<input id="salesPerson" name="salesPerson" list="persons" 
+placeholder="Type or choose..." /> 
+                    <datalist id="persons"> 
+                        <option value="Alice"></option>                         <option value="Bob"></option> 
+                        <option value="Carol"></option> 
+                    </datalist> 
+                </div> 
+            </div> 
+        </fieldset> 
+ 
+        <fieldset> 
+            <legend>Customer</legend> 
+            <div class="row"> 
+                <div class="col"> 
+                    <label for="customerName">Customer Name <span class="muted">(optional)</span></label> 
+                    <input id="customerName" name="customerName" type="text" 
+/> 
+                </div> 
+                <div class="col"> 
+                    <label for="customerPhone">Customer Phone <span class="muted">(optional)</span></label> 
+                    <input id="customerPhone" name="customerPhone" type="tel" 
+/> 
+                </div> 
+                <div class="col"> 
+                    <label for="customerEmail">Customer Email <span class="muted">(optional)</span></label> 
+                    <input id="customerEmail" name="customerEmail" type="email" /> 
+                </div> 
+            </div> 
+            <div style="margin-top:8px"> 
+                <label>Customer Type</label> 
+                <label><input type="radio" name="customerType" value="Walk-in" checked /> Walk-in</label> 
+                <label><input type="radio" name="customerType" value="Regular"
+/> Regular</label> 
+                <label><input type="radio" name="customerType" value="Credit" 
+/> Credit Customer</label> 
+            </div> 
+        </fieldset> 
+ 
+        <fieldset> 
+    <legend>Product / Item</legend> 
+    <div class="row"> 
+       <div class="col"> 
+<label for="productName">Product/Item Name</label>            <input id="productName" name="productName" type="text" required />                 </div> 
+                <div class="col"> 
+                    <label for="productCategory">Product Category</label> 
+                    <select id="productCategory" name="productCategory"> 
+                        <option>Electronics</option> 
+                        <option>Furniture</option> 
+                        <option>Stationery</option> 
+                        <option>Groceries</option> 
+                        <option>Other</option> 
+                    </select> 
+                </div> 
+                <div class="col"> 
+                    <label for="quantity">Quantity Sold</label> 
+                    <input id="quantity" name="quantity" type="number" min="0" step="1" value="1" required /> 
+                </div> 
+            </div> 
+            <div class="row" style="margin-top:8px"> 
+                <div class="col"> 
+                    <label for="unitPrice">Unit Price</label> 
+                    <input id="unitPrice" name="unitPrice" type="number" min="0" step="0.01" value="0.00" required /> 
+                </div> 
+                <div class="col"> 
+                    <label for="discount">Discount Percentage <span class="muted">(optional)</span></label> 
+                    <input id="discount" name="discount" type="number" min="0" max="100" step="0.01" value="0" /> 
+                </div> 
+                <div class="col"> 
+                    <label for="subtotal">Subtotal</label> 
+                    <input id="subtotal" name="subtotal" type="number" readonly />                 </div> 
+            </div> 
+        </fieldset> 
+ 
+        <fieldset> 
+            <legend>Totals &amp; Payment</legend> 
+            <div class="row"> 
+                <div class="col"> 
+                    <label for="tax">Tax / VAT</label> 
+            <input id="tax" name="tax" type="number" readonly /> 
+        </div> 
+       <div class="col"> 
+ 
+<label for="total">Total Amount</label> 
+           <input id="total" name="total" type="number" readonly /> 
+        </div> 
+        <div class="col"> 
+            <label>Payment Method</label> 
+            <label><input type="radio" name="paymentMethod" value="Cash" checked /> Cash</label> 
+                    <label><input type="radio" name="paymentMethod" value="Mobile Money" /> Mobile Money</label> 
+                    <label><input type="radio" name="paymentMethod" value="Card" /> Card</label> 
+                    <label><input type="radio" name="paymentMethod" value="Credit" /> Credit</label> 
+                </div> 
+            </div> 
+            <div class="row" style="margin-top:8px"> 
+                <div class="col"> 
+                    <label for="amountPaid">Amount Paid</label> 
+                    <input id="amountPaid" name="amountPaid" type="number" min="0" step="0.01" value="0.00" /> 
+                </div> 
+                <div class="col"> 
+                    <label for="change">Change / Balance</label> 
+                    <input id="change" name="change" type="number" readonly />
+                </div> 
+            </div> 
+        </fieldset> 
+ 
+        <fieldset> 
+            <legend>Notes</legend> 
+            <label for="notes">Additional Notes <span class="muted">(optional)</span></label> 
+            <textarea id="notes" name="notes" rows="3"></textarea> 
+        </fieldset> 
+ 
+        <div class="actions"> 
+            <button type="button" id="clearBtn" class="secondary">Clear Form</button> 
+            <button type="submit" id="submitBtn">Submit Sale</button> 
+        </div> 
+    </form> 
+ 
+   
+</body> 
+</html> 
+ 
+ 

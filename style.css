@@ -1,0 +1,9 @@
+        body{font-family:Segoe UI,Arial,Helvetica,sans-serif;maxwidth:900px;margin:24px auto;padding:0 16px;color:#222} 
+        h1{font-size:1.4rem;margin-bottom:8px}         form{background:#fff;border:1px solid #e0e0e0;padding:16px;borderradius:6px}         fieldset{border:1px solid #ddd;padding:12px;margin:8px 0;borderradius:6px}         legend{font-weight:600} 
+        .row{display:flex;gap:12px;flex-wrap:wrap} 
+        .col{flex:1;min-width:180px}         label{display:block;font-size:.9rem;margin-bottom:4px}         input,select,textarea{width:100%;Padding:8px;border:1px solid 
+#cfcfcf;border-radius:4px;font-size:.95rem}         input[readonly]{background:#f7f7f7} 
+        .actions{display:flex;gap:12px;justify-content:flex-end;margintop:12px}         button{padding:8px 14px;border-radius:6px;border:1px solid 
+#2b6cb0;background:#2b6cb0;color:white;cursor:pointer}         button.secondary{background:#fff;border:1px solid #999;color:#222} 
+        .muted{font-size:.85rem;color:#555} 
+    

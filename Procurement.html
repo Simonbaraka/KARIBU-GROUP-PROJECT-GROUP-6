@@ -15,10 +15,12 @@
     <div class="FormDesign">
         <form class="Form ">
              <h1>THE KARIBU BUSINESS MANAGEMENT SYSTEM</h1>
-            <img src="logo.jpg" width="100px" height="100px" alt="Company logo">
+            <img src="logo.jpg" width="120px" height="110px" alt="Company logo">
            <br><br>
             <label for="SuplierName">	Supplier Name</label>
             <input type="text" id="SuplierName" name="SuplierName" required placeholder="simon"><br><br>
+
+            
 
             <label for="SupplierContact">	Supplier Contact </label>
             <input type="tel" id="SupplierContact" name="SupplierContact" required><br><br>
@@ -52,36 +54,28 @@
             <input type="number" id="TotalAmount" name="TotalAmount" step="0.01" required><br><br>
         
             
-        <div class ="PaymentMethod">
-            <label for="Payment">Payment Method  </label><br><br>
-            
-            <label for="Male">Male</label>
-            <input type="radio" id="Male" name="gender" value="female" required>
-
-            <label for="Male">Female</label>
-            <input type="radio" id="Male" name="gender" value="female" required> 
-
-            <label for="Male">Male</label>
-            <input type="radio" id="Male" name="gender" value="female" required> <br><br>
-
-        </div>
-
-        <!-- Payment Status -->
-            <label for="Payment">Payment Status </label><br><br>
-            
-            <label for="Male">Paid</label>
-            <input type="radio" id="Male" name="gender" value="female" required>
-
-            <label for="Male">Unpaid</label>
-            <input type="radio" id="Male" name="gender" value="female" required>
-
-            <!-- <label for-->
+            <!-- ...existing code... -->
+            <!-- Gender -->
+            <fieldset>
+            <legend>Gender</legend>
+            <label><input type="radio" id="gender_male" name="gender" value="male" required> Male</label>
+            <label><input type="radio" id="gender_female" name="gender" value="female" required> Female</label>
+            <label><input type="radio" id="gender_other" name="gender" value="other"> Other</label>
+            </fieldset>
+            <br>
+            <!-- Payment Status -->
+            <fieldset>
+            <legend>Payment Status</legend>
+            <label><input type="radio" id="payment_paid" name="payment_status" value="paid" required> Paid</label>
+            <label><input type="radio" id="payment_unpaid" name="payment_status" value="unpaid"> Unpaid</label>
+            </fieldset>
+            <!-- ...existing code... -->
 
             <label for="DeliveryDate">Delivery Date  </label>
             <input type="Date" id="DeliveryDate" name="DeliveryDate" step="0.01" required><br><br>
 
             <label for="Note">Notes/Description  </label><br>
-           <textarea name="message" rows="5" cols="30" placeholder="Additional notes..."></textarea><br><br>
+            <textarea name="message" rows="5" cols="30" placeholder="Additional notes..."></textarea><br><br>
 
             <label for="ReceiptUpload">Receipt Upload  </label>
             <input type="file" id="ReceiptUpload" name="ReceiptUpload" step="0.01" required><br><br>

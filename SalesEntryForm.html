@@ -8,10 +8,13 @@
 
 </head>
 
+<!--Body of the whole page -->
 <body>
-    
+    <!--Division for the form that is to be created -->
     <div class="FormDesign">
         <form class="Form ">
+
+            <!--Heading of the page-->
              <h1>THE KARIBU BUSINESS MANAGEMENT SYSTEM</h1>
             <img src="logo.jpg" width="120px" height="110px" alt="Company logo">
            <br><br>
@@ -20,30 +23,31 @@
             <input type="text" id="SuplierName" name="SuplierName" readonly><br><br>
 
             
-
             <label for="DateTime">Sale Date & Time </label>
             <input type="datetime-local" id="DateTime" name="DateTime" required><br><br>
 
             <label for="CustomerName">Customer Name </label>
             <input type="text" id="CustomerName" name="CustomerName"><br><br>
 
-            <label for="Phone"></label>Customer Phone  </label>
+            <label for="Phone">Customer Phone </label>
             <input type="tel" id="Phone" name="Phone" step="0.01"><br><br>
 
-            <label for="CustomerEmail">Customer Email   </label>
+            <label for="CustomerEmail"> Customer Email   </label>
             <input type="email" id="CustomerEmail" name="CustomerEmail" step="0.01" ><br><br>
 
-            <fieldset>
-            <legend>Customer Type</legend>
-            <label><input type="radio" id="gender_male" name="gender" value="male" required>Walk-in</label>
-            <label><input type="radio" id="gender_female" name="gender" value="female" required> Regular</label>
-            <label><input type="radio" id="gender_other" name="gender" value="other">  Credit Customer</label>
-            </fieldset>
-            <br>
+             <!--Radio buttons for the diffierent customers-->
+            <div class="types">
+            <label>Customer Type</label>
+            <label>Walk-in</label><input type="radio" id="gender_male" name="gender" value="male" required>
+            <label>Regular</label><input type="radio" id="gender_female" name="gender" value="female" required> 
+            <label> Credit Customer</label><input type="radio" id="gender_other" name="gender" value="other"> 
+            </div>
+            <br><br>
 
             <label for="Item">Product/Item Name </label>
             <input type="text" id="Item" name="Item" step="0.01" ><br><br>
 
+             <!--Dropdown for the product category Offered -->
             <label for="ProductCategory">Product Category </label> 
                     <select id="category" name="category"> 
                         
@@ -60,61 +64,52 @@
 
             <label for="UnitePrice">Unit Price  </label>
             <input type="number" id="UnitePrice" name="UnitePrice" step="0.01" ><br><br>
-        
-            
-            <!-- ...existing code... -->
-            <!-- Gender -->
-            
-            <!-- Payment Status -->
             
 
             <label for="Discount">Discount Percentage</label>
            <input id="discount" name="discount" type="number" min="0" max="100" step="0.01" value="0" /> 
 
+           <!--Subtotal-->
             <label for="Note">Subtotal  </label><br>
             <input type="number" id="Tax" name="Tax" readonly><br><br>
 
+            <!--Tax-->
             <label for="Tax">Tax/VAT  </label>
             <input type="number" id="Tax" name="Tax" readonly><br><br>
 
+            <!--Total Amounts-->
              <label for="TotalAmount">Total Amount</label>
             <input type="number" id="TotalAmount" name="TotalAmount" readonly><br><br>
             
-            <!-- Payment Method 
-            <fieldset>
-            <legend>Payment Method</legend>
-            <label><input type="radio" id="gender_male" name="gender" value="male" required> Cash</label>
-            <label><input type="radio" id="gender_female" name="gender" value="female" required> Mobile Money</label>
-            <label><input type="radio" id="gender_other" name="gender" value="other">  Card</label>
-            <label><input type="radio" id="gender_other" name="gender" value="other">  Credit</label>
-            </fieldset>
-            <br>
-            -->
-
+           
+            <!--Payment Methods-->
             <div class="col">
-					<label>Payment Method</label><br><br>
-					<label><input type="radio" name="paymentMethod" value="Cash" checked /> Cash</label>
-					<label><input type="radio" name="paymentMethod" value="Mobile Money" /> Mobile Money</label>
-					<label><input type="radio" name="paymentMethod" value="Card" /> Card</label>
-					<label><input type="radio" name="paymentMethod" value="Credit" /> Credit</label>
-				</div><br><br>
-            
-        <br>
+					<label>Payment Method</label><br>
+					<label>Cash</label><input type="radio" name="paymentMethod" value="Cash" checked > 
+					<label>Mobile Money</label><input type="radio" name="paymentMethod" value="Mobile Money" > 
+					<label>Card</label><input type="radio" name="paymentMethod" value="Card" > 
+					<label> Credit</label><input type="radio" name="paymentMethod" value="Credit" >
+                    
+			</div><br><br>
 
+            <!--Amount Paid-->
              <label for="DeliveryDate">Amount Paid</label>
             <input type="number" id="DeliveryDate" name="DeliveryDate" step="0.01" required><br><br>
 
+            <!--Change/Balance-->
             <label for="Change">Change/Balance</label>
             <input id="change" name="change" type="number" readonly /><br><br>
 
+            <!--Sales Person-->
             <label for="SalesPerson">Sales Person</label>
             <input type="text" id="SalesPerson" name="SalesPerson"><br><br>
 
+            <!--Notes-->
             <label for="DeliveryDate">Additional Notes</label>
             <textarea width="20px" heigth="50px"></textarea><br><br>
 
             
-
+             <!--Clear and submit buttons-->
             <button type="reset"> Clear Form</button>
             <button type="submit">Submit</button>
         </form>

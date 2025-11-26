@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+
+    <!-- Linking external CSS file for styling -->
     <link rel="stylesheet" href="procurement.css">
 </head>
 <body>
@@ -13,49 +15,61 @@
     <!-- Flexbox and Form  -->
 
     <div class="FormDesign">
+
+         <!-- Procurement form start -->
         <form class="Form ">
              <h1>THE KARIBU BUSINESS MANAGEMENT SYSTEM</h1>
+
+              <!-- Company logo -->
             <img src="logo.jpg" width="120px" height="110px" alt="Company logo">
            <br><br>
+
+            <!-- Supplier Name -->
             <label for="SuplierName">	Supplier Name</label>
             <input type="text" id="SuplierName" name="SuplierName" required placeholder="simon"><br><br>
 
             
-
+             <!-- Supplier Contact -->
             <label for="SupplierContact">	Supplier Contact </label>
             <input type="tel" id="SupplierContact" name="SupplierContact" required><br><br>
 
+             <!-- Purchase Date -->
             <label for="PurchaseDate">Purchase Date </label>
             <input type="date" id="PurchaseDate" name="PurchaseDate" required><br><br>
 
+            <!-- Invoice Number -->
             <label for="InvoiceNumber"></label>Invoice Number </label>
             <input type="text" id="InvoiceNumber" name="InvoiceNumber" step="0.01" required><br><br>
 
+             <!-- Product Name -->
             <label for="productName">Product Name  </label>
             <input type="text" id="ProductName" name="productName" step="0.01" required><br><br>
 
+             <!-- Product Category Dropdown -->
             <label for="ProductCategory">Product Category </label> 
-                        <select id="country" name="country"> 
+                    <select id="country" name="country"> 
                         <option value="">Select Category</option> 
                         <option value="ug"> Electronics</option> 
                         <option value="ke">Furniture</option> 
                         <option value="tz">Stationery</option>
                         <option value="sa">Groceries</option>
-                        <option value="ssd">Other</option> </select><br><br>
+                        <option value="ssd">Other</option> 
+                    </select><br><br>
 
-
+             <!-- Quantity -->
             <label for="Quantity">	Quantity  </label>
             <input type="text" id="Quantity" name="Quantity" step="0.01" required><br><br>
 
+             <!-- Unit Price -->
             <label for="UnitPrice">Unit Price  </label>
             <input type="text" id="UnitPrice" name="UnitPrice" step="0.01" required><br><br>
 
+             <!-- Total Amount -->
             <label for="TotalAmount">Total Amount  </label>
             <input type="number" id="TotalAmount" name="TotalAmount" step="0.01" required><br><br>
         
             
-            <!-- ...existing code... -->
-            <!-- Gender -->
+            <!-- Gender selection section -->
             <fieldset>
             <legend>Gender</legend>
             <label><input type="radio" id="gender_male" name="gender" value="male" required> Male</label>
@@ -63,24 +77,26 @@
             <label><input type="radio" id="gender_other" name="gender" value="other"> Other</label>
             </fieldset>
             <br>
+
             <!-- Payment Status -->
             <fieldset>
             <legend>Payment Status</legend>
             <label><input type="radio" id="payment_paid" name="payment_status" value="paid" required> Paid</label>
             <label><input type="radio" id="payment_unpaid" name="payment_status" value="unpaid"> Unpaid</label>
             </fieldset>
-            <!-- ...existing code... -->
-
+            
+            <!-- Delivery Date -->
             <label for="DeliveryDate">Delivery Date  </label>
             <input type="Date" id="DeliveryDate" name="DeliveryDate" step="0.01" required><br><br>
 
+            <!-- Notes or Description -->
             <label for="Note">Notes/Description  </label><br>
             <textarea name="message" rows="5" cols="30" placeholder="Additional notes..."></textarea><br><br>
 
             <label for="ReceiptUpload">Receipt Upload  </label>
             <input type="file" id="ReceiptUpload" name="ReceiptUpload" step="0.01" required><br><br>
             
-
+             <!-- Reset & Submit buttons -->
             <button type="reset">Reset</button>
             <button type="submit">Submit</button>
         </form>

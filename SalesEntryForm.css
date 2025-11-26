@@ -1,29 +1,74 @@
 
-.body{font-family:Segoe UI,Arial,Helvetica,sans-serif;max-width:900px;margin:24px auto;padding:0 16px;color:#222}
-		h1{font-size:1.4rem;margin-bottom:8px; text-align: center}
+body{
+	font-family:Segoe UI,Arial,Helvetica,sans-serif;
+	max-width:900px;
+	margin:auto;
+	padding:0 16px;
+	color:#222;
+	
+}
+		/*  Headinf Design */
+h1{
+	font-size:1.4rem;
+	margin-bottom:8px; 
+	text-align: center
+}
+/*
+	Image Design
+*/
+img{
+	margin-left: 250px;
+}
 
-		form{background:#fff;border:1px solid #e0e0e0;padding:16px;border-radius:6px ;margin: auto}
+/*  Form Design */
+.form{
+	background:#fff;
+	border:1px solid #e0e0e0;
+	padding:16px;
+	border-radius:6px ;
+	margin: auto;
+}
 
-		.fieldset{border:1px solid #ddd;padding:12px;margin:8px 0;border-radius:6px}
 
-		
 
-		.label{display:block;font-size:.9rem;margin-bottom:4px}
+/*  Label Design */	
 
-		input,select,textarea{width:100%;Padding:8px;border:1px solid #cfcfcf;border-radius:4px;font-size:.95rem}
+label{
+	display:block;
+	font-size:.9rem;
+	margin-bottom:4px;
+	margin-left: 20px;
+	
+}
 
-		.input[readonly]{background:#f7f7f7}
+input,select,textarea{
+	width:90%;
+	Padding:8px;
+	border:1px solid #cfcfcf;
+	border-radius:4px;
+	font-size:.95rem;
+	margin:auto;
+	margin-left: 20px;
+}
 
-		.actions{display:flex;gap:12px;justify-content:flex-end;margin-top:12px}
-
-		button{padding:8px 14px
+button{
+			padding:8px 14px
 			;border-radius:6px;
 			border:1px solid #2b6cb0;
 			background:#2b6cb0;
 			color:white;
 			cursor:pointer;
+			margin-left: 25%;
+			margin-bottom: 20px;
 		}
 
-		button.secondary{background:#fff;border:1px solid #999;color:#222}
-
-		.FormDesign{font-size:.85rem;color:#555}
+		
+.FormDesign{
+	font-size:.85rem;
+	
+	color:#555;
+	box-shadow:#222;
+	max-width: 900px;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+	 
+}

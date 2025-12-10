@@ -10,12 +10,13 @@
 
 <!--Body of the whole page -->
 <body>
+        <h2>THE KARIBU BUSINESS MANAGEMENT SYSTEM</h2>
     <!--Division for the form that is to be created -->
     <div class="FormDesign">
         <form class="Form ">
 
             <!--Heading of the page-->
-             <h1>THE KARIBU BUSINESS MANAGEMENT SYSTEM</h1>
+             <h1 class="head">THE KARIBU BUSINESS MANAGEMENT SYSTEM</h1>
             <img src="logo.jpg" width="120px" height="110px" alt="Company logo">
            <br><br>
 
@@ -29,19 +30,30 @@
             <label for="CustomerName">Customer Name </label>
             <input type="text" id="CustomerName" name="CustomerName"><br><br>
 
+            
+
             <label for="Phone">Customer Phone </label>
             <input type="tel" id="Phone" name="Phone" step="0.01"><br><br>
 
             <label for="CustomerEmail"> Customer Email   </label>
-            <input type="email" id="CustomerEmail" name="CustomerEmail" step="0.01" ><br><br>
+            <input type="email" id="CustomerEmail" name="CustomerEmail" placeholder="abcd@gmail.com" ><br><br>
 
              <!--Radio buttons for the diffierent customers-->
-            <div class="types">
-            <label>Customer Type</label>
-            <label>Walk-in</label><input type="radio" id="gender_male" name="gender" value="male" required>
-            <label>Regular</label><input type="radio" id="gender_female" name="gender" value="female" required> 
-            <label> Credit Customer</label><input type="radio" id="gender_other" name="gender" value="other"> 
-            </div>
+            
+				<label class="customerType">Customer Type</label>
+                <div>
+				<label><input type="radio" name="customerType" value="Walk-in" checked /> Walk-in</label>
+                <div>
+
+                </div>
+				<label><input type="radio" name="customerType" value="Regular" /> Regular</label>
+                
+
+                </div>
+                <div>
+				<label><input type="radio" name="customerType" value="Credit" /> Credit Customer</label>
+                    </div>
+			</div>
             <br><br>
 
             <label for="Item">Product/Item Name </label>

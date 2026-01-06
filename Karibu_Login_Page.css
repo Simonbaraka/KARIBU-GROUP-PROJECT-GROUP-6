@@ -1,0 +1,10 @@
+body{
+    background-color: rgb(41, 41, 56);
+}
+
+.login-Form{
+    box-shadow: 30px;
+    border-radius: 0px;
+   
+    text-align: center;
+}

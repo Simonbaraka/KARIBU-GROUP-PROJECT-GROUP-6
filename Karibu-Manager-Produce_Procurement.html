@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <!-- Linking external CSS file for styling -->
+    <link rel="stylesheet" href="procurement.css" />
+  </head>
+  <body>
+    <div class="main-panel">
+      <!--left side-->
+      <div class="aside">
+        <!--userprofile-->
+        <div class="user-profile">
+          <img alt="Username" />
+          <h3>username</h3>
+        </div>
+
+        <!--Manager options-->
+        <ul>
+          <li>Record Salesr</li>
+          <li>Record Procurement</li>
+          <li>Price Changes</li>
+          <li>Stock Tracking</li>
+          <li>Sales Report</li>
+          <li>Main DashBoard</li>
+        </ul>
+      </div>
+
+      <div class="Right-panel-formDesign">
+        <!-- Procurement form start -->
+        <form class="Form">
+          <h1>THE KARIBU PRODUCE PROCUREMENT</h1>
+
+          <!-- Supplier Name -->
+          <label for="SuplierName">Produce Name</label>
+          <input
+            type="text"
+            id="SuplierName"
+            name="SuplierName"
+            required
+            placeholder="simon"
+          /><br /><br />
+
+          <!-- Supplier Contact -->
+          <label for="producetype">Produce Type </label>
+          <input
+            type="text"
+            id="producetype"
+            name="SupplierContact"
+            required
+          /><br /><br />
+
+          <!-- Purchase Date -->
+          <label for="PurchaseDate"> Date/ Time </label>
+          <input type="datetime-local" id="PurchaseDate" required /><br /><br />
+
+          <!-- Produce Tonnage -->
+          <label for="produceTonnage">Produce Tonnage </label>
+          <input
+            type="number"
+            id="ProductName"
+            name="productName"
+            step="0.01"
+            required
+          /><br /><br />
+
+          <!-- cost -->
+          <label for="cost"> Produce Cost </label>
+          <input type="number" id="cost" step="0.01" required /><br /><br />
+
+          <!--dealer name -->
+          <label for="name"> Dealer Name </label>
+          <input type="text" id="name" step="0.01" required /><br /><br />
+
+          <!-- Karibu Branches Dropdown -->
+          <label for="ProductCategory">Karibu Branches </label>
+          <select id="country" name="country">
+            <option value="">Select Category</option>
+            <option value="ug">Kampala Branch</option>
+            <option value="ke">Entebbe</option></select
+          ><br /><br />
+
+          <!-- Dealer contact -->
+          <label for="UnitPrice">Contact </label>
+          <input
+            type="tel"
+            id="UnitPrice"
+            name="UnitPrice"
+            step="0.01"
+            required
+          /><br /><br />
+
+          <!-- Sale Price -->
+          <label for="TotalAmount">Sale Price </label>
+          <input
+            type="number"
+            id="TotalAmount"
+            step="0.01"
+            required
+          /><br /><br />
+
+          <!-- Reset & Submit buttons -->
+          <button type="reset">Create Order</button>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

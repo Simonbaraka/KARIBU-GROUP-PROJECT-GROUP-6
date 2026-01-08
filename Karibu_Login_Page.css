@@ -1,10 +1,27 @@
 body{
-    background-color: rgb(41, 41, 56);
+   
 }
 
 .login-Form{
     box-shadow: 30px;
-    border-radius: 0px;
-   
+     background-color: rgb(41, 41, 56);
+    border-radius: 10px;
+   width: 40%;
     text-align: center;
+    color: aliceblue;
+}
+
+.presentation{
+    
+    background-color:green;
+    color: white;
+    width:120px;
+    height: 30px;
+    padding: 25px;
+    align-content: center;
+}
+
+input{
+    width: 60%;
+    
 }

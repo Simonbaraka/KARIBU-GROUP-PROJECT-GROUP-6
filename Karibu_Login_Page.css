@@ -1,27 +1,73 @@
 body{
-   
+   background-color: #f2f2f2;
+    font-family: Arial, sans-serif;
+
+    /* Center form */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    
+    background-image: url("shopping.avif");
 }
 
 .login-Form{
-    box-shadow: 30px;
-     background-color: rgb(41, 41, 56);
+   box-shadow: 10 10px 10px rgba(0,0,0,0.3);
+    background-color: white;
     border-radius: 10px;
-   width: 40%;
-    text-align: center;
-    color: aliceblue;
+    width: 40%;
+    color: rgb(20, 21, 21);
+    padding: 30px;
+    font-weight: bold;
+    font-size: large;
+    
 }
+
+
 
 .presentation{
     
     background-color:green;
+    border-radius: 10px;
     color: white;
     width:120px;
-    height: 30px;
-    padding: 25px;
+    height: 40px;
+    width: 100%;
     align-content: center;
+    font-size: larger;
+    font-weight: bold;
+    
 }
 
 input{
-    width: 60%;
-    
+    width: 100%;
+    height: 35px;
+    border-radius: 10px;
+    border:8ch;
+    padding-left: 15px;
+    margin-bottom: 15px;
+    background-color: #b0abab;
 }
+
+h1{
+     text-align: center;
+    margin-bottom: 20px;
+}
+
+.presentation:hover{
+    background-color: black;
+}
+
+.links{
+    padding-top: 10px;
+    display: flex;
+    gap: 50px;
+    align-items: center;
+}
+
+a{
+    text-decoration: none;
+    color: black;
+}
+
+

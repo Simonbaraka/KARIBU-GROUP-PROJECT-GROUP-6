@@ -19,7 +19,7 @@
       /*Main Dashboard design*/
       .main-page {
         display: grid;
-        grid-template-columns: 200px 1fr;
+        grid-template-columns: 250px 1fr;
         grid-template-rows: 60px 1fr;
         grid-template-areas:
           'sidebar header'
@@ -33,9 +33,16 @@
       /*Left panel  design*/
       .sidebar {
         grid-area: sidebar;
-        background-color: rgb(171, 18, 18);
+        background: #1e1e2f;
         padding: 20px;
         color: white;
+      }
+
+      .sidebar a {
+        display: block;
+        color: white;
+        text-decoration: none;
+        font-weight: bold;
       }
 
       .user-profile {
@@ -48,7 +55,7 @@
         width: 100%;
         font-weight: bold;
         font-size: larger;
-        padding-top: 40px;
+        margin-top: 30px;
         margin: 0px;
       }
 
@@ -82,6 +89,11 @@
         border-bottom: 1px solid #ddd;
       }
 
+      header h1 {
+        font-size: 22px;
+        letter-spacing: 1px;
+      }
+
       .Right-panel {
         grid-area: Right-panel;
         display: grid;
@@ -93,13 +105,31 @@
       .Panel-1 {
         background-color: white;
         border-radius: 5px;
-        text-align: center;
+
         box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
-        padding: 30px;
+        padding: 25px;
       }
 
-      .Panel-1 p {
-        font-size: 35px;
+      .Panel-1 h1 {
+        font-size: 40px;
+        color: green;
+        font-weight: bolder;
+        text-align: right;
+      }
+
+      .Panel-1 h2 {
+        text-align: left;
+      }
+
+      .Panel-1 {
+        transition:
+          transform 0.2s ease,
+          box-shadow 0.2s ease;
+      }
+
+      .Panel-1:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
       }
 
       .recent {
@@ -112,13 +142,13 @@
       table {
         width: 100%;
         border-collapse: collapse;
-        margin-top: 10px;
+        margin-top: 5px;
       }
 
       th,
       td {
         text-align: left;
-        padding: 15px;
+        padding: 10px;
         border-bottom: 1px solid #ddd;
       }
     </style>
@@ -136,7 +166,7 @@
         <!--List of employees-->
         <div class="employees">
           <ul>
-            <li>Manager</li>
+            <li><a href="Karibu-ManagerDashboard.html">Manager</a></li>
             <li>Sales Agent</li>
             <li>Director</li>
             <li>Log Out</li>
@@ -153,22 +183,22 @@
       <main class="Right-panel">
         <div class="Panel-1">
           <h2>Data</h2>
-          <p>89%</p>
+          <h1>89%</h1>
         </div>
 
         <div class="Panel-1">
           <h2>Data</h2>
-          <p>89%</p>
+          <h1>89%</h1>
         </div>
 
         <div class="Panel-1">
           <h2>Data</h2>
-          <p>89%</p>
+          <h1>89%</h1>
         </div>
 
         <div class="Panel-1">
           <h2>Data</h2>
-          <p>89%</p>
+          <h1 id="numbers">89%</h1>
         </div>
 
         <div class="recent">

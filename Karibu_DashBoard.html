@@ -4,36 +4,192 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+      }
+
+      body {
+        background: #f4f6f8;
+      }
+      /*Main Dashboard design*/
+      .main-page {
+        display: grid;
+        grid-template-columns: 200px 1fr;
+        grid-template-rows: 60px 1fr;
+        grid-template-areas:
+          'sidebar header'
+          'sidebar Right-panel'
+          'sidebar recent';
+
+        height: 100vh;
+        gap: 20px;
+      }
+
+      /*Left panel  design*/
+      .sidebar {
+        grid-area: sidebar;
+        background-color: rgb(171, 18, 18);
+        padding: 20px;
+        color: white;
+      }
+
+      .user-profile {
+        border-radius: 20px;
+        background-color: rgb(135, 125, 125);
+        padding: 20px;
+      }
+
+      .employees {
+        width: 100%;
+        font-weight: bold;
+        font-size: larger;
+        padding-top: 40px;
+        margin: 0px;
+      }
+
+      ul {
+        list-style: none;
+        margin: 0; /* Remove all margins */
+        padding: 0; /* Remove all padding */
+        width: 100%;
+      }
+
+      li {
+        padding: 15px;
+        width: 100%;
+        box-sizing: border-box;
+        margin: 10px 0; /* Only vertical margin between items */
+        border-radius: 10px;
+        text-align: center;
+      }
+
+      li:hover {
+        background-color: rgb(185, 184, 182);
+      }
+
+      header {
+        grid-area: header;
+        background: white;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 20px;
+        border-bottom: 1px solid #ddd;
+      }
+
+      .Right-panel {
+        grid-area: Right-panel;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        border-radius: 20px;
+      }
+
+      .Panel-1 {
+        background-color: white;
+        border-radius: 5px;
+        text-align: center;
+        box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+        padding: 30px;
+      }
+
+      .Panel-1 p {
+        font-size: 35px;
+      }
+
+      .recent {
+        grid-column: 1 / -1;
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+      }
+
+      th,
+      td {
+        text-align: left;
+        padding: 15px;
+        border-bottom: 1px solid #ddd;
+      }
+    </style>
   </head>
   <body>
     <div class="main-page">
-      <h1>KARIBU GROCERIES LTD</h1>
-
       <!--left side-->
-      <div class="aside">
+      <aside class="sidebar">
         <!--userprofile-->
         <div class="user-profile">
           <img alt="Username" />
-          <h3>username</h3>
+          <h3>👤 Admin</h3>
         </div>
 
         <!--List of employees-->
-        <ul>
-          <li>Manager</li>
-          <li>Sales Agent</li>
-          <li>Director</li>
-          <li>Log Out</li>
-        </ul>
-      </div>
+        <div class="employees">
+          <ul>
+            <li>Manager</li>
+            <li>Sales Agent</li>
+            <li>Director</li>
+            <li>Log Out</li>
+          </ul>
+        </div>
+      </aside>
+
+      <header>
+        <h1>KARIBU GROCERIES DASHBOARD</h1>
+        <div class="user">👤 Admin</div>
+      </header>
 
       <!--Right-panel-->
-      <div class="Right-panel">
-        <h2>KARIBU DASH-BOARD</h2>
-        <div class="Panel-1"></div>
-        <div class="Panel-2"></div>
-        <div class="Panel-3"></div>
-        <div class="Panel-4"></div>
-      </div>
+      <main class="Right-panel">
+        <div class="Panel-1">
+          <h2>Data</h2>
+          <p>89%</p>
+        </div>
+
+        <div class="Panel-1">
+          <h2>Data</h2>
+          <p>89%</p>
+        </div>
+
+        <div class="Panel-1">
+          <h2>Data</h2>
+          <p>89%</p>
+        </div>
+
+        <div class="Panel-1">
+          <h2>Data</h2>
+          <p>89%</p>
+        </div>
+
+        <div class="recent">
+          <table>
+            <thead>
+              <th>Order ID</th>
+              <th>Meal</th>
+              <th>Price</th>
+              <th>Status</th>
+            </thead>
+            <tbody>
+              <tr>
+                <td>#001</td>
+                <td>Burger</td>
+                <td>$5</td>
+                <td>Completed</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </main>
     </div>
   </body>
 </html>

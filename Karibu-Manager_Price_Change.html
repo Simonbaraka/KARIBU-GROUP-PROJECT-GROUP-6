@@ -4,12 +4,139 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>KARIBU PRICE CHANGES</title>
+
+    <style>
+      * {
+        margin: 0px;
+        padding: 0px;
+      }
+
+      body {
+        background: #c7d1da;
+      }
+      .main-Panel {
+        display: grid;
+        grid-template-columns: 250px 1fr;
+        grid-template-rows: 60px 1fr;
+        grid-template-areas:
+          'sidebar header'
+          'sidebar Right-panel';
+        height: 100vh;
+      }
+
+      .sidebar {
+        grid-area: sidebar;
+        color: white;
+        background: #1e1e2f;
+        margin: 0px;
+      }
+
+      .user-profile {
+        margin: 20px;
+        padding: 20px;
+        border-radius: 20px;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        padding: 20px;
+      }
+
+      .manager-options {
+        margin-top: 20px;
+      }
+
+      ul {
+        margin-top: 50px;
+      }
+
+      li {
+        padding: 15px;
+        list-style: none;
+        font-size: larger;
+      }
+
+      li:hover {
+        background-color: rgb(185, 184, 182);
+      }
+
+      header {
+        grid-area: header;
+        background: white;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 25px 20px;
+        border-bottom: 1px solid #ddd;
+      }
+
+      header input {
+        width: 25%;
+      }
+
+      #search {
+        border: 2.5px solid rgb(128, 209, 143);
+        padding: 5px;
+        border-radius: 5px;
+        align-items: center;
+      }
+
+      .Right-panel {
+        display: grid;
+        margin-top: 20px;
+        grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+        gap: 20px;
+        border-radius: 10px;
+        width: 85%;
+        margin: 5%;
+      }
+      form {
+        width: 70%;
+      }
+      .user-details {
+        display: grid;
+        grid-template-columns: repeat(1, 1fr);
+        gap: 20px;
+        background-color: rgba(255, 255, 255, 0.808);
+        padding: 50px 50px;
+        border-radius: 5px;
+        margin-left: 25%;
+      }
+
+      .input-box {
+        margin: 20px 0 12px 0;
+      }
+
+      .input-box input {
+        height: 45px;
+        width: 100%;
+        border-radius: 5px;
+        border: 1px solid #1e1e2f;
+      }
+
+      label {
+        font-weight: 500;
+        margin-bottom: 5px;
+        font-size: 20px;
+      }
+
+      button {
+        margin: 20px 25%;
+        padding: 10px 20px;
+        background: #1e1e2f;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background: #1e1e2f;
+      }
+    </style>
   </head>
   <body>
     <div class="main-Panel">
-      <h1>PRICE CHANGES</h1>
       <!--left side-->
-      <div class="aside">
+      <aside class="sidebar">
         <!--userprofile-->
         <div class="user-profile">
           <img alt="Username" />
@@ -17,26 +144,41 @@
         </div>
 
         <!--Manager options-->
-        <ul>
-          <li>Record Salesr</li>
-          <li>Record Procurement</li>
-          <li>Price Changes</li>
-          <li>Stock Tracking</li>
-          <li>Sales Report</li>
-          <li>Main DashBoard</li>
-        </ul>
-      </div>
-
-      <div class="Right-Panel">
+        <div class="manager-options">
+          <ul>
+            <li>Cash Sales</li>
+            <li>Credit Sales</li>
+            <li>Procurement</li>
+            <li>Price Changes</li>
+            <li>Stock Tracking</li>
+            <li>Sales Report</li>
+            <li>Main DashBoard</li>
+          </ul>
+        </div>
+      </aside>
+      <header>
+        <h1>PRICE CHANGES</h1>
+        <input type="text" id="search" placeholder="search item " />
+        <div class="user">👤 Manager</div>
+      </header>
+      <div class="Right-panel">
         <form>
-          <label for="name">Produce Name</label>
-          <input type="text" id="name" required /><br /><br />
+          <div class="user-details">
+            <div class="input-box">
+              <label for="name">Produce Name</label>
+              <input type="text" id="name" required />
+            </div>
 
-          <label for="price">New Price</label>
-          <input type="number" id="price" required /><br /><br />
+            <div class="input-box">
+              <label for="price">New Price</label>
+              <input type="number" id="price" required />
+            </div>
 
-          <label for="amount">Date Of Change</label>
-          <input type="datetime" id="amount" required /><br /><br />
+            <div class="input-box">
+              <label for="amount">Date Of Change</label>
+              <input type="datetime" id="amount" required />
+            </div>
+          </div>
 
           <button onclick="alert('Sale recorded successfully!')">Change</button>
         </form>

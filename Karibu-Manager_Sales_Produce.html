@@ -3,32 +3,25 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Procurement</title>
-    <link
-      href="https://fonts.googleapis.com/icon?family=Material+Icons"
-      rel="stylesheet"
-    />
-
-    <!-- Linking external CSS file for styling -->
+    <title>Karibu Produce Selling</title>
     <style>
       * {
-        margin: 0px;
-        margin: 0px;
         box-sizing: border-box;
+        margin: 0px;
+        padding: 0px;
       }
 
       body {
         background: #c7d1da;
       }
-
       .main-panel {
         display: grid;
         grid-template-columns: 250px 1fr;
         grid-template-rows: 60px 1fr;
-        height: 100vh;
         grid-template-areas:
           'sidebar header'
           'sidebar Right-panel';
+        height: 100vh;
       }
 
       .sidebar {
@@ -77,6 +70,7 @@
       }
 
       header {
+        display: flex;
         grid-area: header;
         background: white;
         display: flex;
@@ -85,7 +79,8 @@
         padding: 25px 20px;
         border-bottom: 1px solid #ddd;
       }
-      #search {
+
+      #search-bar {
         border: 2.5px solid rgb(128, 209, 143);
         padding: 5px;
         border-radius: 5px;
@@ -149,43 +144,43 @@
         background: #1e1e2f;
       }
     </style>
+    <!-- Linking external CSS file for styling -->
   </head>
   <body>
     <div class="main-panel">
       <!--left side-->
-      <aside class="sidebar">
+      <div class="sidebar">
         <!--userprofile-->
         <div class="user-profile">
-          <span class="material-icons">person</span>
+          <img alt="Username" />
           <h3>username</h3>
         </div>
 
         <!--Manager options-->
         <div class="manager-options">
           <ul>
-            <li>Record Salesr</li>
-            <li>Record Procurement</li>
+            <li>Sales</li>
+            <li>Procurement</li>
             <li>Price Changes</li>
             <li>Stock Tracking</li>
             <li>Sales Report</li>
             <li>Main DashBoard</li>
           </ul>
         </div>
-      </aside>
+      </div>
+
+      <!-- Flexbox and Form  -->
 
       <header>
-        <h1>THE KARIBU PRODUCE PROCUREMENT</h1>
-        <form class="search-bar">
-          <input type="text" id="search" placeholder="search items" />
-        </form>
-        <div class="user">👤 Admin</div>
+        <input id="search-bar" placeholder="search item" />
+        <h1>THE KARIBU PRODUCE SALE</h1>
+        <div class="user">👤 Manager</div>
       </header>
-
       <div class="Right-panel">
         <!-- Procurement form start -->
-        <form action="#">
+        <form class="Form">
+          <!-- Supplier Name -->
           <div class="user-details">
-            <!--Produce name -->
             <div class="input-box">
               <label for="SuplierName">Produce Name</label>
               <input
@@ -194,19 +189,23 @@
                 name="SuplierName"
                 required
                 placeholder="simon"
-              /><br />
+              />
             </div>
 
-            <!-- Supplier Contact -->
-
-            <!-- Purchase Date -->
-
+            <!--Buyer name -->
             <div class="input-box">
-              <label for="PurchaseDate"> Date/ Time </label>
-              <input type="datetime-local" id="PurchaseDate" required />
+              <label for="name"> Buyer Name </label>
+              <input type="text" id="name" step="0.01" required />
+            </div>
+
+            <!--Sales Agent  name  -->
+            <div class="input-box">
+              <label for="name"> Sales Agent name </label>
+              <input type="text" id="name" step="0.01" required />
             </div>
 
             <!-- Produce Tonnage -->
+
             <div class="input-box">
               <label for="produceTonnage">Produce Tonnage </label>
               <input
@@ -218,37 +217,22 @@
               />
             </div>
 
-            <!-- cost -->
-
+            <!-- Purchase Date -->
             <div class="input-box">
-              <label for="cost"> Produce Cost </label>
-              <input type="number" id="cost" step="0.01" required />
+              <label for="PurchaseDate"> Date/ Time </label>
+              <input type="datetime-local" id="PurchaseDate" required />
             </div>
-
-            <!--dealer name -->
-            <div class="input-box">
-              <label for="name"> Dealer Name </label>
-              <input type="text" id="name" step="0.01" required />
-            </div>
-
-            <!-- Karibu Branches Dropdown -->
-            <div class="input-box">
-              <label for="ProductCategory">Karibu Branches </label>
-              <select id="country" name="country">
-                <option value="">Select Category</option>
-                <option value="ug">Kampala Branch</option>
-                <option value="ke">Entebbe</option>
-              </select>
-            </div>
-
-            <!-- Dealer contact -->
 
             <!-- Sale Price -->
-
-            <!-- Reset & Submit buttons -->
+            <div class="input-box">
+              <label for="TotalAmount">Amount Paid </label>
+              <input type="number" id="TotalAmount" step="1" required />
+            </div>
           </div>
-          <button type="reset">Create Order</button>
-          <!-- Supplier Name -->
+
+          <!-- Invoice buttons -->
+
+          <button type="submit">Create Invoice</button>
         </form>
       </div>
     </div>

@@ -27,7 +27,7 @@
       .sidebar {
         grid-area: sidebar;
         background: #1e1e2f;
-        padding: 20px;
+
         color: white;
       }
 
@@ -38,31 +38,25 @@
       }
 
       .user-profile {
+        margin: 20px;
+        padding: 20px;
         border-radius: 20px;
         border: 2px solid rgba(255, 255, 255, 0.2);
         padding: 20px;
       }
 
       .manager-options {
-        width: 100%;
-        font-weight: bold;
-        font-size: larger;
-        padding-top: 40px;
-        margin: 0px;
+        margin-top: 20px;
       }
 
       ul {
-        list-style: none;
-        width: 100%;
+        margin-top: 50px;
       }
 
       li {
         padding: 15px;
-        width: 100%;
-        box-sizing: border-box;
-        margin: 10px 0; /* Only vertical margin between items */
-        border-radius: 10px;
-        text-align: left;
+        list-style: none;
+        font-size: larger;
       }
 
       li:hover {
@@ -159,7 +153,8 @@
         <!--Manager options-->
         <div class="manager-options">
           <ul>
-            <li>Sales</li>
+            <li>Cash Sales</li>
+            <li>Credit Sales</li>
             <li>Procurement</li>
             <li>Price Changes</li>
             <li>Stock Tracking</li>
@@ -172,8 +167,9 @@
       <!-- Flexbox and Form  -->
 
       <header>
+        <h1>CASH SALE</h1>
         <input id="search-bar" placeholder="search item" />
-        <h1>THE KARIBU PRODUCE SALE</h1>
+
         <div class="user">👤 Manager</div>
       </header>
       <div class="Right-panel">

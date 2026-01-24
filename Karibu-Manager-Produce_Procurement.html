@@ -13,7 +13,7 @@
     <style>
       * {
         margin: 0px;
-        margin: 0px;
+        padding: 0px;
         box-sizing: border-box;
       }
 
@@ -34,7 +34,6 @@
       .sidebar {
         grid-area: sidebar;
         background: #1e1e2f;
-        padding: 20px;
         color: white;
       }
 
@@ -45,31 +44,24 @@
       }
 
       .user-profile {
+        margin: 20px;
+        padding: 20px;
         border-radius: 20px;
         border: 2px solid rgba(255, 255, 255, 0.2);
-        padding: 20px;
       }
 
       .manager-options {
-        width: 100%;
-        font-weight: bold;
-        font-size: larger;
-        padding-top: 40px;
-        margin: 0px;
+        margin-top: 20px;
       }
 
       ul {
-        list-style: none;
-        width: 100%;
+        margin-top: 50px;
       }
 
       li {
         padding: 15px;
-        width: 100%;
-        box-sizing: border-box;
-        margin: 10px 0; /* Only vertical margin between items */
-        border-radius: 10px;
-        text-align: left;
+        list-style: none;
+        font-size: larger;
       }
 
       li:hover {
@@ -163,8 +155,9 @@
         <!--Manager options-->
         <div class="manager-options">
           <ul>
-            <li>Record Salesr</li>
-            <li>Record Procurement</li>
+            <li>Cash Sales</li>
+            <li>Credit Sales</li>
+            <li>Procurement</li>
             <li>Price Changes</li>
             <li>Stock Tracking</li>
             <li>Sales Report</li>
@@ -174,7 +167,7 @@
       </aside>
 
       <header>
-        <h1>THE KARIBU PRODUCE PROCUREMENT</h1>
+        <h1>PROCUREMENT</h1>
         <form class="search-bar">
           <input type="text" id="search" placeholder="search items" />
         </form>

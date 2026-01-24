@@ -6,12 +6,141 @@
     <title>Document</title>
 
     <!-- Linking external CSS file for styling -->
-    <link rel="stylesheet" href="procurement.css" />
+    <style>
+      * {
+        margin: 0px;
+        padding: 0px;
+        box-sizing: border-box;
+      }
+      body {
+        background: #c7d1da;
+      }
+
+      .main-panel {
+        display: grid;
+        grid-template-columns: 250px 1fr;
+        grid-template-rows: 60px 1fr;
+        grid-template-areas:
+          'sidebar header'
+          'sidebar Right-panel';
+        height: 100vh;
+      }
+
+      .sidebar {
+        grid-area: sidebar;
+        color: white;
+        background: #1e1e2f;
+        margin: 0px;
+      }
+
+      .user-profile {
+        margin: 20px;
+        padding: 20px;
+        border-radius: 20px;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        padding: 20px;
+      }
+
+      .manager-options {
+        margin-top: 20px;
+      }
+
+      ul {
+        margin-top: 50px;
+      }
+
+      li {
+        padding: 15px;
+        list-style: none;
+        font-size: larger;
+      }
+
+      li:hover {
+        background-color: rgb(185, 184, 182);
+      }
+
+      header {
+        grid-area: header;
+        background: white;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 25px 20px;
+        border-bottom: 1px solid #ddd;
+      }
+
+      #search {
+        border: 2.5px solid rgb(128, 209, 143);
+        padding: 5px;
+        border-radius: 5px;
+        align-items: center;
+      }
+
+      .Right-panel {
+        display: grid;
+        margin-top: 20px;
+        grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+        gap: 20px;
+        border-radius: 10px;
+        width: 85%;
+        margin: 5%;
+      }
+      form {
+        width: 100%;
+      }
+      .user-details {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+        background-color: rgba(255, 255, 255, 0.808);
+        padding: 50px 50px;
+        border-radius: 5px;
+      }
+
+      .input-box select {
+        height: 45px;
+        width: 100%;
+        border: 1px solid #3fc353;
+        border-radius: 5px;
+      }
+
+      .input-box {
+        margin: 20px 0 12px 0;
+      }
+
+      .input-box input {
+        height: 45px;
+        width: 100%;
+        border-radius: 5px;
+        border: 1px solid #1e1e2f;
+      }
+
+      label {
+        font-weight: 500;
+        margin-bottom: 5px;
+        font-size: 20px;
+      }
+
+      button {
+        margin: 20px 30px;
+        padding: 10px 20px;
+        background: #1e1e2f;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background: #1e1e2f;
+      }
+    </style>
   </head>
   <body>
-    <div class="main-Panel">
+    <div class="main-panel">
       <!--left side-->
-      <div class="aside">
+      <aside class="sidebar">
         <!--userprofile-->
         <div class="user-profile">
           <img alt="Username" />
@@ -19,109 +148,90 @@
         </div>
 
         <!--Manager options-->
-        <ul>
-          <li>Record Salesr</li>
-          <li>Record Procurement</li>
-          <li>Price Changes</li>
-          <li>Stock Tracking</li>
-          <li>Sales Report</li>
-          <li>Main DashBoard</li>
-        </ul>
-      </div>
+        <div class="manager-options">
+          <ul>
+            <li>Cash Sales</li>
+            <li>Credit Sales</li>
+            <li>Record Procurement</li>
+            <li>Price Changes</li>
+            <li>Stock Tracking</li>
+            <li>Sales Report</li>
+            <li>Main DashBoard</li>
+          </ul>
+        </div>
+      </aside>
+
+      <header>
+        <h1>CREDIT SALES</h1>
+        <input type="text" id="search" placeholder="search items" />
+
+        <div class="user">👤 Admin</div>
+      </header>
 
       <!-- Flexbox and Form  -->
 
-      <div class="Credit_Sales">
+      <div class="Right-panel">
         <!-- Procurement form start -->
-        <form class="Credit_Sales_Form">
-          <h1>THE KARIBU CREDIT SALES</h1>
+        <form action="#">
+          <div class="user-details">
+            <!-- Supplier Name -->
+            <div class="input-box">
+              <label for="SuplierName">Buyer Name</label>
+              <input type="text" id="SuplierName" name="SuplierName" required />
+            </div>
 
-          <!-- Supplier Name -->
-          <label for="SuplierName">Buyer Name</label>
-          <input
-            type="text"
-            id="SuplierName"
-            name="SuplierName"
-            required
-            placeholder="simon"
-          /><br /><br />
+            <!--Sales Agent -->
 
-          <!--Sales Agent -->
-          <label for="cost"> Sales Agent </label>
-          <input type="name" id="cost" step="0.01" required /><br /><br />
+            <div class="input-box">
+              <label for="cost"> Sales Agent </label>
+              <input type="name" id="cost" step="0.01" required />
+            </div>
 
-          <!-- Dealer contact -->
-          <label for="UnitPrice">Contacts </label>
-          <input
-            type="tel"
-            id="UnitPrice"
-            name="UnitPrice"
-            step="0.01"
-            required
-          /><br /><br />
+            <!-- Dealer contact -->
 
-          <!-- Dealer contact -->
-          <label for="UnitPrice">NIN </label>
-          <input
-            type="number"
-            id="UnitPrice"
-            name="UnitPrice"
-            step="0.01"
-            required
-          /><br /><br />
+            <div class="input-box">
+              <label for="UnitPrice">Contacts </label>
+              <input type="tel" id="UnitPrice" required />
+            </div>
 
-          <!-- Dealer contact -->
-          <label for="UnitPrice">Location </label>
-          <input
-            type="text"
-            id="UnitPrice"
-            name="UnitPrice"
-            step="0.01"
-            required
-          /><br /><br />
+            <!-- Dealer contact -->
 
-          <!-- Supplier Contact -->
-          <label for="producetype">Produce Name/Type </label>
-          <input
-            type="text"
-            id="producetype"
-            name="SupplierContact"
-            required
-          /><br /><br />
+            <!-- Dealer contact -->
 
-          <!-- Produce Tonnage -->
-          <label for="produceTonnage">Produce Tonnage </label>
-          <input
-            type="number"
-            id="ProductName"
-            name="productName"
-            step="0.01"
-            required
-          /><br /><br />
+            <div class="input-box">
+              <label for="UnitPrice">Location </label>
+              <input type="text" id="UnitPrice" name="UnitPrice" required />
+            </div>
 
-          <!--  -->
-          <label for="TotalAmount">Amount Due </label>
-          <input
-            type="number"
-            id="TotalAmount"
-            step="0.01"
-            required
-          /><br /><br />
+            <!-- Supplier Contact -->
 
-          <!-- Purchase Date -->
-          <label for="PurchaseDate">Due Date/ Time </label>
-          <input type="datetime-local" id="PurchaseDate" required /><br /><br />
+            <div class="input-box">
+              <label for="producetype">Produce Name/Type </label>
+              <input type="text" id="producetype" required />
+            </div>
 
-          <!--dealer name -->
-          <label for="name"> Dispatch Date </label>
-          <input
-            type="datetime-local"
-            id="name"
-            step="0.01"
-            required
-          /><br /><br />
+            <!-- Produce Tonnage -->
 
-          <!-- Reset & Submit buttons -->
+            <div class="input-box">
+              <label for="produceTonnage">Produce Tonnage </label>
+              <input type="number" id="ProductName" step="1000" required />
+            </div>
+            <!-- Amount due -->
+            <div class="input-box">
+              <label for="TotalAmount">Amount Due </label>
+              <input type="number" id="TotalAmount" step="0.01" required />
+            </div>
+
+            <!-- Purchase Date -->
+            <div class="input-box">
+              <label for="PurchaseDate">Due Date/ Time </label>
+              <input type="datetime-local" id="PurchaseDate" required />
+            </div>
+
+            <!--dealer name -->
+
+            <!-- Reset & Submit buttons -->
+          </div>
           <button type="reset">Reset</button>
           <button type="submit">Submit</button>
         </form>

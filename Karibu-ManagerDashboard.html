@@ -14,7 +14,6 @@
         margin: 0;
         padding: 0;
         box-sizing: border-box;
-        font-family: Arial, sans-serif;
       }
 
       body {
@@ -35,15 +34,15 @@
       .aside {
         grid-area: aside;
         background: #1e1e2f;
-        padding: 20px;
         color: white;
       }
 
       .user-profile {
+        margin: 20px;
+        padding: 20px;
         border-radius: 20px;
         border: 2px solid rgba(255, 255, 255, 0.2);
         padding: 20px;
-        text-align: center;
       }
 
       .manager-options {
@@ -66,7 +65,6 @@
         width: 100%;
         box-sizing: border-box;
         margin: 10px 0; /* Only vertical margin between items */
-        border-radius: 10px;
         text-align: left;
       }
 
@@ -87,6 +85,7 @@
         border: 2.5px solid rgb(128, 209, 143);
         padding: 5px;
         border-radius: 5px;
+        width: 25%;
       }
 
       .Right-panel {
@@ -154,7 +153,8 @@
         <!--Manager options-->
         <div class="manager-options">
           <ul>
-            <li>Sales</li>
+            <li>Cash Sales</li>
+            <li>Credit Sales</li>
             <li>Procurement</li>
             <li>Price Changes</li>
             <li>Stock Tracking</li>
@@ -165,10 +165,10 @@
       </aside>
 
       <header>
-        <form class="search-bar">
-          <input type="text" id="search" placeholder="search items" />
-        </form>
-        <h1>KARIBU GROCERIES LIMITED</h1>
+        <h1>Manager DashBoard</h1>
+
+        <input type="text" id="search" placeholder="search items" />
+
         <span class="material-icons">notifications</span>
         <span class="material-icons">person</span>
         <div class="user">👤 Manager</div>

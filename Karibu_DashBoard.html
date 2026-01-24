@@ -10,7 +10,6 @@
         margin: 0;
         padding: 0;
         box-sizing: border-box;
-        font-family: Arial, sans-serif;
       }
 
       body {
@@ -33,7 +32,6 @@
       .sidebar {
         grid-area: sidebar;
         background: #1e1e2f;
-        padding: 20px;
         color: white;
       }
 
@@ -45,32 +43,24 @@
       }
 
       .user-profile {
+        margin: 20px;
+        padding: 20px;
         border-radius: 20px;
         border: 2px solid rgba(255, 255, 255, 0.2);
-        padding: 20px;
       }
 
       .employees {
-        width: 100%;
-        font-weight: bold;
-        font-size: larger;
-        margin-top: 50px;
+        margin-top: 20px;
       }
 
       ul {
-        list-style: none;
-        margin: 0; /* Remove all margins */
-        padding: 0; /* Remove all padding */
-        width: 100%;
+        margin-top: 50px;
       }
 
       li {
         padding: 15px;
-        width: 100%;
-        box-sizing: border-box;
-        margin: 10px 0; /* Only vertical margin between items */
-        border-radius: 10px;
-        text-align: left;
+        list-style: none;
+        font-size: larger;
       }
 
       li:hover {
@@ -151,6 +141,10 @@
         border-bottom: 1px solid #ddd;
         border-left: 2px solid #ddd;
       }
+
+      input {
+        width: 25%;
+      }
     </style>
   </head>
   <body>
@@ -175,10 +169,8 @@
       </aside>
 
       <header>
-        <form class="search-bar">
-          <input type="text" id="search" placeholder="search items" />
-        </form>
         <h1>KARIBU GROCERIES DASHBOARD</h1>
+        <input type="text" id="search" placeholder="search items" />
         <div class="user">👤 Admin</div>
       </header>
 

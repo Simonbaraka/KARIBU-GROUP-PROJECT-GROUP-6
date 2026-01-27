@@ -3,12 +3,136 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Karibu Sales Report</title>
+
+    <style>
+      * {
+        padding: 0px;
+        margin: 0px;
+        box-sizing: border-box;
+      }
+
+      body {
+        background: #c7d1da;
+      }
+      .main-panel {
+        display: grid;
+        grid-template-columns: 250px 1fr;
+        grid-template-rows: 60px 1fr;
+        grid-template-areas:
+          'sidebar header'
+          'sidebar Right-panel';
+        height: 100vh;
+      }
+
+      .sidebar {
+        grid-area: sidebar;
+        background: #1e1e2f;
+        color: white;
+      }
+
+      .sidebar a {
+        display: block;
+        color: white;
+        text-decoration: none;
+      }
+
+      .manager-options {
+        margin-top: 20px;
+      }
+
+      ul {
+        margin-top: 50px;
+      }
+
+      li {
+        padding: 15px;
+        list-style: none;
+        font-size: larger;
+      }
+
+      li:hover {
+        background-color: rgb(185, 184, 182);
+      }
+
+      .user-profile {
+        margin: 20px;
+        padding: 20px;
+        border-radius: 20px;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+      }
+
+      #search {
+        border: 2.5px solid rgb(128, 209, 143);
+        padding: 5px;
+        border-radius: 5px;
+        align-items: center;
+      }
+
+      header {
+        grid-area: header;
+        border-bottom: 1px solid #ddd;
+        background: white;
+        padding: 25px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .Right-panel {
+        grid-template-columns: repeat(1, 1fr);
+        grid-template-rows: auto;
+        border-radius: 10px;
+        width: 85%;
+        margin: 5%;
+        background-color: white;
+        padding: 20px;
+      }
+
+      .user-details {
+        display: grid;
+        grid-template-columns: 250px 1fr;
+        gap: 15px;
+        padding: 20px;
+        align-items: center;
+      }
+
+      .user-details input {
+        padding: 5px;
+        border-radius: 5px;
+        border: 1px solid #1e1e2f;
+        width: 25%;
+      }
+
+      label {
+        font-weight: 500;
+        font-size: 20px;
+      }
+
+      .user-report {
+        height: 55vh;
+        border-radius: 5px;
+        margin: 20px;
+        border: 1px solid#1e1e2f;
+      }
+
+      h2 {
+        align-items: center;
+      }
+
+      button {
+        background: #1e1e2f;
+        color: white;
+        margin-left: 20px;
+        border-radius: 5px;
+        padding: 7px;
+      }
+    </style>
   </head>
   <body>
-    <div class="main-Panel">
+    <div class="main-panel">
       <!--left side-->
-      <div class="aside">
+      <div class="sidebar">
         <!--userprofile-->
         <div class="user-profile">
           <img alt="Username" />
@@ -16,29 +140,42 @@
         </div>
 
         <!--Manager options-->
-        <ul>
-          <li>Record Salesr</li>
-          <li>Record Procurement</li>
-          <li>Price Changes</li>
-          <li>Stock Tracking</li>
-          <li>Sales Report</li>
-          <li>Main DashBoard</li>
-        </ul>
+        <div class="manager-options">
+          <ul>
+            <li>Cash Sales</li>
+            <li>Credit Sales</li>
+            <li>Record Procurement</li>
+            <li>Price Changes</li>
+            <li>Stock Tracking</li>
+            <li>Sales Report</li>
+            <li>Main DashBoard</li>
+          </ul>
+        </div>
       </div>
 
+      <header>
+        <h1>Sales Report</h1>
+        <input type="text" id="search" placeholder="searh item" />
+        <div class="user">👤 Manager</div>
+      </header>
+
       <!--Right panel-->
-      <div class="Right-Panel">
+      <div class="Right-panel">
+        <!-- Main container that holds the form and the display area for the graph-->
         <form>
-          <label for="start">Start Date</label>
-          <input type="datetime" />
+          <div class="user-details">
+            <label for="start">Start Date</label>
+            <input type="date" id="start" />
 
-          <h2>Report is displayed here</h2>
-
-          <label for="end">End Date</label>
-          <input type="datetime" />
-
+            <label for="end">End Date</label>
+            <input type="date" id="end" />
+          </div>
           <button>Generate Report</button>
         </form>
+
+        <div class="user-report">
+          <h2>Report is displayed here</h2>
+        </div>
       </div>
     </div>
   </body>

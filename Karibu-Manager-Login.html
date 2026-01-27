@@ -3,27 +3,82 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Karibu Login Page</title>
-    <link rel="stylesheet" href="Karibu_Login_Page.css" />
+    <title>Karibu Manager Login Page</title>
+    <style>
+      body {
+        background: #c7d1da;
+      }
+      .main-panel {
+        background-color: white;
+        margin: 5%;
+        margin-right: 25%;
+        margin-left: 25%;
+        border-radius: 10px;
+      }
+
+      .user-details {
+        padding: 20px;
+        margin: 20px;
+      }
+
+      .input-box {
+        padding: 20px;
+      }
+
+      .input-box input {
+        width: 100%;
+        padding: 10px;
+        border-radius: 5px;
+      }
+
+      .input-box label {
+        font-size: 25px;
+      }
+
+      h1 {
+        text-align: center;
+      }
+
+      .input-boxs button {
+        padding: 5px;
+        color: white;
+        background: #1e1e2f;
+        border-radius: 5px;
+        width: 100px;
+        margin-left: 20px;
+      }
+
+      .input-boxs h4 {
+        font-size: large;
+        padding-top: 10px;
+        margin-left: 20px;
+      }
+    </style>
   </head>
   <body>
-    <div class="Manager">
-      <h1>MANAGER LOGIN</h1>
-
+    <div class="main-panel">
       <!--Form details-->
       <form class="Manager-Form-Detail">
-        <label for="mail">Manager Email</label>
-        <input
-          type="email"
-          id="mail"
-          placeholder="abcdef@gmail.com"
-        /><br /><br /><br />
+        <div class="user-details">
+          <div class="input-box">
+            <div class="input-box">
+              <h1>MANAGER LOGIN</h1>
+            </div>
 
-        <label for="Password">Manager Password</label>
-        <input type="text" id="Password" /><br /><br /><br />
+            <label for="mail">Manager Email</label>
+            <input type="email" id="mail" placeholder="abcdef@gmail.com" />
+          </div>
 
-        <button>Sign In</button>
-        <h4>forgot Password ?</h4>
+          <div class="input-box">
+            <label for="Password">Manager Password</label>
+            <input type="password" id="Password" />
+          </div>
+
+          <div class="input-boxs">
+            <button>Sign In</button>
+            <h4>forgot Password ?</h4>
+          </div>
+        </div>
       </form>
     </div>
   </body>

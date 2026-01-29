@@ -3,13 +3,136 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Director Sales Summaries</title>
   </head>
+
+  <style>
+    * {
+      margin: 0px;
+      padding: 0px;
+    }
+
+    body {
+      background: #dbe2e9;
+    }
+    .main-panel {
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      grid-template-rows: 60px 1fr;
+      grid-template-areas:
+        'sidebar header'
+        'sidebar Right-panel';
+      height: 100vh;
+    }
+
+    .sidebar {
+      grid-area: sidebar;
+      background-color: white;
+      color: black;
+    }
+
+    .user-profile {
+      margin: 20px;
+      padding: 20px;
+      border-radius: 20px;
+      border: 2px solid rgba(63, 61, 61, 0.2);
+      padding: 20px;
+    }
+
+    .Director-Options {
+      margin-top: 20px;
+    }
+
+    ul {
+      list-style: none;
+      margin-top: 50px;
+    }
+
+    li {
+      padding: 20px;
+      font-size: larger;
+      border-bottom: 1px solid rgba(63, 61, 61, 0.2);
+      border-radius: 10px;
+    }
+
+    li:hover {
+      background-color: rgb(185, 184, 182);
+    }
+
+    .sidebar a {
+      text-decoration: none;
+      color: black;
+    }
+
+    header {
+      grid-area: header;
+      background-color: white;
+      justify-content: space-between;
+      align-items: center;
+      display: flex;
+      padding: 25px 20px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    #search {
+      border: 2.5px solid rgb(128, 209, 143);
+      padding: 5px;
+      border-radius: 5px;
+      width: 25%;
+    }
+
+    .Right-panel {
+      grid-area: Right-panel;
+      border-radius: 10px;
+      margin: 5%;
+      display: grid;
+      grid-template-rows: repeat(auto, 1fr);
+    }
+
+    .user-details {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+      padding: 20px;
+      align-items: end;
+      background-color: white;
+    }
+
+    .input-box input {
+      padding: 5px;
+      border-radius: 5px;
+    }
+
+    .input-box label {
+      font-size: 20px;
+    }
+
+    .input-box button {
+      background: #1e1e2f;
+      color: white;
+      border-radius: 5px;
+      padding: 7px;
+      height: 36px;
+      cursor: pointer;
+    }
+
+    .Director-sales-report {
+      background-color: white;
+      padding: 20px;
+
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+      min-height: 350px;
+    }
+
+    .Director-sales-report h2 {
+      border-bottom: 1px solid black;
+      text-align: center;
+    }
+  </style>
   <body>
-    <div class="main-Panel">
-      <h1>Sales Report</h1>
+    <div class="main-panel">
       <!--left side-->
-      <div class="aside">
+      <div class="sidebar">
         <!--userprofile-->
         <div class="user-profile">
           <img alt="Username" />
@@ -17,30 +140,49 @@
         </div>
 
         <!--Manager options-->
-        <ul>
-          <li>Sales Report</li>
-          <li>Sales Summaries</li>
-          <li>Aggregated Sales</li>
-          <li>Main DashBoard</li>
-        </ul>
+        <div class="Director-options">
+          <ul>
+            <li>Sales Report</li>
+            <li>Sales Summaries</li>
+            <li>Aggregated Sales</li>
+            <li>Main DashBoard</li>
+          </ul>
+        </div>
       </div>
 
+      <header>
+        <h1>BRANCHES' SALES REPORT</h1>
+        <input type="text" id="search" placeholder="search item" />
+      </header>
+
       <!--Right panel-->
-      <div class="Right-Panel">
+      <div class="Right-panel">
         <form>
-          <label for="start">Branch Name</label>
-          <input type="datetime" /><br /><br />
+          <div class="user-details">
+            <div class="input-box">
+              <label for="Branch">Branch</label>
+              <input type="text" id="Branch" />
+            </div>
 
-          <label for="start">Start Date</label>
-          <input type="datetime" />
+            <div class="input-box">
+              <label for="start">Start Date</label>
+              <input type="date" id="start" />
+            </div>
 
-          <label for="end">End Date</label>
-          <input type="datetime" />
+            <div class="input-box">
+              <label for="end">End Date</label>
+              <input type="date" id="end" />
+            </div>
 
-          <h2>Report is displayed here</h2>
-
-          <button>Generate</button>
+            <div class="input-box">
+              <button>Generate</button>
+            </div>
+          </div>
         </form>
+
+        <div class="Director-sales-report">
+          <h2>SALES REPORT GRAPH</h2>
+        </div>
       </div>
     </div>
   </body>

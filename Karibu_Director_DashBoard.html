@@ -4,21 +4,159 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Director DashBoard</title>
+
+    <style>
+      * {
+        padding: 0px;
+        margin: 0px;
+      }
+
+      body {
+        background: #dbe2e9;
+      }
+
+      .main-panel {
+        display: grid;
+        grid-template-columns: 250px 1fr;
+        grid-template-rows: 60px 1fr;
+        grid-template-areas:
+          'sidebar header'
+          'sidebar Right-panel';
+        height: 100vh;
+        gap: 3px;
+      }
+
+      .sidebar {
+        grid-area: sidebar;
+        background-color: white;
+        color: black;
+      }
+
+      /* User-profile design*/
+      .user-profile {
+        margin: 20px;
+        padding: 20px;
+        border-radius: 20px;
+        border: 2px solid rgba(63, 61, 61, 0.2);
+        padding: 20px;
+      }
+
+      .Director-Options {
+        margin-top: 20px;
+      }
+
+      ul {
+        list-style: none;
+        margin-top: 50px;
+      }
+
+      li {
+        padding: 20px;
+        font-size: larger;
+        border-bottom: 1px solid rgba(63, 61, 61, 0.2);
+        border-radius: 10px;
+      }
+
+      li:hover {
+        background-color: rgb(185, 184, 182);
+      }
+
+      .sidebar a {
+        text-decoration: none;
+        color: black;
+      }
+
+      header {
+        grid-area: header;
+        background: white;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 25px 20px;
+        border-bottom: 1px solid #ddd;
+      }
+      #search {
+        border: 2.5px solid rgb(128, 209, 143);
+        padding: 5px;
+        border-radius: 5px;
+        width: 25%;
+      }
+
+      .Right-panel {
+        grid-area: Right-panel;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+        gap: 20px;
+        border-radius: 10px;
+        margin: 5%;
+      }
+
+      .stats {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 20px;
+      }
+      .Panel-1 {
+        background-color: white;
+        border-radius: 5px;
+        padding: 25px;
+        box-shadow: black;
+        margin: 20px;
+        margin-bottom: 300px;
+      }
+
+      .Panel-1 h1 {
+        text-align: right;
+        font-size: 50px;
+        color: green;
+        font-weight: bolder;
+        text-align: right;
+      }
+    </style>
   </head>
   <body>
-    <h1>Director Dashboard</h1>
-    <div class="main-Panel">
-      <div class="user-profile">
-        <img />
-        <h3>Director</h3>
+    <div class="main-panel">
+      <!--Left side panel-->
+      <div class="sidebar">
+        <div class="user-profile">
+          <img />
+          <h3>Director</h3>
+        </div>
+
+        <div class="Director-Options">
+          <ul>
+            <li>Sales Report</li>
+            <li>
+              <a href="Karibu_Director_AggregatedSummaries.html"
+                >Aggregated Summaries</a
+              >
+            </li>
+            <li>Main Dashboard</li>
+          </ul>
+        </div>
       </div>
 
-      <div class="Director-Options">
-        <ul>
-          <li>Sales Report</li>
-          <li>Sales Summaries</li>
-          <li>Main Dashboard</li>
-        </ul>
+      <header>
+        <h1>Director Dashboard</h1>
+        <input type="text" id="search" placeholder="search item" />
+      </header>
+
+      <!--Right side panel-->
+      <div class="Right-panel">
+        <div class="stats">
+          <div class="Panel-1">
+            <h2>Total Sales:</h2>
+            <h3>$12,500</h3>
+          </div>
+          <div class="Panel-1">
+            <h2>Orders</h2>
+            <h3>320</h3>
+          </div>
+          <div class="Panel-1">
+            <h2>Top Item:</h2>
+            <h3>Rice</h3>
+          </div>
+        </div>
       </div>
     </div>
   </body>

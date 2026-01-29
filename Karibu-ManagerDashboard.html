@@ -29,19 +29,20 @@
         grid-template-areas:
           'aside header'
           'aside Right-panel';
+        gap: 3px;
       }
 
       .aside {
         grid-area: aside;
-        background: #1e1e2f;
-        color: white;
+        background: white;
+        color: black;
       }
 
       .user-profile {
         margin: 20px;
         padding: 20px;
         border-radius: 20px;
-        border: 2px solid rgba(255, 255, 255, 0.2);
+        border: 2px solid rgba(32, 30, 30, 0.2);
         padding: 20px;
       }
 
@@ -55,12 +56,12 @@
 
       .manager-options a {
         text-decoration: none;
-        color: white;
+        color: black;
       }
 
       ul {
         list-style: none;
-        margin: 0; /* Remove all margins */
+        margin: 0px; /* Remove all margins */
         padding: 0; /* Remove all padding */
         width: 100%;
       }
@@ -71,6 +72,9 @@
         box-sizing: border-box;
         margin: 10px 0; /* Only vertical margin between items */
         text-align: left;
+        border-bottom: 1px solid rgba(63, 61, 61, 0.2);
+        cursor: pointer;
+        border-radius: 10px;
       }
 
       li:hover {

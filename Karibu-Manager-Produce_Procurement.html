@@ -18,7 +18,7 @@
       }
 
       body {
-        background: #c7d1da;
+        background: #e2e7eb;
       }
 
       .main-panel {
@@ -59,7 +59,8 @@
         margin-top: 50px;
       }
 
-      li {
+      .manager-options li {
+        display: flex;
         padding: 15px;
         list-style: none;
         font-size: larger;
@@ -67,6 +68,12 @@
         cursor: pointer;
         border-radius: 10px;
         margin: 10px;
+        gap: 14px;
+      }
+
+      .material-icons {
+        font-size: 22px;
+        color: #1e1e2f;
       }
 
       li:hover {
@@ -160,13 +167,25 @@
         <!--Manager options-->
         <div class="manager-options">
           <ul>
-            <li>Cash Sales</li>
-            <li>Credit Sales</li>
-            <li>Procurement</li>
-            <li>Price Changes</li>
-            <li>Stock Tracking</li>
-            <li>Sales Report</li>
-            <li>Main DashBoard</li>
+            <li>
+              <div class="material-icons">payments</div>
+              Cash Sales
+            </li>
+            <li>
+              <div class="material-icons">credit_card</div>
+              Credit Sales
+            </li>
+            <li>
+              <span class="material-icons">local_shipping</span>Procurement
+            </li>
+            <li>
+              <span class="material-icons">price_change</span>Price Changes
+            </li>
+            <li>
+              <span class="material-icons">inventory_2</span>Stock Tracking
+            </li>
+            <li><span class="material-icons">bar_chart</span>Sales Report</li>
+            <li><span class="material-icons">dashboard</span>Main DashBoard</li>
           </ul>
         </div>
       </aside>

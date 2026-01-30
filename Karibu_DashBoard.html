@@ -13,7 +13,7 @@
       }
 
       body {
-        background: #c7d1da;
+        background: #e2e7eb;
       }
       /*Main Dashboard design*/
       .main-page {
@@ -31,8 +31,8 @@
       /*Left panel  design*/
       .sidebar {
         grid-area: sidebar;
-        background: #1e1e2f;
-        color: white;
+        background: white;
+        color: black;
       }
 
       .sidebar a {
@@ -46,7 +46,7 @@
         margin: 20px;
         padding: 20px;
         border-radius: 20px;
-        border: 2px solid rgba(255, 255, 255, 0.2);
+        border: 2px solid rgba(32, 30, 30, 0.2);
       }
 
       .employees {
@@ -60,11 +60,18 @@
       li {
         padding: 15px;
         list-style: none;
-        font-size: larger;
+        font-size: large;
+        cursor: pointer;
+        margin: 10px;
+        border-radius: 10px;
+        border-bottom: 1px solid rgba(63, 61, 61, 0.2);
       }
 
       li:hover {
         background-color: rgb(185, 184, 182);
+      }
+      .employees a {
+        color: black;
       }
 
       header {
@@ -161,8 +168,10 @@
         <div class="employees">
           <ul>
             <li><a href="Karibu-ManagerDashboard.html">Manager</a></li>
-            <li>Sales Agent</li>
-            <li>Director</li>
+            <li>
+              <a href="Karibu_Sales_Agent_DashBoard.html"> Sales Agent </a>
+            </li>
+            <li><a href="Karibu_Director_DashBoard.html">Director</a></li>
             <li>Log Out</li>
           </ul>
         </div>

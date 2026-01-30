@@ -3,7 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
     <title>Karibu Produce Selling</title>
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
     <style>
       * {
         box-sizing: border-box;
@@ -33,7 +38,7 @@
 
       .sidebar a {
         display: block;
-        color: white;
+        color: black;
         text-decoration: none;
       }
 
@@ -61,6 +66,16 @@
         border-bottom: 1px solid rgba(63, 61, 61, 0.2);
         cursor: pointer;
         border-radius: 10px;
+      }
+
+      .manager-options li a {
+        display: flex;
+        gap: 14px;
+        align-items: center;
+      }
+      .material-icons {
+        font-size: 22px;
+        color: #1e1e2f;
       }
 
       li:hover {
@@ -157,13 +172,48 @@
         <!--Manager options-->
         <div class="manager-options">
           <ul>
-            <li>Cash Sales</li>
-            <li>Credit Sales</li>
-            <li>Procurement</li>
-            <li>Price Changes</li>
-            <li>Stock Tracking</li>
-            <li>Sales Report</li>
-            <li>Main DashBoard</li>
+            <li>
+              <a>
+                <div class="material-icons">dashboard</div>
+                Main DashBoard</a
+              >
+            </li>
+            <li>
+              <a>
+                <div class="material-icons">payments</div>
+                Cash Sales</a
+              >
+            </li>
+            <li>
+              <a>
+                <div class="material-icons">credit_card</div>
+                Credit Sales</a
+              >
+            </li>
+            <li>
+              <a>
+                <div class="material-icons">local_shipping</div>
+                Procurement</a
+              >
+            </li>
+            <li>
+              <a>
+                <div class="material-icons">price_change</div>
+                Price Changes</a
+              >
+            </li>
+            <li>
+              <a>
+                <div class="material-icons">inventory_2</div>
+                Stock Tracking</a
+              >
+            </li>
+            <li>
+              <a>
+                <div class="material-icons">bar_chart</div>
+                Sales Report</a
+              >
+            </li>
           </ul>
         </div>
       </div>

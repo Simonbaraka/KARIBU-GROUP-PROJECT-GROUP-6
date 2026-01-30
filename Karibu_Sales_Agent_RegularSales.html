@@ -4,7 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Regular Sales</title>
-
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
     <style>
       * {
         margin: 0px;
@@ -69,6 +72,11 @@
         cursor: pointer;
       }
 
+      .Agent-options li a {
+        display: flex;
+        gap: 14px;
+        align-items: center;
+      }
       li:hover {
         background-color: rgb(185, 184, 182);
       }
@@ -155,14 +163,25 @@
         <div class="Agent-options">
           <ul>
             <li>
-              <a href="Karibu-Manager_Sales_Produce.html">Cash Sales</a>
+              <a href="Karibu_DashBoard.html">
+                <div class="material-icons">dashboard</div>
+                Main DashBoard</a
+              >
             </li>
 
             <li>
-              <a href="Karibu-Manager_Credit_Sales.html">Credit Sales</a>
+              <a href="Karibu-Manager_Sales_Produce.html"
+                ><div class="material-icons">payments</div>
+                Cash Sales</a
+              >
             </li>
 
-            <li><a href="Karibu_DashBoard.html">Main DashBoard</a></li>
+            <li>
+              <a href="Karibu-Manager_Credit_Sales.html"
+                ><div class="material-icons">credit_card</div>
+                Credit Sales</a
+              >
+            </li>
           </ul>
         </div>
       </div>

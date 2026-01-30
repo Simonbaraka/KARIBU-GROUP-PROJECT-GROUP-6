@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Director Sales Summaries</title>
   </head>
+  <link
+    href="https://fonts.googleapis.com/icon?family=Material+Icons"
+    rel="stylesheet"
+  />
 
   <style>
     * {
@@ -23,6 +27,7 @@
         'sidebar header'
         'sidebar Right-panel';
       height: 100vh;
+      gap: 3px;
     }
 
     .sidebar {
@@ -39,7 +44,7 @@
       padding: 20px;
     }
 
-    .Director-Options {
+    .Director-options {
       margin-top: 20px;
     }
 
@@ -50,11 +55,17 @@
 
     li {
       padding: 15px;
-      font-size: larger;
+      font-size: large;
       border-bottom: 1px solid rgba(63, 61, 61, 0.2);
       border-radius: 10px;
-      margin: 10px 0px;
       margin: 10px;
+      cursor: pointer;
+    }
+
+    .Director-options li a {
+      display: flex;
+      gap: 14px;
+      align-items: center;
     }
 
     li:hover {
@@ -144,16 +155,37 @@
         <!--Manager options-->
         <div class="Director-options">
           <ul>
-            <li>Sales Report</li>
-            <li>Sales Summaries</li>
-            <li>Aggregated Sales</li>
-            <li>Main DashBoard</li>
+            <li>
+              <a>
+                <div class="material-icons">dashboard</div>
+                Main DashBoard</a
+              >
+            </li>
+            <li>
+              <a
+                ><div class="material-icons">bar_chart</div>
+                Sales Report</a
+              >
+            </li>
+            <li>
+              <a>
+                <div class="material-icons">summarize</div>
+                Sales Summaries</a
+              >
+            </li>
+            <li>
+              <a>
+                <div class="material-icons">point_of_sale</div>
+                Aggregated Sales</a
+              >
+            </li>
           </ul>
         </div>
       </div>
 
       <header>
         <h1>BRANCHES' SALES REPORT</h1>
+        <div class="material-icons"></div>
         <input type="text" id="search" placeholder="search item" />
       </header>
 

@@ -4,7 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Director DashBoard</title>
-
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
     <style>
       * {
         padding: 0px;
@@ -60,6 +63,11 @@
         margin: 10px;
       }
 
+      .Director-Options li a {
+        display: flex;
+        gap: 14px;
+        align-items: center;
+      }
       li:hover {
         background-color: rgb(185, 184, 182);
       }
@@ -128,13 +136,30 @@
 
         <div class="Director-Options">
           <ul>
-            <li>Sales Report</li>
             <li>
-              <a href="Karibu_Director_AggregatedSummaries.html"
-                >Aggregated Summaries</a
+              <a>
+                <div class="material-icons">dashboard</div>
+                Main DashBoard</a
               >
             </li>
-            <li>Main Dashboard</li>
+            <li>
+              <a
+                ><div class="material-icons">bar_chart</div>
+                Sales Report</a
+              >
+            </li>
+            <li>
+              <a>
+                <div class="material-icons">summarize</div>
+                Sales Summaries</a
+              >
+            </li>
+            <li>
+              <a>
+                <div class="material-icons">point_of_sale</div>
+                Aggregated Sales</a
+              >
+            </li>
           </ul>
         </div>
       </div>

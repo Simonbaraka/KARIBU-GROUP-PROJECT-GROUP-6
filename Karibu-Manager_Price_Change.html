@@ -4,7 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>KARIBU PRICE CHANGES</title>
-
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
     <style>
       * {
         margin: 0px;
@@ -22,6 +25,7 @@
           'sidebar header'
           'sidebar Right-panel';
         height: 100vh;
+        gap: 3px;
       }
 
       .sidebar {
@@ -35,7 +39,7 @@
         margin: 20px;
         padding: 20px;
         border-radius: 20px;
-        border: 2px solid rgba(255, 255, 255, 0.2);
+        border: 2px solid rgba(33, 30, 30, 0.2);
         padding: 20px;
       }
 
@@ -43,6 +47,11 @@
         margin-top: 20px;
       }
 
+      .manager-options li a {
+        display: flex;
+        gap: 14px;
+        align-items: center;
+      }
       ul {
         margin-top: 50px;
       }
@@ -50,7 +59,7 @@
       li {
         padding: 15px;
         box-sizing: border-box;
-        margin: 10px 0; /* Only vertical margin between items */
+        margin: 10px; /* Only vertical margin between items */
         text-align: left;
         border-bottom: 1px solid rgba(63, 61, 61, 0.2);
         cursor: pointer;
@@ -151,13 +160,48 @@
         <!--Manager options-->
         <div class="manager-options">
           <ul>
-            <li>Cash Sales</li>
-            <li>Credit Sales</li>
-            <li>Procurement</li>
-            <li>Price Changes</li>
-            <li>Stock Tracking</li>
-            <li>Sales Report</li>
-            <li>Main DashBoard</li>
+            <li>
+              <a>
+                <div class="material-icons">dashboard</div>
+                Main DashBoard</a
+              >
+            </li>
+            <li>
+              <a>
+                <div class="material-icons">payments</div>
+                Cash Sales</a
+              >
+            </li>
+            <li>
+              <a>
+                <div class="material-icons">credit_card</div>
+                Credit Sales</a
+              >
+            </li>
+            <li>
+              <a>
+                <div class="material-icons">local_shipping</div>
+                Procurement</a
+              >
+            </li>
+            <li>
+              <a>
+                <div class="material-icons">price_change</div>
+                Price Changes</a
+              >
+            </li>
+            <li>
+              <a>
+                <div class="material-icons">inventory_2</div>
+                Stock Tracking</a
+              >
+            </li>
+            <li>
+              <a>
+                <div class="material-icons">bar_chart</div>
+                Sales Report</a
+              >
+            </li>
           </ul>
         </div>
       </aside>

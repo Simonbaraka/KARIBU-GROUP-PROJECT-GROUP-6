@@ -87,7 +87,6 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-
         border-bottom: 1px solid #ddd;
       }
 
@@ -147,6 +146,39 @@
       button:hover {
         background: #1e1e2f;
       }
+
+      .user-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        background: white;
+        padding: 8px 14px;
+        border-radius: 25px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+        cursor: pointer;
+      }
+
+      .Avatar {
+        background-color: #1e1e2f;
+        color: white;
+        padding: 5px;
+        border-radius: 20px;
+        font-size: larger;
+      }
+
+      .user-info {
+        display: block;
+        align-items: center;
+      }
+
+      .user-name {
+        font: 30px;
+      }
+
+      .user-role {
+        font-size: 12px;
+        color: gray;
+      }
     </style>
   </head>
   <body>
@@ -189,8 +221,15 @@
       <header>
         <h1>CREDIT SALES</h1>
         <input type="text" id="search" placeholder="search items" />
-
-        <div class="user">👤 Admin</div>
+        <div class="user-header">
+          <div class="Avatar">SB</div>
+          <div class="user-info">
+            <div class="user-name">
+              <h5>Simon</h5>
+            </div>
+            <div class="user-role">Sales Agent</div>
+          </div>
+        </div>
       </header>
 
       <!-- Flexbox and Form  -->

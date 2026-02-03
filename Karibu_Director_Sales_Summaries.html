@@ -141,6 +141,37 @@
       border-bottom: 1px solid black;
       text-align: center;
     }
+
+    .user-header {
+      display: flex;
+      border-radius: 25px;
+      padding: 8px 14px;
+      gap: 20px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+      align-items: center;
+    }
+
+    .Avatar {
+      background-color: #1e1e2f;
+      color: white;
+      padding: 5px;
+      border-radius: 20px;
+      font-size: larger;
+    }
+
+    .user-info {
+      display: block;
+      align-items: center;
+    }
+
+    .user-name {
+      font: 30px;
+    }
+
+    .user-role {
+      font-size: 12px;
+      color: gray;
+    }
   </style>
   <body>
     <div class="main-panel">
@@ -156,25 +187,25 @@
         <div class="Director-options">
           <ul>
             <li>
-              <a>
+              <a href="Karibu_Director_DashBoard.html">
                 <div class="material-icons">dashboard</div>
                 Main DashBoard</a
               >
             </li>
             <li>
-              <a
+              <a href="Karibu_Director_Sales_Report.html"
                 ><div class="material-icons">bar_chart</div>
                 Sales Report</a
               >
             </li>
             <li>
-              <a>
+              <a href="Karibu_Director_Sales_Summaries.html">
                 <div class="material-icons">summarize</div>
                 Sales Summaries</a
               >
             </li>
             <li>
-              <a>
+              <a href="Karibu_Director_AggregatedSummaries.html">
                 <div class="material-icons">point_of_sale</div>
                 Aggregated Sales</a
               >
@@ -185,7 +216,16 @@
 
       <header>
         <h1>BRANCHES' SALES REPORT</h1>
-        <div class="material-icons"></div>
+        <input type="text" id="search" placeholder="search items" />
+        <div class="user-header">
+          <div class="Avatar">SB</div>
+          <div class="user-info">
+            <div class="user-name">
+              <h5>Simon</h5>
+            </div>
+            <div class="user-role">Director</div>
+          </div>
+        </div>
         <input type="text" id="search" placeholder="search item" />
       </header>
 

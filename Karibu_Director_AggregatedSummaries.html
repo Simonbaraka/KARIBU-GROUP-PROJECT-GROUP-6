@@ -4,10 +4,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Aggregated Summaries</title>
+
     <link
       href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet"
     />
+
     <style>
       * {
         padding: 0px;
@@ -39,7 +41,7 @@
         margin: 20px;
         padding: 20px;
         border-radius: 20px;
-        border: 2px solid rgba(63, 61, 61, 0.2);
+
         padding: 20px;
       }
 
@@ -65,9 +67,16 @@
         display: flex;
         gap: 14px;
         align-items: center;
+        text-decoration: none;
+        color: black;
       }
       li:hover {
         background-color: rgb(185, 184, 182);
+      }
+
+      .manager-options li.active {
+        background: #406787;
+        font-weight: bold;
       }
 
       header {
@@ -102,6 +111,10 @@
         gap: 15px;
         padding: 20px;
         align-items: center;
+
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
       }
 
       .user-details input {
@@ -121,11 +134,18 @@
       }
 
       button {
-        background: white;
-        color: black;
-        margin-left: 20px;
-        border-radius: 3px;
-        padding: 7px;
+        background: #1e1e2f;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        padding: 10px 18px;
+        font-weight: 600;
+        cursor: pointer;
+        margin: 15px 20px;
+      }
+
+      button:hover {
+        background: #2b2b45;
       }
 
       .director-graphs {
@@ -133,6 +153,48 @@
         border-radius: 5px;
         margin: 20px;
         border: 1px solid#1e1e2f;
+        height: 420px;
+        background: white;
+        padding: 20px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+
+      .user-header {
+        display: flex;
+        border-radius: 25px;
+        padding: 8px 14px;
+        gap: 20px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+        align-items: center;
+      }
+
+      .Avatar {
+        background-color: #1e1e2f;
+        color: white;
+        padding: 5px;
+        border-radius: 20px;
+        font-size: larger;
+      }
+
+      .user-info {
+        display: block;
+        align-items: center;
+      }
+
+      .user-name {
+        font: 30px;
+      }
+
+      .user-role {
+        font-size: 12px;
+        color: gray;
+      }
+
+      img {
+        width: 180px;
+        height: 100px;
+        border-radius: 50%;
+        object-fit: cover;
       }
     </style>
   </head>
@@ -141,32 +203,31 @@
     <div class="main-panel">
       <aside class="sidebar">
         <div class="user-profile">
-          <img alt="Username" />
-          <h3>Username</h3>
+          <img src="Karibu-logo.png" alt="Username" />
         </div>
 
         <div class="manager-options">
           <ul>
             <li>
-              <a>
+              <a href="Karibu_Director_DashBoard.html">
                 <div class="material-icons">dashboard</div>
                 Main DashBoard</a
               >
             </li>
             <li>
-              <a
+              <a href="Karibu_Director_Sales_Report.html"
                 ><div class="material-icons">bar_chart</div>
                 Sales Report</a
               >
             </li>
             <li>
-              <a>
+              <a href="Karibu_Director_Sales_Summaries.html">
                 <div class="material-icons">summarize</div>
                 Sales Summaries</a
               >
             </li>
             <li>
-              <a>
+              <a href="Karibu_Director_AggregatedSummaries.html">
                 <div class="material-icons">point_of_sale</div>
                 Aggregated Sales</a
               >
@@ -177,8 +238,18 @@
 
       <header>
         <h1>Aggregated Summaries</h1>
-        <input type="text" id="search" placeholder="search item" />
+        <input type="text" id="search" placeholder="search items" />
+        <div class="user-header">
+          <div class="Avatar">SB</div>
+          <div class="user-info">
+            <div class="user-name">
+              <h5>Simon</h5>
+            </div>
+            <div class="user-role">Director</div>
+          </div>
+        </div>
       </header>
+
       <main class="Right-panel">
         <form>
           <div class="user-details">
@@ -194,10 +265,45 @@
           <button type="submit">Generate</button>
 
           <div class="director-graphs">
-            <h2>Report is displayed here</h2>
+            <h2>Aggregated Sales Report</h2>
+            <canvas id="salesChart"></canvas>
           </div>
         </form>
       </main>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+      const ctx = document.getElementById('salesChart').getContext('2d');
+
+      const salesChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+          datasets: [
+            {
+              label: 'Total Sales (ZAR)',
+              data: [12000, 19000, 15000, 22000, 18000, 25000],
+              backgroundColor: 'rgba(30, 30, 47, 0.8)',
+              borderRadius: 6,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: true,
+              position: 'top',
+            },
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+            },
+          },
+        },
+      });
+    </script>
   </body>
 </html>

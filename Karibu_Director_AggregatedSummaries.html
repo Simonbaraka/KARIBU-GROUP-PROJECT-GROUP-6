@@ -82,8 +82,7 @@
       }
 
       .manager-options li.active {
-        background: #406787;
-        font-weight: bold;
+        background-color: rgb(227, 226, 223);
       }
 
       header {
@@ -118,7 +117,7 @@
         gap: 15px;
         padding: 20px;
         align-items: center;
-
+        border: 1px solid#1e1e2f;
         background: white;
         border-radius: 10px;
         box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
@@ -127,7 +126,8 @@
       .user-details input {
         padding: 5px;
         border-radius: 5px;
-        border: 1px solid #1e1e2f;
+        border: 1px solid #ddd;
+        background-color: #f8f9fa;
         width: 25%;
       }
 
@@ -226,7 +226,7 @@
                 Sales Summaries</a
               >
             </li>
-            <li>
+            <li class="active">
               <a href="Karibu_Director_AggregatedSummaries.html">
                 <div class="material-icons">point_of_sale</div>
                 Aggregated Sales</a
@@ -237,7 +237,7 @@
       </aside>
 
       <header>
-        <h1>Aggregated Summaries</h1>
+        <h2>Aggregated Summaries</h2>
         <input type="text" id="search" placeholder="search items" />
         <div class="user-header">
           <div class="Avatar">SB</div>

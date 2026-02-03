@@ -87,6 +87,9 @@
         background-color: rgb(185, 184, 182);
       }
 
+      .Agent-options li.active {
+        background-color: rgb(227, 226, 223);
+      }
       header {
         grid-area: header;
         background: white;
@@ -129,7 +132,8 @@
         height: 45px;
         width: 100%;
         border-radius: 5px;
-        border: 1px solid #1e1e2f;
+        border: 1px solid #ddd;
+        background-color: #f8f9fa;
       }
 
       label {
@@ -200,21 +204,21 @@
         <div class="Agent-options">
           <ul>
             <li>
-              <a href="Karibu_DashBoard.html">
+              <a href="Karibu_Sales_Agent_DashBoard.html">
                 <div class="material-icons">dashboard</div>
                 Main DashBoard</a
               >
             </li>
 
             <li>
-              <a href="Karibu-Manager_Sales_Produce.html"
+              <a href="Karibu_Sales_Agent_RegularSales.html"
                 ><div class="material-icons">payments</div>
                 Cash Sales</a
               >
             </li>
 
-            <li>
-              <a href="Karibu-Manager_Credit_Sales.html"
+            <li class="active">
+              <a href="Karibu_Sales_Agent_CreditSales.html"
                 ><div class="material-icons">credit_card</div>
                 Credit Sales</a
               >
@@ -224,7 +228,7 @@
       </aside>
 
       <header>
-        <h1>CREDIT SALES</h1>
+        <h2>CREDIT SALES</h2>
         <input type="text" id="search" placeholder="search items" />
         <div class="user-header">
           <div class="Avatar">SB</div>

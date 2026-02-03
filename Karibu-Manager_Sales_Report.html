@@ -65,6 +65,10 @@
         align-items: center;
       }
 
+      .manager-options li.active {
+        background-color: rgb(227, 226, 223);
+      }
+
       li:hover {
         background-color: rgb(185, 184, 182);
       }
@@ -87,6 +91,7 @@
         padding: 5px;
         border-radius: 5px;
         align-items: center;
+        width: 25%;
       }
 
       header {
@@ -122,6 +127,8 @@
         border-radius: 5px;
         border: 1px solid #1e1e2f;
         width: 25%;
+        border: 1px solid #ddd;
+        background-color: #f8f9fa;
       }
 
       label {
@@ -227,7 +234,7 @@
                 Tracking</a
               >
             </li>
-            <li>
+            <li class="active">
               <a href="Karibu-Manager_Sales_Report.html"
                 ><span class="material-icons">bar_chart</span>Sales Report</a
               >
@@ -237,7 +244,7 @@
       </div>
 
       <header>
-        <h1>Sales Report</h1>
+        <h2>Sales Report</h2>
         <input type="text" id="search" placeholder="search items" />
         <div class="user-header">
           <div class="Avatar">SB</div>

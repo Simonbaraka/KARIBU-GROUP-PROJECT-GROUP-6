@@ -57,6 +57,8 @@
         display: flex;
         gap: 14px;
         align-items: center;
+        text-decoration: none;
+        color: black;
       }
       ul {
         margin-top: 50px;
@@ -75,6 +77,10 @@
 
       li:hover {
         background-color: rgb(185, 184, 182);
+      }
+
+      li.active {
+        background-color: rgb(227, 226, 223);
       }
 
       header {
@@ -128,7 +134,8 @@
         height: 45px;
         width: 100%;
         border-radius: 5px;
-        border: 1px solid #1e1e2f;
+        border: 1px solid #ddd;
+        background-color: #f8f9fa;
       }
 
       label {
@@ -138,7 +145,6 @@
       }
 
       button {
-        margin: 20px 25%;
         padding: 10px 20px;
         background: #1e1e2f;
         color: white;
@@ -197,52 +203,50 @@
         <div class="manager-options">
           <ul>
             <li>
-              <a>
-                <div class="material-icons">dashboard</div>
-                Main DashBoard</a
+              <a href="Karibu_DashBoard.html"
+                ><span class="material-icons">dashboard</span>Main DashBoard</a
               >
             </li>
             <li>
-              <a>
-                <div class="material-icons">payments</div>
-                Cash Sales</a
+              <a href="Karibu-Manager_Sales_Produce.html"
+                ><span class="material-icons">payments</span>Cash Sales</a
+              >
+            </li>
+
+            <li>
+              <a href="Karibu-Manager_Credit_Sales.html"
+                ><span class="material-icons">credit_card</span>
+                Credit Sales
+              </a>
+            </li>
+
+            <li>
+              <a href="Karibu-Manager-Produce_Procurement.html">
+                <span class="material-icons">local_shipping</span>Procurement</a
+              >
+            </li>
+            <li class="active">
+              <a href="Karibu-Manager_Price_Change.html"
+                ><span class="material-icons">price_change</span>Price
+                Changes</a
               >
             </li>
             <li>
-              <a>
-                <div class="material-icons">credit_card</div>
-                Credit Sales</a
+              <a
+                ><span class="material-icons">inventory_2</span>Stock
+                Tracking</a
               >
             </li>
             <li>
-              <a>
-                <div class="material-icons">local_shipping</div>
-                Procurement</a
-              >
-            </li>
-            <li>
-              <a>
-                <div class="material-icons">price_change</div>
-                Price Changes</a
-              >
-            </li>
-            <li>
-              <a>
-                <div class="material-icons">inventory_2</div>
-                Stock Tracking</a
-              >
-            </li>
-            <li>
-              <a>
-                <div class="material-icons">bar_chart</div>
-                Sales Report</a
+              <a href="Karibu-Manager_Sales_Report.html"
+                ><span class="material-icons">bar_chart</span>Sales Report</a
               >
             </li>
           </ul>
         </div>
       </aside>
       <header>
-        <h1>PRICE CHANGES</h1>
+        <h2>PRICE CHANGES</h2>
         <input type="text" id="search" placeholder="search items" />
         <div class="user-header">
           <div class="Avatar">SB</div>
@@ -259,7 +263,12 @@
           <div class="user-details">
             <div class="input-box">
               <label for="name">Produce Name</label>
-              <input type="text" id="name" required />
+              <input
+                type="text"
+                id="name"
+                placeholder=" eg. Tomatoes,Cereals"
+                required
+              />
             </div>
 
             <div class="input-box">
@@ -269,11 +278,15 @@
 
             <div class="input-box">
               <label for="amount">Date Of Change</label>
-              <input type="datetime" id="amount" required />
+              <input type="date" id="amount" required />
+            </div>
+
+            <div class="input-box">
+              <button onclick="alert('Sale recorded successfully!')">
+                Change
+              </button>
             </div>
           </div>
-
-          <button onclick="alert('Sale recorded successfully!')">Change</button>
         </form>
       </div>
     </div>

@@ -5,78 +5,163 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Karibu Manager Login Page</title>
     <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
       body {
         background: #e2e7eb;
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        padding: 20px;
       }
+
       .main-panel {
         background-color: white;
-        margin: 5%;
-        margin-right: 25%;
-        margin-left: 25%;
-        border-radius: 10px;
-      }
-
-      .user-details {
-        padding: 20px;
-        margin: 20px;
-      }
-
-      .input-box {
-        padding: 20px;
-      }
-
-      .input-box input {
         width: 100%;
-        padding: 10px;
-        border-radius: 5px;
-      }
-
-      .input-box label {
-        font-size: 25px;
+        max-width: 500px;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        padding: 40px;
       }
 
       h1 {
         text-align: center;
+        color: #1e1e2f;
+        margin-bottom: 30px;
+        font-size: 1.8rem;
       }
 
-      .input-boxs button {
-        padding: 5px;
+      .user-details {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .input-box {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .input-box label {
+        font-size: 1rem;
+        font-weight: 600;
+        color: #333;
+      }
+
+      .input-box input {
+        width: 100%;
+        padding: 12px 15px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 1rem;
+        background-color: #f8f9fa;
+        transition: all 0.3s ease;
+      }
+
+      .input-box input:focus {
+        outline: none;
+        border-color: #1e1e2f;
+        background-color: white;
+        box-shadow: 0 0 0 3px rgba(30, 30, 47, 0.1);
+      }
+
+      .button-section {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        margin-top: 10px;
+      }
+
+      .button-section button {
+        width: 100%;
+        padding: 12px;
         color: white;
         background: #1e1e2f;
+        border: none;
         border-radius: 5px;
-        width: 100px;
-        margin-left: 20px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
       }
 
-      .input-boxs h4 {
-        font-size: large;
-        padding-top: 10px;
-        margin-left: 20px;
+      .button-section button:hover {
+        background: #2a2a3f;
+      }
+
+      .button-section button:active {
+        transform: scale(0.98);
+      }
+
+      .forgot-password {
+        text-align: center;
+      }
+
+      .forgot-password a {
+        color: #1e1e2f;
+        text-decoration: none;
+        font-size: 0.95rem;
+        transition: color 0.3s ease;
+      }
+
+      .forgot-password a:hover {
+        color: #4a4a6a;
+        text-decoration: underline;
+      }
+
+      /* Responsive design */
+      @media (max-width: 600px) {
+        .main-panel {
+          padding: 30px 20px;
+        }
+
+        h1 {
+          font-size: 1.5rem;
+        }
       }
     </style>
   </head>
   <body>
     <div class="main-panel">
-      <!--Form details-->
-      <form class="Manager-Form-Detail">
+      <form class="Manager-Form-Detail" action="#" method="post">
+        <h1>MANAGER LOGIN</h1>
+
         <div class="user-details">
           <div class="input-box">
-            <div class="input-box">
-              <h1>MANAGER LOGIN</h1>
-            </div>
-
             <label for="mail">Manager Email</label>
-            <input type="email" id="mail" placeholder="abcdef@gmail.com" />
+            <input
+              type="email"
+              id="mail"
+              name="email"
+              placeholder="abcdef@gmail.com"
+              required
+              autocomplete="email"
+            />
           </div>
 
           <div class="input-box">
             <label for="Password">Manager Password</label>
-            <input type="password" id="Password" />
+            <input
+              type="password"
+              id="Password"
+              name="password"
+              placeholder="Enter your password"
+              required
+              autocomplete="current-password"
+            />
           </div>
 
-          <div class="input-boxs">
-            <button>Sign In</button>
-            <h4>forgot Password ?</h4>
+          <div class="button-section">
+            <button type="submit">Sign In</button>
+            <div class="forgot-password">
+              <a href="#">Forgot Password?</a>
+            </div>
           </div>
         </div>
       </form>

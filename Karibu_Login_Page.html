@@ -4,31 +4,191 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Karibu Login Page</title>
-    <link rel="stylesheet" href="Karibu_Login_Page.css" />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        background: #e2e7eb;
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        padding: 20px;
+      }
+
+      .main-panel {
+        background-color: white;
+        width: 100%;
+        max-width: 500px;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        padding: 40px;
+      }
+
+      .logo-container {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 20px;
+      }
+
+      img {
+        border-radius: 50%;
+        width: 150px;
+        height: 150px;
+        object-fit: cover;
+      }
+
+      h1 {
+        text-align: center;
+        color: #1e1e2f;
+        margin-bottom: 30px;
+        font-size: 1.8rem;
+      }
+
+      .user-details {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .input-box {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .input-box label {
+        font-size: 1rem;
+        font-weight: 600;
+        color: #333;
+      }
+
+      .input-box input {
+        width: 100%;
+        padding: 12px 15px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 1rem;
+        background-color: #f8f9fa;
+        transition: all 0.3s ease;
+      }
+
+      .input-box input:focus {
+        outline: none;
+        border-color: #1e1e2f;
+        background-color: white;
+        box-shadow: 0 0 0 3px rgba(30, 30, 47, 0.1);
+      }
+
+      .button-section {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        margin-top: 10px;
+      }
+
+      .button-section button {
+        width: 100%;
+        padding: 12px;
+        color: white;
+        background: #1e1e2f;
+        border: none;
+        border-radius: 5px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.3s ease;
+      }
+
+      .button-section button:hover {
+        background: #2a2a3f;
+      }
+
+      .button-section button:active {
+        transform: scale(0.98);
+      }
+
+      .links {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+      }
+
+      .links a {
+        color: #1e1e2f;
+        text-decoration: none;
+        font-size: 0.95rem;
+        transition: color 0.3s ease;
+      }
+
+      .links a:hover {
+        color: #4a4a6a;
+        text-decoration: underline;
+      }
+
+      /* Responsive design */
+      @media (max-width: 600px) {
+        .main-panel {
+          padding: 30px 20px;
+        }
+
+        h1 {
+          font-size: 1.5rem;
+        }
+
+        .links {
+          flex-direction: column;
+          gap: 10px;
+          text-align: center;
+        }
+      }
+    </style>
   </head>
   <body>
-    <div class="login-Form">
-      <form class="Form-Detail">
+    <div class="main-panel">
+      <form class="Form-Detail" action="Karibu_DashBoard.html">
+        <div class="logo-container">
+          <img src="Karibu-logo.png" alt="Karibu Groceries Logo" />
+        </div>
         <h1>KARIBU GROCERIES LTD</h1>
 
-        <label for="mail">Email</label><br />
-        <input
-          type="email"
-          id="mail"
-          placeholder="abcdef@gmail.com"
-          required
-        /><br /><br /><br />
+        <div class="user-details">
+          <div class="input-box">
+            <label for="mail">Email</label>
+            <input
+              type="email"
+              id="mail"
+              name="email"
+              placeholder="abcdef@gmail.com"
+              required
+              autocomplete="email"
+            />
+          </div>
 
-        <label for="Password">Password</label><br />
-        <input type="text" id="Password" required /><br /><br /><br />
+          <div class="input-box">
+            <label for="Password">Password</label>
+            <input
+              type="password"
+              id="Password"
+              name="password"
+              placeholder="Enter your password"
+              required
+              autocomplete="current-password"
+            />
+          </div>
 
-        <button class="presentation">
-          <a href="Karibu_DashBoard.html">Sign In</a>
-        </button>
-
-        <div class="links">
-          <a href="">forgot Password ?</a>
-          <a href="">Create an account</a>
+          <div class="button-section">
+            <button type="submit">Sign In</button>
+            <div class="links">
+              <a href="#">Forgot Password?</a>
+              <a href="#">Create an account</a>
+            </div>
+          </div>
         </div>
       </form>
     </div>

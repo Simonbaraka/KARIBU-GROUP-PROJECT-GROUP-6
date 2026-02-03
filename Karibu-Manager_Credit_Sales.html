@@ -73,8 +73,13 @@
         display: flex;
         gap: 14px;
         align-items: center;
+        text-decoration: none;
+        color: black;
       }
 
+      .manager-options li.active {
+        background-color: rgb(227, 226, 223);
+      }
       li:hover {
         background-color: rgb(185, 184, 182);
       }
@@ -94,6 +99,7 @@
         padding: 5px;
         border-radius: 5px;
         align-items: center;
+        width: 25%;
       }
 
       .Right-panel {
@@ -132,7 +138,8 @@
         height: 45px;
         width: 100%;
         border-radius: 5px;
-        border: 1px solid #1e1e2f;
+        border: 1px solid #ddd;
+        background-color: #f8f9fa;
       }
 
       label {
@@ -201,45 +208,43 @@
         <div class="manager-options">
           <ul>
             <li>
-              <a>
-                <div class="material-icons">dashboard</div>
-                Main DashBoard</a
+              <a href="Karibu_DashBoard.html"
+                ><span class="material-icons">dashboard</span>Main DashBoard</a
               >
             </li>
             <li>
-              <a>
-                <div class="material-icons">payments</div>
-                Cash Sales</a
+              <a href="Karibu-Manager_Sales_Produce.html"
+                ><span class="material-icons">payments</span>Cash Sales</a
+              >
+            </li>
+
+            <li class="active">
+              <a href="Karibu-Manager_Credit_Sales.html"
+                ><span class="material-icons">credit_card</span>
+                Credit Sales
+              </a>
+            </li>
+
+            <li>
+              <a href="Karibu-Manager-Produce_Procurement.html">
+                <span class="material-icons">local_shipping</span>Procurement</a
               >
             </li>
             <li>
-              <a>
-                <div class="material-icons">credit_card</div>
-                Credit Sales</a
+              <a href="Karibu-Manager_Price_Change.html"
+                ><span class="material-icons">price_change</span>Price
+                Changes</a
               >
             </li>
             <li>
-              <a>
-                <div class="material-icons">local_shipping</div>
-                Procurement</a
+              <a
+                ><span class="material-icons">inventory_2</span>Stock
+                Tracking</a
               >
             </li>
             <li>
-              <a>
-                <div class="material-icons">price_change</div>
-                Price Changes</a
-              >
-            </li>
-            <li>
-              <a>
-                <div class="material-icons">inventory_2</div>
-                Stock Tracking</a
-              >
-            </li>
-            <li>
-              <a>
-                <div class="material-icons">bar_chart</div>
-                Sales Report</a
+              <a href="Karibu-Manager_Sales_Report.html"
+                ><span class="material-icons">bar_chart</span>Sales Report</a
               >
             </li>
           </ul>
@@ -247,7 +252,7 @@
       </aside>
 
       <header>
-        <h1>CREDIT SALES</h1>
+        <h2>CREDIT SALES</h2>
         <input type="text" id="search" placeholder="search items" />
         <div class="user-header">
           <div class="Avatar">SB</div>

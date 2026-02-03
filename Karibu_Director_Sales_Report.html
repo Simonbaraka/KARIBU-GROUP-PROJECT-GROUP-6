@@ -79,6 +79,10 @@
         background-color: rgb(185, 184, 182);
       }
 
+      li.active {
+        background-color: rgb(227, 226, 223);
+      }
+
       .sidebar a {
         text-decoration: none;
         color: black;
@@ -112,41 +116,55 @@
 
       .user-details {
         display: grid;
-        grid-template-columns: 250px 1fr;
+        grid-template-columns: repeat(4, 1fr);
         gap: 15px;
         padding: 20px;
-        align-items: center;
+        align-items: end;
+        background-color: white;
+        border: 1px solid#1e1e2f;
+        border-radius: 5px;
       }
 
-      .user-details input {
+      .input-box input {
         padding: 5px;
         border-radius: 5px;
-        border: 1px solid #1e1e2f;
-        width: 25%;
+        border: 1px solid #ddd;
+        background-color: #f8f9fa;
       }
 
-      label {
-        font-weight: 500;
+      .input-box label {
         font-size: 20px;
       }
 
+      .input-box button {
+        background: #1e1e2f;
+        color: white;
+        border-radius: 5px;
+        padding: 7px;
+        height: 36px;
+        cursor: pointer;
+      }
+
       h2 {
-        align-items: center;
+        text-align: center;
+        border-bottom: 1px solid black;
+        margin: 5px;
       }
 
       button {
-        background: white;
-        color: black;
+        background-color: #1e1e2f;
+        color: white;
         margin-left: 20px;
         border-radius: 3px;
         padding: 7px;
       }
 
-      .director-graphs {
-        height: 55vh;
-        border-radius: 5px;
-        margin: 20px;
+      .Director-graphs {
+        background-color: white;
+        padding: 20px;
         border: 1px solid#1e1e2f;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+        min-height: 350px;
       }
 
       .user-header {
@@ -199,7 +217,7 @@
                 Main DashBoard</a
               >
             </li>
-            <li>
+            <li class="active">
               <a href="Karibu_Director_Sales_Report.html"
                 ><div class="material-icons">bar_chart</div>
                 Sales Report</a
@@ -222,7 +240,7 @@
       </div>
 
       <header>
-        <h1>Sales Report</h1>
+        <h2>Sales Report</h2>
         <input type="text" id="search" placeholder="search items" />
         <div class="user-header">
           <div class="Avatar">SB</div>
@@ -238,16 +256,22 @@
       <div class="Right-panel">
         <form>
           <div class="user-details">
-            <label for="start">Branch Name</label>
-            <input type="text" />
+            <div class="input-box">
+              <label for="start">Branch</label>
+              <input type="text" />
+            </div>
 
-            <label for="start">Start Date</label>
-            <input type="date" id="start" />
+            <div class="input-box">
+              <label for="start">Start Date</label>
+              <input type="date" id="start" />
+            </div>
 
-            <label for="end">End Date</label>
-            <input type="date" id="end" />
+            <div class="input-box">
+              <label for="end">End Date</label> <input type="date" id="end" />
+            </div>
+
+            <div class="input-box"><button>Generate</button></div>
           </div>
-          <button>Generate</button>
         </form>
 
         <div class="Director-graphs"><h2>Report is displayed here</h2></div>

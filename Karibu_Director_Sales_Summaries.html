@@ -77,7 +77,9 @@
     li:hover {
       background-color: rgb(185, 184, 182);
     }
-
+    .Director-options li.active {
+      background-color: rgb(227, 226, 223);
+    }
     .sidebar a {
       text-decoration: none;
       color: black;
@@ -115,11 +117,15 @@
       padding: 20px;
       align-items: end;
       background-color: white;
+      border: 1px solid#1e1e2f;
+      border-radius: 5px;
     }
 
     .input-box input {
       padding: 5px;
       border-radius: 5px;
+      border: 1px solid #ddd;
+      background-color: #f8f9fa;
     }
 
     .input-box label {
@@ -138,9 +144,10 @@
     .Director-sales-report {
       background-color: white;
       padding: 20px;
-
+      border: 1px solid#1e1e2f;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
       min-height: 350px;
+      border-radius: 5px;
     }
 
     .Director-sales-report h2 {
@@ -203,7 +210,7 @@
                 Sales Report</a
               >
             </li>
-            <li>
+            <li class="active">
               <a href="Karibu_Director_Sales_Summaries.html">
                 <div class="material-icons">summarize</div>
                 Sales Summaries</a
@@ -220,7 +227,7 @@
       </div>
 
       <header>
-        <h1>BRANCHES' SALES REPORT</h1>
+        <h2>BRANCHES' SALES SUMMARIES</h2>
         <input type="text" id="search" placeholder="search items" />
         <div class="user-header">
           <div class="Avatar">SB</div>
@@ -231,7 +238,6 @@
             <div class="user-role">Director</div>
           </div>
         </div>
-        <input type="text" id="search" placeholder="search item" />
       </header>
 
       <!--Right panel-->

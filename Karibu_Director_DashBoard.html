@@ -77,6 +77,9 @@
       li:hover {
         background-color: rgb(185, 184, 182);
       }
+      .Director-Options li.active {
+        background-color: rgb(227, 226, 223);
+      }
 
       .sidebar a {
         text-decoration: none;
@@ -172,7 +175,7 @@
 
         <div class="Director-Options">
           <ul>
-            <li>
+            <li class="active">
               <a href="Karibu_Director_DashBoard.html">
                 <div class="material-icons">dashboard</div>
                 Main DashBoard</a
@@ -196,12 +199,19 @@
                 Aggregated Sales</a
               >
             </li>
+
+            <li>
+              <a href="Karibu_DashBoard.html"
+                ><div class="material-icons">logout</div>
+                Log Out</a
+              >
+            </li>
           </ul>
         </div>
       </div>
 
       <header>
-        <h1>Director Dashboard</h1>
+        <h2>Director Dashboard</h2>
         <input type="text" id="search" placeholder="search items" />
         <div class="user-header">
           <div class="Avatar">SB</div>

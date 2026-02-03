@@ -80,6 +80,9 @@
         align-items: center;
       }
 
+      .Agent-options li.active {
+        background-color: rgb(227, 226, 223);
+      }
       li:hover {
         background-color: rgb(185, 184, 182);
       }
@@ -197,8 +200,8 @@
         <!--Manager options-->
         <div class="Agent-options">
           <ul>
-            <li>
-              <a href="Karibu_DashBoard.html">
+            <li class="active">
+              <a href="Karibu_Sales_Agent_DashBoard.html">
                 <div class="material-icons">dashboard</div>
                 Main DashBoard</a
               >
@@ -217,12 +220,19 @@
                 Credit Sales</a
               >
             </li>
+
+            <li>
+              <a href="Karibu_DashBoard.html"
+                ><div class="material-icons">logout</div>
+                Log Out</a
+              >
+            </li>
           </ul>
         </div>
       </aside>
 
       <header>
-        <h1>DashBoard</h1>
+        <h2>DashBoard</h2>
 
         <input type="text" id="search" placeholder="search items" />
         <div class="user-header">

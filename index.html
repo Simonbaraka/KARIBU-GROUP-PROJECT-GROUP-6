@@ -102,7 +102,6 @@
         font-size: 1rem;
         font-weight: 600;
         cursor: pointer;
-        transition: background 0.3s ease;
       }
 
       .button-section button:hover {
@@ -151,7 +150,7 @@
   </head>
   <body>
     <div class="main-panel">
-      <form class="Form-Detail" action="Karibu_DashBoard.html">
+      <form class="Form-Detail">
         <div class="logo-container">
           <img src="Karibu-logo.png" alt="Karibu Groceries Logo" />
         </div>
@@ -192,5 +191,50 @@
         </div>
       </form>
     </div>
+    <script>
+      let form = document.querySelector('.Form-Detail');
+      let userEmail = document.querySelector('#mail');
+      let userPassword = document.querySelector('#Password');
+
+      form.addEventListener('submit', (e) => {
+        e.preventDefault(); // Prevents page reloads
+
+        //Gets what rhw user typed into the login form
+        let username = userEmail.value.trim();
+        let userpassword = userPassword.value.trim();
+
+        // Check empty fields
+        if (username === '' || userpassword === '') {
+          alert('Fill in all fields');
+          return;
+        }
+
+        // Allowed users
+        let usernames = ['Admin@gmail.com', 'Manager@gmail.com'];
+        let password = '1234';
+
+        // Check login
+        if (usernames.includes(username) && password === userpassword) {
+          let userdetails = {
+            firstname: 'Simon',
+            secondName: 'Baraka',
+            email: username,
+            role: 'Admin',
+          };
+
+          // Save to localStorage
+          localStorage.setItem('userdetails', JSON.stringify(userdetails));
+
+          alert('Login successful');
+
+          // Redirect
+          window.location.href = 'Karibu_DashBoard.html';
+        } else {
+          alert('Invalid email or password');
+        }
+
+        console.log(username, userpassword);
+      });
+    </script>
   </body>
 </html>

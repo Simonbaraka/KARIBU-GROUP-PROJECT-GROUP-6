@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Create Account - Karibu</title>
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        background: #e2e7eb;
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        padding: 20px;
+      }
+
+      .main-panel {
+        background-color: white;
+        width: 100%;
+        max-width: 520px;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        padding: 40px;
+      }
+
+      .logo-container {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 20px;
+      }
+
+      img {
+        border-radius: 50%;
+        width: 120px;
+        height: 120px;
+        object-fit: cover;
+      }
+
+      h1 {
+        text-align: center;
+        color: #1e1e2f;
+        margin-bottom: 25px;
+        font-size: 1.7rem;
+      }
+
+      .user-details {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+      }
+
+      .input-box {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      .input-box label {
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: #333;
+      }
+
+      .input-box input,
+      .input-box select {
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 1rem;
+        background-color: #f8f9fa;
+      }
+
+      .input-box input:focus,
+      .input-box select:focus {
+        outline: none;
+        border-color: #1e1e2f;
+        background: white;
+      }
+
+      .button-section {
+        margin-top: 15px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      button {
+        padding: 12px;
+        background: #1e1e2f;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 1rem;
+        font-weight: bold;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background: #2a2a3f;
+      }
+
+      .links {
+        text-align: center;
+      }
+
+      .links a {
+        color: #1e1e2f;
+        text-decoration: none;
+        font-size: 0.9rem;
+      }
+
+      .links a:hover {
+        text-decoration: underline;
+      }
+
+      .error {
+        color: red;
+        font-size: 0.9rem;
+        text-align: center;
+        display: none;
+      }
+
+      .success {
+        color: green;
+        font-size: 0.9rem;
+        text-align: center;
+        display: none;
+      }
+
+      @media (max-width: 600px) {
+        .main-panel {
+          padding: 25px 18px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="main-panel">
+      <form id="signupForm">
+        <!-- Logo -->
+        <div class="logo-container">
+          <img src="Karibu-logo.png" alt="Karibu Logo" />
+        </div>
+
+        <h1>Create Account</h1>
+
+        <div class="user-details">
+          <!-- First Name -->
+          <div class="input-box">
+            <label for="fname">First Name</label>
+            <input type="text" id="fname" required />
+          </div>
+
+          <!-- Last Name -->
+          <div class="input-box">
+            <label for="lname">Last Name</label>
+            <input type="text" id="lname" required />
+          </div>
+
+          <!-- Email -->
+          <div class="input-box">
+            <label for="email">Email</label>
+            <input type="email" id="email" required />
+          </div>
+
+          <!-- Role -->
+          <div class="input-box">
+            <label for="role">Role</label>
+            <select id="role" required>
+              <option value="">Select role</option>
+              <option value="director">Director</option>
+              <option value="manager">Manager</option>
+              <option value="sales">Sales Agent</option>
+            </select>
+          </div>
+
+          <!-- Password -->
+          <div class="input-box">
+            <label for="password">Password</label>
+            <input type="password" id="password" required />
+          </div>
+
+          <!-- Confirm Password -->
+          <div class="input-box">
+            <label for="confirm">Confirm Password</label>
+            <input type="password" id="confirm" required />
+          </div>
+
+          <!-- Messages -->
+          <div class="error" id="errorMsg"></div>
+          <div class="success" id="successMsg"></div>
+
+          <!-- Buttons -->
+          <div class="button-section">
+            <button type="submit">Create Account</button>
+
+            <div class="links">
+              <a href="login.html">Already have an account? Login</a>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+      const form = document.getElementById('signupForm');
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const fname = document.getElementById('fname').value.trim();
+        const lname = document.getElementById('lname').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const role = document.getElementById('role').value;
+        const password = document.getElementById('password').value;
+        const confirm = document.getElementById('confirm').value;
+
+        const errorMsg = document.getElementById('errorMsg');
+        const successMsg = document.getElementById('successMsg');
+
+        errorMsg.style.display = 'none';
+        successMsg.style.display = 'none';
+
+        /* Validation */
+
+        if (!fname || !lname || !email || !role || !password || !confirm) {
+          errorMsg.textContent = 'Please fill in all fields.';
+          return;
+        }
+
+        if (password.length < 6) {
+          errorMsg.textContent = 'Password must be at least 6 characters.';
+          errorMsg.style.display = 'block';
+          return;
+        }
+
+        if (password !== confirm) {
+          errorMsg.textContent = 'Passwords do not match.';
+          errorMsg.style.display = 'block';
+          return;
+        }
+
+        /* Temporary localStorage save (for testing) */
+
+        const user = {
+          firstName: fname,
+          lastName: lname,
+          email: email,
+          role: role,
+          password: password,
+        };
+
+        localStorage.setItem('karibu_User', JSON.stringify(user));
+
+        successMsg.textContent = 'Account created successfully!';
+        successMsg.style.display = 'block';
+
+        // Redirect after 2 seconds
+        setTimeout(() => {
+          window.location.href = 'index.html';
+        }, 2000);
+      });
+    </script>
+  </body>
+</html>

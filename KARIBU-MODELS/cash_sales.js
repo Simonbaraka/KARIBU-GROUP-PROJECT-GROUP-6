@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 
-// Create Schema (Structure of Cash Sales)
 const cashSchema = new mongoose.Schema({
   Produce_name: {
     type: String,
@@ -19,23 +18,21 @@ const cashSchema = new mongoose.Schema({
 
   Date_time: {
     type: Date,
-    default: Date.now, // Auto set date
+    default: Date.now,
   },
 
   Tonnage: {
     type: Number,
     required: true,
-    min: 1000, // Minimum allowed value
+    min: 1000,
   },
 
   Amount_paid: {
-    type: Number, // Better as Number
+    type: Number,
     required: true,
   },
 });
 
-// Create Model
-const CashModel = mongoose.model('CashSales', cashSchema);
+const CashSales = mongoose.model('CashSales', cashSchema);
 
-// Export Model
-module.exports = { CashModel };
+module.exports = CashSales;

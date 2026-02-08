@@ -1,7 +1,7 @@
 const express = require('express');
 const { database } = require('.Karibu-Database/Karibu-MongoDB');
 
-const { router } = require('./Karibu-Routes/cash-sales');
+const router = require('./Karibu-Routes/cash-sales');
 const app = express();
 
 app.use(express.json());

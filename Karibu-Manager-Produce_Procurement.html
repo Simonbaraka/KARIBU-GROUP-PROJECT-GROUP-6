@@ -275,15 +275,15 @@
 
       <div class="Right-panel">
         <!-- Procurement form start -->
-        <form action="#">
+        <form class="_Form">
           <div class="user-details">
             <!--Produce name -->
             <div class="input-box">
               <label for="SuplierName">Produce Name</label>
               <input
                 type="text"
-                id="SuplierName"
-                name="SuplierName"
+                id="Produce_Name"
+                name="Produce_Name"
                 required
                 placeholder="simon"
               /><br />
@@ -291,10 +291,10 @@
 
             <!-- Produce Tonnage -->
             <div class="input-box">
-              <label for="produceTonnage">Produce Tonnage </label>
+              <label for="produce_Tonnage">Produce Tonnage </label>
               <input
                 type="number"
-                id="ProductName"
+                id="Product_Name"
                 name="productName"
                 step="0.01"
                 required
@@ -311,14 +311,14 @@
             <!--dealer name -->
             <div class="input-box">
               <label for="name"> Dealer Name </label>
-              <input type="text" id="name" step="0.01" required />
+              <input type="text" id="Dealer_Name" step="0.01" required />
             </div>
 
             <!-- Purchase Date -->
 
             <div class="input-box">
               <label for="PurchaseDate"> Date/ Time </label>
-              <input type="datetime-local" id="PurchaseDate" required />
+              <input type="datetime-local" id="Purchase_Date" required />
             </div>
 
             <!-- Karibu Branches Dropdown -->
@@ -337,10 +337,34 @@
 
             <!-- Reset & Submit buttons -->
           </div>
-          <button type="reset">Create Order</button>
+          <button type="submit" ld="Orderbtn">Create Order</button>
           <!-- Supplier Name -->
         </form>
       </div>
     </div>
+
+    <script>
+      //Get the form
+      let _form = document.querySelector('._Form');
+      let Order_button = document.querySelector('#Orderbtn');
+      const data = {
+        Produce_name: document.getElementById('produce_Name').value,
+        Produce_tonnage: document.getElementById('produce_Tonnage').value,
+        Produce_cost: Number(document.getElementById('cost').value),
+        Dealer_name: document.getElementById('Dealer_Name').value,
+        purchase_date: document.getElementById('Purchase_Date').value,
+        Branch: document.getElementById('country').value,
+      };
+
+      _form.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        try {
+          console.log('Data Fetching completed');
+        } catch (err) {
+          console.error(err);
+        }
+      });
+    </script>
   </body>
 </html>

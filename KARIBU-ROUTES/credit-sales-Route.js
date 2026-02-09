@@ -1,5 +1,5 @@
 const express = require('express');
-const CreditModel = require('../Karibu-Models/credit_sales');
+const CreditModel = require('../Karibu-models/credit_sales-Model');
 const router = express.Router();
 
 //Get All credit sales

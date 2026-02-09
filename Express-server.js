@@ -1,13 +1,14 @@
 const express = require('express');
-const { database } = require('./KARIBU-DATABASE/Karibu-MongoDB');
+const database = require('../Karibu-database/Karibu-MongoDB');
 
 //ROUTE IMPORTS
-const CreditSalesRouter = require('./KARIBU-ROUTES/credit-sales-Route');
-const cashSalesRouter = require('./KARIBU-ROUTES/cash-sales-Route');
-const ProcurementRouter = require('./KARIBU-ROUTES/Procurement-Route');
+const CreditSalesRouter = require('../Karibu-routes/credit-sales-Route');
+const cashSalesRouter = require('../Karibu-routes/cash-sales-Route');
+const ProcurementRouter = require('../Karibu-routes/Procurement-Route');
 
 const app = express();
 app.use(express.urlencoded({ extended: true }));
+s;
 app.use(express.json());
 
 const PORT = 3000;

@@ -1,5 +1,5 @@
 const express = require('express');
-const Procurement_Model = require('../Karibu-Models/procurement');
+const Procurement_Model = require('../Karibu-models/procurement-Model');
 const Router = express.Router();
 
 //Get Procurement

@@ -1,9 +1,9 @@
 const express = require('express');
-const CashModel = require('../Karibu-Models/cash_sales');
+const CashModel = require('../Karibu-models/cash_sales-Model');
 
 const router = express.Router();
 
-router.get('/Sales', async (req, res) => {
+router.get('/cashsales', async (req, res) => {
   try {
     let sale = await CashModel.find();
     res
@@ -14,7 +14,7 @@ router.get('/Sales', async (req, res) => {
   }
 });
 
-router.post('/Sales', async (req, res) => {
+router.post('/cashsales', async (req, res) => {
   try {
     let newRecord = new CashModel(req.body);
 
@@ -29,7 +29,7 @@ router.post('/Sales', async (req, res) => {
   }
 });
 
-router.patch('/Sales/:id', async (req, res) => {
+router.patch('/cashsales/:id', async (req, res) => {
   try {
     const id = req.body.id;
     const updated = await CashModel.findByIdAndUpdate(id, req.body, {
@@ -43,7 +43,7 @@ router.patch('/Sales/:id', async (req, res) => {
   }
 });
 
-router.delete('/Sales', async (req, res) => {
+router.delete('/cashsales', async (req, res) => {
   try {
     let id_ = req.params.id;
 

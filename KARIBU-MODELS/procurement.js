@@ -38,4 +38,4 @@ const Produce_Schema = new mongoose.Schema({
 const Procurement_Model = mongoose.model('Procurement', Produce_Schema);
 
 // Export Model
-module.exports = { Procurement_Model };
+module.exports = Procurement_Model;

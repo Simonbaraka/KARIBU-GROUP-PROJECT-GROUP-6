@@ -45,7 +45,7 @@ const CreditSchema = new mongoose.Schema({
 });
 
 // Create Model
-const CreditModel = mongoose.model('Credit_Sales', CreditSchema);
+const CreditModel = mongoose.model('CreditSales', CreditSchema);
 
 // Export Model
-module.exports = { CreditModel };
+module.exports = CreditModel;

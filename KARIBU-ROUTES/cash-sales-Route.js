@@ -1,5 +1,5 @@
 const express = require('express');
-const CashModel = require('./KARIBU-MODELS/cash_sales');
+const CashModel = require('../Karibu-Models/cash_sales');
 
 const router = express.Router();
 
@@ -43,9 +43,15 @@ router.patch('/Sales/:id', async (req, res) => {
   }
 });
 
-router.delete('/Sales', (req, res) => {
+router.delete('/Sales', async (req, res) => {
   try {
-    console.log('Data deleted successfully ');
+    let id_ = req.params.id;
+
+    const delete_data = await CashModel.findByIdAndDelete(id_);
+
+    res
+      .status(200)
+      .json({ message: 'Data deleted successfully', data: delete_data });
   } catch (err) {
     res
       .status(500)

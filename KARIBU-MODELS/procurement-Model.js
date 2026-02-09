@@ -10,26 +10,26 @@ const Produce_Schema = new mongoose.Schema({
   Produce_tonnage: {
     type: Number,
     required: true,
-    min: 1000, // Minimum allowed value
+    min: 1000,
   },
 
   Produce_Cost: {
-    type: Number, // Better as Number
+    type: Number,
     required: true,
   },
 
   Dealer_Name: {
-    type: String, // Better as Number
+    type: String,
     required: true,
   },
 
   Date_time: {
     type: Date,
-    default: Date.now, // Auto set date
+    default: Date.now,
   },
 
   Branch: {
-    type: String, // Better as Number
+    type: String,
     required: true,
   },
 });

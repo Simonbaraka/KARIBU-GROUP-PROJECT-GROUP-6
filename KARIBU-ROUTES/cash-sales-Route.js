@@ -43,7 +43,7 @@ router.patch('/cashsales/:id', async (req, res) => {
   }
 });
 
-router.delete('/cashsales', async (req, res) => {
+router.delete('/cashsales/:id', async (req, res) => {
   try {
     let id_ = req.params.id;
 

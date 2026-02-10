@@ -360,9 +360,22 @@
         e.preventDefault();
 
         try {
+          if (
+            !data.Produce_name ||
+            !data.Produce_tonnage ||
+            !data.Produce_cost ||
+            !data.Dealer_name ||
+            !data.purchase_date ||
+            !data.Branch
+          ) {
+            alert('Please fill in all fields');
+          }
           console.log('Data Fetching completed');
         } catch (err) {
-          console.error(err);
+          console.error({
+            message: 'Data fetching was incomplete',
+            error: err.message,
+          });
         }
       });
     </script>

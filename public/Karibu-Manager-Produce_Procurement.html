@@ -279,14 +279,13 @@
           <div class="user-details">
             <!--Produce name -->
             <div class="input-box">
-              <label for="SuplierName">Produce Name</label>
+              <label for="Produce_Name">Produce Name</label>
               <input
                 type="text"
                 id="Produce_Name"
-                name="Produce_Name"
                 required
-                placeholder="simon"
-              /><br />
+                placeholder="e.g., Tomatoes"
+              />
             </div>
 
             <!-- Produce Tonnage -->
@@ -294,10 +293,9 @@
               <label for="produce_Tonnage">Produce Tonnage </label>
               <input
                 type="number"
-                id="Product_Name"
-                name="productName"
-                step="0.01"
+                id="produce_Tonnage"
                 required
+                placeholder="e.g., 1000"
               />
             </div>
 
@@ -305,13 +303,23 @@
 
             <div class="input-box">
               <label for="cost"> Produce Cost </label>
-              <input type="number" id="cost" step="0.01" required />
+              <input
+                type="number"
+                id="cost"
+                required
+                placeholder="e.g., 5000"
+              />
             </div>
 
             <!--dealer name -->
             <div class="input-box">
               <label for="name"> Dealer Name </label>
-              <input type="text" id="Dealer_Name" step="0.01" required />
+              <input
+                type="text"
+                id="Dealer_Name"
+                placeholder="Dealer Name"
+                required
+              />
             </div>
 
             <!-- Purchase Date -->
@@ -324,7 +332,7 @@
             <!-- Karibu Branches Dropdown -->
             <div class="input-box">
               <label for="ProductCategory">Karibu Branches </label>
-              <select id="country" name="country">
+              <select id="country" name="country" required>
                 <option value="">Select Category</option>
                 <option value="ug">Kampala Branch</option>
                 <option value="ke">Entebbe</option>
@@ -337,68 +345,63 @@
 
             <!-- Reset & Submit buttons -->
           </div>
-          <button type="submit" ld="Orderbtn">Create Order</button>
+          <button type="submit" id="Orderbtn">Create Order</button>
           <!-- Supplier Name -->
         </form>
       </div>
     </div>
 
     <script>
-      //Get the form
-      let _form = document.querySelector('._Form');
-      let Order_button = document.querySelector('#Orderbtn');
+      const _form = document.querySelector('._Form');
 
       _form.addEventListener('submit', async (e) => {
         e.preventDefault();
 
         const data = {
-          Produce_name: document.getElementById('produce_Name').value,
-
+          Produce_name: document.getElementById('Produce_Name').value.trim(),
           Produce_tonnage: Number(
             document.getElementById('produce_Tonnage').value
           ),
-
-          Produce_Cost: Number(
-            // 👈 match model
-            document.getElementById('cost').value
-          ),
-
-          Dealer_Name: document.getElementById('Dealer_Name').value, // 👈 match model
-
+          Produce_Cost: Number(document.getElementById('cost').value),
+          Dealer_Name: document.getElementById('Dealer_Name').value.trim(),
           Branch: document.getElementById('country').value,
+          Date_time:
+            document.getElementById('Purchase_Date').value ||
+            new Date().toISOString(),
         };
 
-        try {
-          if (
-            !data.Produce_name ||
-            !data.Produce_tonnage ||
-            !data.Produce_Cost ||
-            !data.Dealer_Name ||
-            !data.purchase_date ||
-            !data.Branch
-          ) {
-            alert('Please fill in all fields');
-            return;
-          }
+        // Validation
+        if (
+          !data.Produce_name ||
+          !data.Produce_tonnage ||
+          !data.Produce_Cost ||
+          !data.Dealer_Name ||
+          !data.Branch ||
+          !data.Date_time
+        ) {
+          alert('Please fill in all fields');
+          return;
+        }
 
+        try {
           const response = await fetch('/api/procurement', {
             method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data),
           });
 
           const result = await response.json();
 
-          if (!response.ok) {
-            throw new Error(result.message || 'Failed to save data');
+          if (response.ok) {
+            alert('✅ Procurement saved successfully!');
+            _form.reset();
+            console.log('Saved:', result.data);
+          } else {
+            alert('❌ Failed to save: ' + result.message);
           }
         } catch (err) {
-          console.error({
-            message: 'Data fetching was incomplete',
-            error: err.message,
-          });
+          console.error('Error:', err.message);
+          alert('❌ Error submitting form');
         }
       });
     </script>

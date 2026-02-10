@@ -89,3 +89,5 @@ Router.delete('/:Produce_name', async (req, res) => {
       .json({ message: 'Procurement Deletion Failed', error: err.message });
   }
 });
+
+module.exports = Router;

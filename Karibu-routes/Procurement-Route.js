@@ -22,13 +22,14 @@ Router.get('/', async (req, res) => {
 Router.post('/', async (req, res) => {
   try {
     const _procurement = new Procurement_Model(req.body);
-
+    console.log('DATA RECEIVED:', req.body);
     await _procurement.save();
     res.status(201).json({
       message: 'Procurement Recorded Successfully',
       data: _procurement,
     });
   } catch (err) {
+    console.log('SAVE ERROR:', err.message);
     res.status(500).json({
       message: 'Failed to Create Procurement Data',
       error: err.message,

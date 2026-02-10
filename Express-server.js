@@ -9,6 +9,7 @@ const ProcurementRouter = require('./Karibu-routes/Procurement-Route');
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use('/api/procurement', ProcurementRouter);
 app.use('/api', cashSalesRouter);
 
 const PORT = 3000;

@@ -347,30 +347,53 @@
       //Get the form
       let _form = document.querySelector('._Form');
       let Order_button = document.querySelector('#Orderbtn');
-      const data = {
-        Produce_name: document.getElementById('produce_Name').value,
-        Produce_tonnage: document.getElementById('produce_Tonnage').value,
-        Produce_cost: Number(document.getElementById('cost').value),
-        Dealer_name: document.getElementById('Dealer_Name').value,
-        purchase_date: document.getElementById('Purchase_Date').value,
-        Branch: document.getElementById('country').value,
-      };
 
-      _form.addEventListener('submit', (e) => {
+      _form.addEventListener('submit', async (e) => {
         e.preventDefault();
+
+        const data = {
+          Produce_name: document.getElementById('produce_Name').value,
+
+          Produce_tonnage: Number(
+            document.getElementById('produce_Tonnage').value
+          ),
+
+          Produce_Cost: Number(
+            // 👈 match model
+            document.getElementById('cost').value
+          ),
+
+          Dealer_Name: document.getElementById('Dealer_Name').value, // 👈 match model
+
+          Branch: document.getElementById('country').value,
+        };
 
         try {
           if (
             !data.Produce_name ||
             !data.Produce_tonnage ||
-            !data.Produce_cost ||
-            !data.Dealer_name ||
+            !data.Produce_Cost ||
+            !data.Dealer_Name ||
             !data.purchase_date ||
             !data.Branch
           ) {
             alert('Please fill in all fields');
+            return;
           }
-          console.log('Data Fetching completed');
+
+          const response = await fetch('/api/procurement', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+          });
+
+          const result = await response.json();
+
+          if (!response.ok) {
+            throw new Error(result.message || 'Failed to save data');
+          }
         } catch (err) {
           console.error({
             message: 'Data fetching was incomplete',

@@ -334,8 +334,8 @@
               <label for="ProductCategory">Karibu Branches </label>
               <select id="country" name="country" required>
                 <option value="">Select Category</option>
-                <option value="ug">Kampala Branch</option>
-                <option value="ke">Entebbe</option>
+                <option value="Kampala">Kampala Branch</option>
+                <option value="Entebbe">Entebbe</option>
               </select>
             </div>
 
@@ -353,6 +353,7 @@
 
     <script>
       const _form = document.querySelector('._Form');
+      const API_URL = 'http://localhost:3000';
 
       _form.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -384,7 +385,7 @@
         }
 
         try {
-          const response = await fetch('/api/procurement', {
+          const response = await fetch(`${API_URL}/api/procurement`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data),

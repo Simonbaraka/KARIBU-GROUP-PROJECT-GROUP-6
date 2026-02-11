@@ -225,28 +225,20 @@
         const password = document.getElementById('password').value;
         const confirm = document.getElementById('confirm').value;
 
-        const errorMsg = document.getElementById('errorMsg');
-        const successMsg = document.getElementById('successMsg');
-
-        errorMsg.style.display = 'none';
-        successMsg.style.display = 'none';
-
         /* Validation */
 
         if (!fname || !lname || !email || !role || !password || !confirm) {
-          errorMsg.textContent = 'Please fill in all fields.';
+          alert('Please fill in all fields.');
           return;
         }
 
         if (password.length < 6) {
-          errorMsg.textContent = 'Password must be at least 6 characters.';
-          errorMsg.style.display = 'block';
+          alert('Password must be more than 6 characters');
           return;
         }
 
         if (password !== confirm) {
-          errorMsg.textContent = 'Passwords do not match.';
-          errorMsg.style.display = 'block';
+          alert('Passwords do not match.');
           return;
         }
 

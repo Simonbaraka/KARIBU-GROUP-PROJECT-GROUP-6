@@ -3,7 +3,7 @@ const CashModel = require('../Karibu-models/cash_sales-Model');
 
 const router = express.Router();
 
-router.get('/cashsales', async (req, res) => {
+router.get('/', async (req, res, next) => {
   try {
     let sale = await CashModel.find();
     res
@@ -14,27 +14,33 @@ router.get('/cashsales', async (req, res) => {
   }
 });
 
-router.post('/cashsales', async (req, res) => {
+router.post('/', async (req, res) => {
   try {
+    //console.log('DATA RECEIVED:', req.body);
     let newRecord = new CashModel(req.body);
-
     await newRecord.save();
     res
-      .status(200)
+      .status(201)
       .json({ message: 'Sales saved successfully', data: newRecord });
   } catch (err) {
-    res
-      .status(500)
-      .json({ message: 'Failed to save sales data ', error: err.message });
+    console.error('Error in /api/cashsales:', err);
+    res.status(500).json({ message: 'Failed to save sales data ' });
   }
 });
 
-router.patch('/cashsales/:id', async (req, res) => {
+router.patch('/:id', async (req, res) => {
   try {
-    const id = req.body.id;
+    const id = req.params.id;
     const updated = await CashModel.findByIdAndUpdate(id, req.body, {
       new: true,
     });
+
+    if (!updated) {
+      res.status(404).json({
+        message: 'Record not found',
+      });
+    }
+
     res
       .status(200)
       .json({ message: 'Updated Sales Successfully', data: updated });
@@ -43,11 +49,15 @@ router.patch('/cashsales/:id', async (req, res) => {
   }
 });
 
-router.delete('/cashsales/:id', async (req, res) => {
+router.delete('/:id', async (req, res) => {
   try {
     let id_ = req.params.id;
 
     const delete_data = await CashModel.findByIdAndDelete(id_);
+
+    if (!delete_data) {
+      res.status(404).json({ message: 'Record Not found' });
+    }
 
     res
       .status(200)

@@ -18,8 +18,8 @@ const CreditSchema = new mongoose.Schema({
   },
 
   NIN: {
-    type: Date,
-    default: Date.now, // Auto set date
+    type: Number,
+    required: true, // Auto set date
   },
 
   Produce_name: {
@@ -41,6 +41,7 @@ const CreditSchema = new mongoose.Schema({
   Date_time: {
     type: Date,
     default: Date.now, // Auto set date
+    required: true,
   },
 });
 

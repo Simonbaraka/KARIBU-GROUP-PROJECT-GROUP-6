@@ -17,9 +17,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/api/procurement', ProcurementRouter);
 app.use('/api/cashsales', cashSalesRouter);
+app.use('/api/creditsales', CreditSalesRouter);
 
 console.log('Cash Router:', cashSalesRouter);
 console.log('Procurement Router:', ProcurementRouter);
+console.log('Credit sales Router:', ProcurementRouter);
 
 const PORT = 3000;
 app.listen(PORT, () => {

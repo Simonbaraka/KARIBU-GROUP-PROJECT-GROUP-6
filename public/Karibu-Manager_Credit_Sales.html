@@ -253,6 +253,7 @@
 
       <header>
         <h2>CREDIT SALES</h2>
+
         <input type="text" id="search" placeholder="search items" />
         <div class="user-header">
           <div class="Avatar">SB</div>
@@ -269,26 +270,26 @@
 
       <div class="Right-panel">
         <!-- Procurement form start -->
-        <form action="#">
+        <form class="_Form">
           <div class="user-details">
             <!-- Supplier Name -->
             <div class="input-box">
-              <label for="SuplierName">Buyer Name</label>
-              <input type="text" id="SuplierName" name="SuplierName" required />
+              <label for="Buyer_Name">Buyer Name</label>
+              <input type="text" id="Buyer_Name" name="SuplierName" required />
             </div>
 
             <!--Sales Agent -->
 
             <div class="input-box">
-              <label for="cost"> Sales Agent </label>
-              <input type="name" id="cost" step="0.01" required />
+              <label for="Sales_Agent"> Sales Agent </label>
+              <input type="name" id="Sales_Agent" step="0.01" required />
             </div>
 
             <!-- Dealer contact -->
 
             <div class="input-box">
-              <label for="UnitPrice">Contacts </label>
-              <input type="tel" id="UnitPrice" required />
+              <label for="Contacts">Contacts </label>
+              <input type="tel" id="Contacts" required />
             </div>
 
             <!-- Dealer contact -->
@@ -296,43 +297,101 @@
             <!-- Dealer contact -->
 
             <div class="input-box">
-              <label for="UnitPrice">NIN </label>
-              <input type="text" id="UnitPrice" name="UnitPrice" required />
+              <label for="NIN">NIN </label>
+              <input type="text" id="NIN" name="UnitPrice" required />
             </div>
 
             <!-- Supplier Contact -->
 
             <div class="input-box">
-              <label for="producetype">Produce Name/Type </label>
-              <input type="text" id="producetype" required />
+              <label for="Produce_Name">Produce Name/Type </label>
+              <input type="text" id="Produce_Name" required />
             </div>
 
             <!-- Produce Tonnage -->
 
             <div class="input-box">
-              <label for="produceTonnage">Produce Tonnage </label>
-              <input type="number" id="ProductName" step="1000" required />
+              <label for="produce_Tonnage">Produce Tonnage </label>
+              <input type="number" id="produce_Tonnage" required />
             </div>
             <!-- Amount due -->
             <div class="input-box">
-              <label for="TotalAmount">Amount Due </label>
-              <input type="number" id="TotalAmount" step="0.01" required />
+              <label for="Amount_Due">Amount Due </label>
+              <input type="number" id="Amount_Due" required />
             </div>
 
             <!-- Purchase Date -->
             <div class="input-box">
-              <label for="PurchaseDate">Due Date/ Time </label>
-              <input type="datetime-local" id="PurchaseDate" required />
+              <label for="Purchase_Date">Due Date </label>
+              <input type="date" id="Purchase_Date" required />
             </div>
 
             <!--dealer name -->
 
             <!-- Reset & Submit buttons -->
           </div>
-          <button type="reset">Reset</button>
-          <button type="submit">Submit</button>
+
+          <button type="click" id="btn">Submit</button>
         </form>
       </div>
     </div>
+
+    <script>
+      let submitbutton = document.querySelector('#btn');
+      _form = document.querySelector('._Form');
+      const API_URL = 'http://localhost:3000';
+      submitbutton.addEventListener('click', async (e) => {
+        e.preventDefault();
+
+        const dataObject = {
+          Buyer_name: document.querySelector('#Buyer_Name').value,
+          Agent_name: document.querySelector('#Sales_Agent').value,
+          Contact: document.querySelector('#Contacts').value,
+          NIN: Number(document.querySelector('#NIN').value),
+          Produce_name: document.querySelector('#Produce_Name').value,
+          Tonnage: document.querySelector('#produce_Tonnage').value,
+          Amount_Due: Number(document.querySelector('#Amount_Due').value),
+          Date_time:
+            document.querySelector('#Purchase_Date').value ||
+            new Date().toISOString(),
+        };
+
+        //VALIDATE EXISTENCE OF ALL FIELDS
+        if (
+          !dataObject.Buyer_name ||
+          !dataObject.Agent_name ||
+          !dataObject.Contact ||
+          !dataObject.NIN ||
+          !dataObject.Produce_name ||
+          !dataObject.Date_time ||
+          !dataObject.Tonnage
+        ) {
+          alert('Incomplete Form filling ');
+          return;
+        }
+
+        try {
+          let response = await fetch(`${API_URL}/api/creditsales`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(dataObject),
+          });
+
+          let result = await response.json();
+
+          if (response.ok) {
+            alert('✅ Credit Sales saved successfully');
+            _form.reset();
+
+            console.log('Saved:', result.data);
+          } else {
+            alert('❌ Failed to save: ' + result.message);
+          }
+        } catch (err) {
+          console.error('Error:', err.message);
+          alert('❌ Error submitting form');
+        }
+      });
+    </script>
   </body>
 </html>

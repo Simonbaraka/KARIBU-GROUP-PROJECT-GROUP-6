@@ -200,6 +200,34 @@
         font-size: 12px;
         color: gray;
       }
+
+      .recent {
+        grid-column: 1 / -1;
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        margin-top: 2%;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 5px;
+      }
+
+      th {
+        background: #1e1e2f;
+        text-align: left;
+        padding: 10px;
+        border-left: 2px solid #ddd;
+        color: white;
+      }
+      td {
+        text-align: left;
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+        border-left: 2px solid #ddd;
+      }
     </style>
     <!-- Linking external CSS file for styling -->
   </head>
@@ -311,7 +339,7 @@
             <!-- Purchase Date -->
             <div class="input-box">
               <label for="Purchase_Date"> Date/ Time </label>
-              <input type="datetime-local" id="Purchase_Date" required />
+              <input type="date" id="Purchase_Date" required />
             </div>
 
             <!-- Sale Price -->
@@ -320,10 +348,27 @@
               <input type="number" id="Amount_Paid" step="1" required />
             </div>
           </div>
-
           <!-- Invoice buttons -->
 
           <button type="submit" id="Record-btn">Record Sale</button>
+          <div class="recent">
+            <table>
+              <h3>Recent Transactions</h3>
+              <br />
+              <thead>
+                <tr>
+                  <th>No.</th>
+                  <th>Produce</th>
+                  <th>Buyer</th>
+                  <th>Agent</th>
+                  <th>Produce Tonnage</th>
+                  <th>Date</th>
+                  <th>Amount Paid</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
         </form>
       </div>
     </div>
@@ -355,6 +400,18 @@
           return;
         }
 
+        /*
+         * Value Validation
+         */
+        if (data.Tonnage < 1000 || data.Amount_paid < 350000) {
+          alert('Tonnage must be greater than 1000');
+          return;
+        }
+        if (data.Amount_paid < 350000) {
+          alert('Amount paid must be greater than 350000');
+          return;
+        }
+
         try {
           let response = await fetch(`${API_URL}/api/cashsales`, {
             method: 'POST',
@@ -375,6 +432,34 @@
           alert('❌ Error submitting form');
         }
       });
+
+      const tableBody = document.querySelector('.recent tbody');
+
+      // Fetch all sales
+      async function loadSales() {
+        const res = await fetch(`${API_URL}/api/cashsales`);
+        const result = await res.json();
+
+        let innerHTML1 = '';
+
+        result.data.forEach((sale, index) => {
+          innerHTML1 += `
+          <tr>
+              <td>${index + 1}</td>
+              <td>${sale.Produce_name}</td>
+              <td>${sale.Buyer_name}</td>
+              <td>${sale.Agent_name}</td>
+              <td>${sale.Tonnage}</td>
+              <td>${sale.Date_time}</td>
+              <td>${sale.Amount_paid}</td>
+           <tr>
+    `;
+        });
+        tableBody.innerHTML = innerHTML1;
+      }
+
+      // Load when page opens
+      loadSales();
     </script>
   </body>
 </html>

@@ -17,7 +17,11 @@ const CreditSchema = new mongoose.Schema({
     required: true,
   },
 
-  NIN: {
+  Location: {
+    type: String,
+    required: true,
+  },
+  National_ID: {
     type: Number,
     required: true, // Auto set date
   },
@@ -41,6 +45,11 @@ const CreditSchema = new mongoose.Schema({
   Date_time: {
     type: Date,
     default: Date.now, // Auto set date
+    required: true,
+  },
+
+  Branch: {
+    type: String,
     required: true,
   },
 });

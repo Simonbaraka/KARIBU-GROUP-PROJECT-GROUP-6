@@ -136,6 +136,14 @@
         background-color: #f8f9fa;
       }
 
+      .input-box select {
+        height: 45px;
+        width: 100%;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+        background-color: #f8f9fa;
+      }
+
       label {
         font-weight: 500;
         margin-bottom: 5px;
@@ -245,70 +253,160 @@
 
       <div class="Right-panel">
         <!-- Procurement form start -->
-        <form action="#">
+        <form class="Credit_form">
           <div class="user-details">
             <!-- Supplier Name -->
             <div class="input-box">
-              <label for="SuplierName">Buyer Name</label>
-              <input type="text" id="SuplierName" name="SuplierName" required />
+              <label for="Buyer_Name">Buyer Name</label>
+              <input
+                type="text"
+                id="Buyer_Name"
+                placeholder=" Eg Simon Baraka"
+                required
+              />
             </div>
 
             <!--Sales Agent -->
 
             <div class="input-box">
-              <label for="cost"> Sales Agent </label>
-              <input type="name" id="cost" step="0.01" required />
+              <label for="Agent_name"> Sales Agent </label>
+              <input
+                type="name"
+                id="Agent_name"
+                placeholder=" Eg Simon Baraka"
+                required
+              />
             </div>
 
             <!-- Dealer contact -->
 
             <div class="input-box">
-              <label for="UnitPrice">Contacts </label>
-              <input type="tel" id="UnitPrice" required />
+              <label for="Contact">Contacts </label>
+              <input
+                type="tel"
+                id="Contact"
+                placeholder="Eg 0761498549"
+                required
+              />
             </div>
 
             <!-- Dealer contact -->
-
+            <div class="input-box">
+              <label for="NIN">National ID </label>
+              <input
+                type="number"
+                id="NIN"
+                placeholder="12345678901234"
+                required
+              />
+            </div>
             <!-- Dealer contact -->
 
             <div class="input-box">
-              <label for="UnitPrice">Location </label>
-              <input type="text" id="UnitPrice" name="UnitPrice" required />
+              <label for="Location">Location </label>
+              <input
+                type="text"
+                id="Location"
+                placeholder="Eg Bbunga Kampala"
+                required
+              />
             </div>
 
             <!-- Supplier Contact -->
 
             <div class="input-box">
-              <label for="producetype">Produce Name/Type </label>
-              <input type="text" id="producetype" required />
+              <label for="Produce_Name">Produce Name/Type </label>
+              <input
+                type="text"
+                id="Produce_Name"
+                placeholder="Eg cereals, cabbages"
+                required
+              />
             </div>
 
-            <!-- Produce Tonnage -->
-
             <div class="input-box">
-              <label for="produceTonnage">Produce Tonnage </label>
-              <input type="number" id="ProductName" step="1000" required />
+              <label for="produce_Tonnage">Produce Tonnage (Kgs) </label>
+              <input
+                type="number"
+                id="produce_Tonnage"
+                placeholder="Eg 1,000"
+                required
+              />
             </div>
             <!-- Amount due -->
             <div class="input-box">
-              <label for="TotalAmount">Amount Due </label>
-              <input type="number" id="TotalAmount" step="0.01" required />
+              <label for="Amount_Due">Amount Due (Ugx) </label>
+              <input
+                type="number"
+                id="Amount_Due"
+                placeholder="Eg 100,0000"
+                required
+              />
             </div>
 
             <!-- Purchase Date -->
             <div class="input-box">
               <label for="PurchaseDate">Due Date/ Time </label>
-              <input type="datetime-local" id="PurchaseDate" required />
+              <input type="date" id="PurchaseDate" required />
             </div>
 
-            <!--dealer name -->
+            <!--branch-->
+            <div class="input-box">
+              <label for="Branch">Karibu Branch</label>
+              <select id="Branch">
+                <option></option>
+                <option>Kampala</option>
+                <option>Entebbe</option>
+              </select>
+            </div>
 
             <!-- Reset & Submit buttons -->
           </div>
-          <button type="reset">Reset</button>
           <button type="submit">Submit</button>
         </form>
       </div>
     </div>
+
+    <script>
+      _creditForm = document.querySelector('.Credit_form');
+      const API_URL = 'http://localhost:3000';
+      _creditForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        let data = {
+          Buyer_name: document.querySelector('#Buyer_Name').value,
+          Agent_name: document.querySelector('#Agent_name').value,
+          Contact: Number(document.querySelector('#Contact').value),
+          Location: document.querySelector('#Location').value,
+          National_ID: Number(document.querySelector('#NIN').value),
+          Produce_name: document.querySelector('#Produce_Name').value,
+          Tonnage: Number(document.querySelector('#produce_Tonnage').value),
+          Amount_Due: Number(document.querySelector('#Amount_Due').value),
+          Date_time: document.querySelector('#PurchaseDate').value,
+          Branch: document.querySelector('#Branch').value,
+        };
+
+        try {
+          let response = await fetch(`${API_URL}/api/creditsales`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data),
+          });
+
+          let result = await response.json();
+
+          if (response.ok) {
+            alert('✅ Cash Sales saved successfully');
+            _creditForm.reset();
+            console.log('Saved:', result.data);
+          } else {
+            alert('❌ Failed to save: ' + result.message);
+          }
+        } catch (err) {
+          console.error('Error:', err.message);
+          alert('❌ Error submitting form');
+        }
+      });
+    </script>
   </body>
 </html>

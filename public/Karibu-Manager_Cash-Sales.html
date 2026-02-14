@@ -249,7 +249,7 @@
               >
             </li>
             <li class="active">
-              <a href="Karibu-Manager_Sales_Produce.html"
+              <a href="Karibu-Manager_Cash-Sales.html"
                 ><span class="material-icons">payments</span>Cash Sales</a
               >
             </li>
@@ -313,27 +313,42 @@
                 type="text"
                 id="Produce_Name"
                 required
-                placeholder="simon"
+                placeholder="Eg cereals, cabbages"
               />
             </div>
 
             <!--Buyer name -->
             <div class="input-box">
               <label for="Buyer_name"> Buyer Name </label>
-              <input type="text" id="Buyer_name" step="0.01" required />
+              <input
+                type="text"
+                id="Buyer_name"
+                placeholder=" Eg Simon Baraka"
+                required
+              />
             </div>
 
             <!--Sales Agent  name  -->
             <div class="input-box">
-              <label for="sales_agent"> Sales Agent name </label>
-              <input type="text" id="sales_agent" step="0.01" required />
+              <label for="sales_agent"> Sales Agent </label>
+              <input
+                type="text"
+                id="sales_agent"
+                placeholder=" Eg Simon Baraka"
+                required
+              />
             </div>
 
             <!-- Produce Tonnage -->
 
             <div class="input-box">
-              <label for="produce_Tonnage">Produce Tonnage </label>
-              <input type="number" id="produce_Tonnage" step="0.01" required />
+              <label for="produce_Tonnage">Produce Tonnage (Kgs) </label>
+              <input
+                type="number"
+                id="produce_Tonnage"
+                placeholder="Eg 1000, 20000"
+                required
+              />
             </div>
 
             <!-- Purchase Date -->
@@ -344,8 +359,13 @@
 
             <!-- Sale Price -->
             <div class="input-box">
-              <label for="Amount_Paid">Amount Paid </label>
-              <input type="number" id="Amount_Paid" step="1" required />
+              <label for="Amount_Paid">Selling Price (Ugx)</label>
+              <input
+                type="number"
+                id="Amount_Paid"
+                placeholder=" Eg 100,000"
+                required
+              />
             </div>
           </div>
           <!-- Invoice buttons -->
@@ -403,7 +423,7 @@
         /*
          * Value Validation
          */
-        if (data.Tonnage < 1000 || data.Amount_paid < 350000) {
+        if (data.Tonnage < 1000) {
           alert('Tonnage must be greater than 1000');
           return;
         }

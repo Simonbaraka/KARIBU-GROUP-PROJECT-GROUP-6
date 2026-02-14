@@ -275,49 +275,94 @@
             <!-- Supplier Name -->
             <div class="input-box">
               <label for="Buyer_Name">Buyer Name</label>
-              <input type="text" id="Buyer_Name" name="SuplierName" required />
+              <input
+                type="text"
+                id="Buyer_Name"
+                placeholder=" Eg Simon Baraka"
+                required
+              />
             </div>
 
             <!--Sales Agent -->
 
             <div class="input-box">
               <label for="Sales_Agent"> Sales Agent </label>
-              <input type="name" id="Sales_Agent" step="0.01" required />
+              <input
+                type="name"
+                id="Sales_Agent"
+                placeholder=" Eg Simon Baraka"
+                required
+              />
             </div>
 
             <!-- Dealer contact -->
 
             <div class="input-box">
               <label for="Contacts">Contacts </label>
-              <input type="tel" id="Contacts" required />
+              <input
+                type="tel"
+                id="Contacts"
+                placeholder="Eg  0761498549"
+                required
+              />
             </div>
 
             <!-- Dealer contact -->
 
-            <!-- Dealer contact -->
-
             <div class="input-box">
-              <label for="NIN">NIN </label>
-              <input type="text" id="NIN" name="UnitPrice" required />
+              <label for="NIN">National ID </label>
+              <input
+                type="text"
+                id="NIN"
+                name="UnitPrice"
+                placeholder="12345678901234"
+                required
+              />
+            </div>
+
+            <!-- Dealer Location -->
+            <div class="input-box">
+              <label for="Location">Location </label>
+              <input
+                type="text"
+                id="Location"
+                placeholder="Eg Bbunga Kampala"
+                required
+              />
             </div>
 
             <!-- Supplier Contact -->
 
             <div class="input-box">
               <label for="Produce_Name">Produce Name/Type </label>
-              <input type="text" id="Produce_Name" required />
+              <input
+                type="text"
+                id="Produce_Name"
+                placeholder="Eg cereals, cabbages"
+                required
+              />
             </div>
 
             <!-- Produce Tonnage -->
 
             <div class="input-box">
-              <label for="produce_Tonnage">Produce Tonnage </label>
-              <input type="number" id="produce_Tonnage" required />
+              <label for="produce_Tonnage">Produce Tonnage (Kgs) </label>
+              <input
+                type="number"
+                id="produce_Tonnage"
+                placeholder="Eg 1000, 2000"
+                required
+              />
             </div>
             <!-- Amount due -->
             <div class="input-box">
-              <label for="Amount_Due">Amount Due </label>
-              <input type="number" id="Amount_Due" required />
+              <label for="Amount_Due">Amount Due (Ugx) </label>
+              <input
+                type="number"
+                id="Amount_Due"
+                placeholder=" Eg 100,000"
+                required
+              />
             </div>
 
             <!-- Purchase Date -->
@@ -327,7 +372,14 @@
             </div>
 
             <!--dealer name -->
-
+            <div class="input-box">
+              <label for="Branch">Karibu Branch</label>
+              <select id="Branch">
+                <option>Select Branch</option>
+                <option>Kampala</option>
+                <option>Entebbe</option>
+              </select>
+            </div>
             <!-- Reset & Submit buttons -->
           </div>
 
@@ -347,13 +399,15 @@
           Buyer_name: document.querySelector('#Buyer_Name').value,
           Agent_name: document.querySelector('#Sales_Agent').value,
           Contact: document.querySelector('#Contacts').value,
-          NIN: Number(document.querySelector('#NIN').value),
+          Location: document.querySelector('#Location').value,
+          National_ID: Number(document.querySelector('#NIN').value),
           Produce_name: document.querySelector('#Produce_Name').value,
           Tonnage: document.querySelector('#produce_Tonnage').value,
           Amount_Due: Number(document.querySelector('#Amount_Due').value),
           Date_time:
             document.querySelector('#Purchase_Date').value ||
             new Date().toISOString(),
+          Branch: document.querySelector('#Branch').value,
         };
 
         //VALIDATE EXISTENCE OF ALL FIELDS
@@ -361,7 +415,7 @@
           !dataObject.Buyer_name ||
           !dataObject.Agent_name ||
           !dataObject.Contact ||
-          !dataObject.NIN ||
+          !dataObject.National_ID ||
           !dataObject.Produce_name ||
           !dataObject.Date_time ||
           !dataObject.Tonnage

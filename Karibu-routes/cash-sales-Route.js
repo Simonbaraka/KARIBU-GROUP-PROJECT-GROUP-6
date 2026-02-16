@@ -2,6 +2,25 @@ const express = require('express');
 const CashModel = require('../Karibu-models/cash_sales-Model');
 
 const router = express.Router();
+/**
+ * @openapi
+ * tags:
+ *   name: CashSales
+ *   description: Cash sales management
+ */
+
+/**
+ * @openapi
+ * /api/cashsales:
+ *   get:
+ *     summary: Get all cash sales
+ *     tags: [CashSales]
+ *     responses:
+ *       200:
+ *         description: Sales retrieved successfully
+ *       500:
+ *         description: Server error
+ */
 
 router.get('/', async (req, res, next) => {
   try {
@@ -13,6 +32,32 @@ router.get('/', async (req, res, next) => {
     res.status(500).json({ message: 'Sales not found', error: err.message });
   }
 });
+
+/**
+ * @openapi
+ * /api/cashsales:
+ *   post:
+ *     summary: Create new cash sale
+ *     tags: [CashSales]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               Buyer_name:
+ *                 type: string
+ *               Amount:
+ *                 type: number
+ *               Product:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: Sale created successfully
+ *       500:
+ *         description: Failed to save data
+ */
 
 router.post('/', async (req, res) => {
   try {
@@ -27,6 +72,34 @@ router.post('/', async (req, res) => {
     res.status(500).json({ message: 'Failed to save sales data ' });
   }
 });
+
+/**
+ * @openapi
+ * /api/cashsales/{id}:
+ *   patch:
+ *     summary: Update cash sale
+ *     tags: [CashSales]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Sale ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *     responses:
+ *       200:
+ *         description: Sale updated successfully
+ *       404:
+ *         description: Record not found
+ *       500:
+ *         description: Update failed
+ */
 
 router.patch('/:id', async (req, res) => {
   try {
@@ -48,6 +121,28 @@ router.patch('/:id', async (req, res) => {
     res.status(500).json({ message: 'Update Failed', error: err.message });
   }
 });
+
+/**
+ * @openapi
+ * /api/cashsales/{id}:
+ *   delete:
+ *     summary: Delete cash sale
+ *     tags: [CashSales]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Sale ID
+ *     responses:
+ *       200:
+ *         description: Sale deleted successfully
+ *       404:
+ *         description: Record not found
+ *       500:
+ *         description: Delete failed
+ */
 
 router.delete('/:id', async (req, res) => {
   try {

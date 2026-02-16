@@ -214,8 +214,9 @@
     <!-- JavaScript -->
     <script>
       const form = document.getElementById('signupForm');
+      const API_URL = 'http://localhost:3000';
 
-      form.addEventListener('submit', function (e) {
+      form.addEventListener('submit', async (e) => {
         e.preventDefault();
 
         const fname = document.getElementById('fname').value.trim();
@@ -225,15 +226,14 @@
         const password = document.getElementById('password').value;
         const confirm = document.getElementById('confirm').value;
 
-        /* Validation */
-
+        // Validation
         if (!fname || !lname || !email || !role || !password || !confirm) {
           alert('Please fill in all fields.');
           return;
         }
 
         if (password.length < 6) {
-          alert('Password must be more than 6 characters');
+          alert('Password must be at least 6 characters.');
           return;
         }
 
@@ -242,25 +242,45 @@
           return;
         }
 
-        /* Temporary localStorage save (for testing) */
-
         const user = {
-          firstName: fname,
-          lastName: lname,
-          email: email,
-          role: role,
-          password: password,
+          FirstName: fname,
+          LastName: lname,
+          Email: email,
+          Role: role,
+          Password: password,
+          confirm_Password: confirm, // send for backend validation
         };
 
-        localStorage.setItem('karibu_User', JSON.stringify(user));
+        try {
+          const response = await fetch(`${API_URL}/api/users`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(user),
+          });
 
-        successMsg.textContent = 'Account created successfully!';
-        successMsg.style.display = 'block';
+          const result = await response.json();
 
-        // Redirect after 2 seconds
-        setTimeout(() => {
-          window.location.href = 'index.html';
-        }, 2000);
+          if (response.ok) {
+            alert('✅ Account created successfully');
+
+            console.log('Saved:', result.data);
+
+            // Clear form
+            form.reset();
+
+            // Redirect after 2 seconds
+            setTimeout(() => {
+              window.location.href = 'login.html';
+            }, 2000);
+          } else {
+            alert('❌ Failed: ' + result.message);
+          }
+        } catch (error) {
+          console.error('Network error:', error);
+          alert('❌ Cannot connect to server. Try again later.');
+        }
       });
     </script>
   </body>

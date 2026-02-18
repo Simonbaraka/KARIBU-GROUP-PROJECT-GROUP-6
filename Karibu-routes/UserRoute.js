@@ -24,7 +24,7 @@ router.get('/', async (req, res) => {
 router.post('/', async (req, res) => {
   try {
     // Remove confirm_Password before saving
-    const { confirm_Password, ...userData } = req.body;
+    const { ...userData } = req.body;
 
     let user = new userModel(userData);
     await user.save();
@@ -32,6 +32,7 @@ router.post('/', async (req, res) => {
     // Don't send password in response
     const userResponse = user.toObject();
     delete userResponse.Password;
+    console.log(userResponse);
 
     res.status(201).json({
       success: true,
@@ -39,7 +40,7 @@ router.post('/', async (req, res) => {
       data: userResponse,
     });
   } catch (err) {
-    res.status(400).json({
+    res.status(401).json({
       success: false,
       message: 'Failed to create user account',
       error: err.message,

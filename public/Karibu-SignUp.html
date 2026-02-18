@@ -177,9 +177,9 @@
             <label for="role">Role</label>
             <select id="role" required>
               <option value="">Select role</option>
-              <option value="director">Director</option>
-              <option value="manager">Manager</option>
-              <option value="sales">Sales Agent</option>
+              <option value="Director">Director</option>
+              <option value="Manager">Manager</option>
+              <option value="Sales Agent">Sales Agent</option>
             </select>
           </div>
 
@@ -248,12 +248,12 @@
           Email: email,
           Role: role,
           Password: password,
-          confirm_Password: confirm, // send for backend validation
+          // send for backend validation
         };
 
         try {
           const response = await fetch(`${API_URL}/api/users`, {
-            method: 'POST',
+            method: 'post',
             headers: {
               'Content-Type': 'application/json',
             },
@@ -270,10 +270,21 @@
             // Clear form
             form.reset();
 
-            // Redirect after 2 seconds
-            setTimeout(() => {
-              window.location.href = 'login.html';
-            }, 2000);
+            // Redirect after 2 seconds to the different
+
+            if (user.Role === 'Sales Agent') {
+              setTimeout(() => {
+                window.location.href = 'Karibu_Sales_Agent_DashBoard.html';
+              }, 2000);
+            } else if (user.Role === 'Direcotr') {
+              setTimeout(() => {
+                window.location.href = 'Karibu_Director_DashBoard.html';
+              }, 2000);
+            } else if (user.Role === 'Manager') {
+              setTimeout(() => {
+                window.location.href = 'Karibu-ManagerDashboard.html';
+              }, 2000);
+            }
           } else {
             alert('❌ Failed: ' + result.message);
           }

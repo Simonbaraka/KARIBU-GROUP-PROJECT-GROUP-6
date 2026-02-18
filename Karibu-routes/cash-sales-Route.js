@@ -33,6 +33,17 @@ router.get('/', async (req, res, next) => {
   }
 });
 
+router.get('/:id', async (req, res, next) => {
+  try {
+    let sale = await CashModel.findById(req.params.id);
+    res
+      .status(200)
+      .json({ message: 'Sales Data collection was a success ', data: sale });
+  } catch (err) {
+    res.status(500).json({ message: 'Sales not found', error: err.message });
+  }
+});
+
 /**
  * @openapi
  * /api/cashsales:

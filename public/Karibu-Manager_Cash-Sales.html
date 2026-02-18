@@ -9,6 +9,13 @@
       href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet"
     />
+
+    <!-- Material Icons -->
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined"
+      rel="stylesheet"
+    />
+
     <style>
       * {
         box-sizing: border-box;
@@ -228,6 +235,31 @@
         border-bottom: 1px solid #ddd;
         border-left: 2px solid #ddd;
       }
+
+      .icon-btn {
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        padding: 4px;
+        margin: 0 3px;
+      }
+
+      .icon-btn span {
+        font-size: 20px;
+        color: #444;
+      }
+
+      .icon-btn:hover span {
+        color: #1e1e2f;
+      }
+
+      .icon-btn.delete:hover span {
+        color: red;
+      }
+
+      .icon-btn.come:hover span {
+        color: red;
+      }
     </style>
     <!-- Linking external CSS file for styling -->
   </head>
@@ -384,6 +416,7 @@
                   <th>Produce Tonnage</th>
                   <th>Date</th>
                   <th>Amount Paid</th>
+                  <th>Action</th>
                 </tr>
               </thead>
               <tbody></tbody>
@@ -464,22 +497,85 @@
 
         result.data.forEach((sale, index) => {
           innerHTML1 += `
-          <tr>
-              <td>${index + 1}</td>
-              <td>${sale.Produce_name}</td>
-              <td>${sale.Buyer_name}</td>
-              <td>${sale.Agent_name}</td>
-              <td>${sale.Tonnage}</td>
-              <td>${sale.Date_time}</td>
-              <td>${sale.Amount_paid}</td>
-           <tr>
-    `;
+            <tr>
+                <td>${index + 1}</td>
+                <td>${sale.Produce_name}</td>
+                <td>${sale.Buyer_name}</td>
+                <td>${sale.Agent_name}</td>
+                <td>${sale.Tonnage}</td>
+                <td>${sale.Date_time}</td>
+                <td>${sale.Amount_paid}</td>
+                <td style="text-align:right;">
+                  <span>
+                    <button onclick="update_cashsale('${sale._id}')" class="icon-btn come" title="Edit">
+                      <span class="material-icons-outlined">edit</span>
+                    </button>
+                    <button onclick = "deleteUser('${sale._id}')" class="icon-btn delete" title="Delete">
+                        <span class="material-icons-outlined">delete</span>
+                    </button>
+                  </span>
+                </td>
+
+             <tr>
+      `;
         });
         tableBody.innerHTML = innerHTML1;
       }
 
       // Load when page opens
       loadSales();
+
+      //DELETE CASH SALE
+      async function deleteUser(id) {
+        try {
+          const response = await fetch(`${API_URL}/api/cashsales/${id}`, {
+            method: 'DELETE',
+          });
+
+          const result = await response.json();
+
+          if (response.ok) {
+            alert('✅ Cash sale Record deleted successfully');
+
+            // Optional: Refresh page or remove row
+          } else {
+            alert('❌ Failed: ' + result.message);
+          }
+        } catch (err) {
+          console.error(err);
+          alert('❌ Network error');
+        }
+      }
+
+      //UPDATE CASH SALE
+
+      async function update_cashsale(id) {
+        try {
+          // 1️⃣ Get sale data first
+          const response = await fetch(`${API_URL}/api/cashsales/${id}`);
+
+          const data = await response.json();
+
+          if (!response.ok) {
+            alert('❌ Failed to load record');
+            return;
+          }
+
+          // 2️⃣ Fill form inputs
+          document.querySelector('#Produce_Name').value = data.Produce_name;
+          document.querySelector('#Buyer_name').value = data.Buyer_name;
+          document.querySelector('#sales_agent').value = data.Agent_name;
+          document.querySelector('#Purchase_Date').value = data.Date_time;
+          document.querySelector('#produce_Tonnage').value = data.Tonnage;
+          document.querySelector('#Amount_Paid').value = data.Amount_paid;
+
+          // 3️⃣ Store ID for later update
+          document.querySelector('#cashForm').dataset.id = id;
+        } catch (error) {
+          console.error(error);
+          alert('❌ Network error');
+        }
+      }
     </script>
   </body>
 </html>

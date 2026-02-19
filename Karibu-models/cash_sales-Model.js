@@ -30,7 +30,7 @@ const cashSchema = new mongoose.Schema({
   Amount_paid: {
     type: Number,
     required: true,
-    min: 350000,
+    min: 10000,
   },
 });
 

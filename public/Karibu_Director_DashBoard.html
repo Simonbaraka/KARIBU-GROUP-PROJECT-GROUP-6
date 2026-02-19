@@ -163,6 +163,18 @@
         font-size: 12px;
         color: gray;
       }
+
+      #cash {
+        font-size: 400%;
+      }
+
+      #credit {
+        font-size: 400%;
+      }
+
+      #procurement {
+        font-size: 400%;
+      }
     </style>
   </head>
   <body>
@@ -201,6 +213,13 @@
             </li>
 
             <li>
+              <a href="Karibu_Employee.html">
+                <div class="material-icons">group</div>
+                Employees</a
+              >
+            </li>
+
+            <li>
               <a href="Karibu_DashBoard.html"
                 ><div class="material-icons">logout</div>
                 Log Out</a
@@ -228,19 +247,58 @@
       <div class="Right-panel">
         <div class="stats">
           <div class="Panel-1">
-            <h2>Total Sales:</h2>
-            <h3>$12,500</h3>
+            <h2>Total Cash Sales:</h2>
+            <h1 id="cash"></h1>
           </div>
           <div class="Panel-1">
-            <h2>Orders</h2>
-            <h3>320</h3>
+            <h2>Credit Sales:</h2>
+            <h1 id="credit"></h1>
           </div>
           <div class="Panel-1">
-            <h2>Top Item:</h2>
-            <h3>Rice</h3>
+            <h2>Procurements:</h2>
+            <h1 id="procurement"></h1>
           </div>
         </div>
       </div>
     </div>
+
+    <script>
+      let display = document.querySelector('#cash');
+      let credit_display = document.querySelector('#credit');
+      let procurement_display = document.querySelector('#procurement');
+      const API_URL = 'http://localhost:3000';
+
+      //Total cash sales counter
+      async function cash_sale_counter() {
+        let response = await fetch(`${API_URL}/api/cashsales`);
+        let result = await response.json();
+
+        let totalsales = result.data.length;
+        display.textContent = totalsales;
+        console.log(totalsales);
+      }
+      cash_sale_counter();
+
+      //Total credit sales counter
+      async function credit_counter() {
+        let credit_getter = await fetch(`${API_URL}/api/creditsales`);
+        let result = await credit_getter.json();
+
+        let totalcredit = result.data.length;
+        credit_display.textContent = totalcredit;
+        console.log(totalcredit);
+      }
+      credit_counter();
+
+      //Procurement counter
+      async function procurement_counter() {
+        let procurement_getter = await fetch(`${API_URL}/api/procurement`);
+        let result = await procurement_getter.json();
+
+        let totalprocurement = result.data.length;
+        procurement_display.textContent = totalprocurement;
+      }
+      procurement_counter();
+    </script>
   </body>
 </html>

@@ -212,6 +212,22 @@
         font-size: 22px;
         color: #1e1e2f;
       }
+
+      #cash {
+        font-size: 400%;
+      }
+
+      #credit {
+        font-size: 400%;
+      }
+
+      #procurement {
+        font-size: 400%;
+      }
+
+      #user {
+        font-size: 400%;
+      }
     </style>
   </head>
   <body>
@@ -287,7 +303,7 @@
             <div class="avatar">SB</div>
             <div class="user-info">
               <div class="user-name">Simon</div>
-              <div class="user-role">Sales Agent</div>
+              <div class="user-role">Manager</div>
             </div>
           </div>
         </div>
@@ -297,16 +313,30 @@
         <!--Sales  manager panel-->
 
         <div class="Panel-1">
-          <h4>Number of sales</h4>
-          <h1>900</h1>
-          <h4>Last Updated</h4>
+          <h3>Cash Sales:</h3>
+          <h1 id="cash"></h1>
+          <h5>Last Updated</h5>
+        </div>
+
+        <!--Credit manager panel 0779761960-->
+        <div class="Panel-1">
+          <h3>Credit Sales:</h3>
+          <h1 id="credit"></h1>
+          <h5>Last Updated</h5>
         </div>
 
         <!--Procurement manager panel 0779761960-->
         <div class="Panel-1">
-          <h4>Number of Procurement</h4>
-          <h1>200</h1>
-          <h4>Last Updated</h4>
+          <h3>Procurements:</h3>
+          <h1 id="procurement"></h1>
+          <h5>Last Updated</h5>
+        </div>
+
+        <!--Procurement manager panel 0779761960-->
+        <div class="Panel-1">
+          <h3>Employee:</h3>
+          <h1 id="user"></h1>
+          <h5>Last Updated</h5>
         </div>
 
         <div class="recent">
@@ -330,5 +360,54 @@
         </div>
       </main>
     </div>
+
+    <script>
+      //Value areas for the display panel
+      let cash_area = document.querySelector('#cash');
+      let credit_area = document.querySelector('#credit');
+      let procurement_area = document.querySelector('#procurement');
+      let user_area = document.querySelector('#user');
+      const API_URL = 'http://localhost:3000';
+
+      //Cash Sales Count
+      async function Cash_Count() {
+        let cash_getter = await fetch(`${API_URL}/api/cashsales`);
+        let result = await cash_getter.json();
+
+        let totalcashsales = result.data.length;
+        cash_area.textContent = totalcashsales;
+      }
+      Cash_Count();
+
+      //Credit sales Count
+      async function Credit_Count() {
+        let credit_getter = await fetch(`${API_URL}/api/creditsales`);
+        let result = await credit_getter.json();
+
+        let totalCreditSales = result.data.length;
+        credit_area.textContent = totalCreditSales;
+      }
+      Credit_Count();
+
+      //Procurement Count
+      async function Procurement_Count() {
+        let procurement_getter = await fetch(`${API_URL}/api/procurement`);
+        let result = await procurement_getter.json();
+
+        let totalProcurement = result.data.length;
+        procurement_area.textContent = totalProcurement;
+      }
+      Procurement_Count();
+
+      //Empolyee count
+      async function Employee_Count() {
+        let employee_getter = await fetch(`${API_URL}/api/users`);
+        let result = await employee_getter.json();
+
+        let EmployeeCount = result.data.length;
+        user_area.textContent = EmployeeCount;
+      }
+      Employee_Count();
+    </script>
   </body>
 </html>

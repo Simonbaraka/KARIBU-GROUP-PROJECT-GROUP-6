@@ -1,0 +1,412 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <title>Procurement</title>
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined"
+      rel="stylesheet"
+    />
+
+    <!-- Linking external CSS file for styling -->
+    <style>
+      * {
+        margin: 0px;
+        padding: 0px;
+        box-sizing: border-box;
+      }
+
+      body {
+        background: #e2e7eb;
+      }
+
+      .main-panel {
+        display: grid;
+        grid-template-columns: 250px 1fr;
+        grid-template-rows: 60px 1fr;
+        height: 100vh;
+        grid-template-areas:
+          'sidebar header'
+          'sidebar Right-panel';
+        gap: 3px;
+      }
+
+      .sidebar {
+        grid-area: sidebar;
+        background: white;
+        color: black;
+      }
+
+      .sidebar a {
+        display: block;
+        color: black;
+        text-decoration: none;
+      }
+
+      .user-profile {
+        margin: 20px;
+        padding: 20px;
+        border-radius: 20px;
+        padding: 20px;
+      }
+
+      img {
+        width: 180px;
+        height: 100px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+
+      .manager-options {
+        margin-top: 20px;
+      }
+
+      ul {
+        margin-top: 50px;
+      }
+
+      .manager-options li {
+        display: flex;
+        padding: 15px;
+        list-style: none;
+        font-size: larger;
+        border-bottom: 1px solid rgba(63, 61, 61, 0.2);
+        cursor: pointer;
+        border-radius: 10px;
+        margin: 10px;
+      }
+
+      a {
+        text-decoration: none;
+        color: white;
+      }
+      .manager-options li a {
+        display: flex;
+        gap: 14px;
+        color: black;
+        text-align: center;
+      }
+      .material-icons {
+        font-size: 22px;
+        color: #1e1e2f;
+      }
+
+      .manager-options li.active {
+        background-color: rgb(227, 226, 223);
+      }
+      li:hover {
+        background-color: rgb(185, 184, 182);
+      }
+
+      header {
+        grid-area: header;
+        background: white;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 25px 20px;
+        border-bottom: 1px solid #ddd;
+      }
+      #search {
+        border: 2.5px solid rgb(128, 209, 143);
+        padding: 5px;
+        border-radius: 5px;
+        width: 25%;
+      }
+
+      .Right-panel {
+        display: grid;
+        margin-top: 20px;
+        grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+        gap: 20px;
+        border-radius: 10px;
+        width: 85%;
+        margin: 5%;
+      }
+
+      .user-details {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+        background-color: rgba(255, 255, 255, 0.808);
+        padding: 50px 50px;
+        border-radius: 5px;
+      }
+
+      .input-box select {
+        height: 45px;
+        width: 100%;
+        border: 1px solid #3fc353;
+        border-radius: 5px;
+      }
+
+      .input-box {
+        margin: 20px 0 12px 0;
+      }
+
+      .input-box input {
+        height: 45px;
+        width: 100%;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+        background-color: #f8f9fa;
+      }
+
+      label {
+        font-weight: 500;
+        margin-bottom: 5px;
+        font-size: 20px;
+      }
+
+      .recent {
+        grid-column: 1 / -1;
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        margin-top: 2%;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 5px;
+      }
+
+      th {
+        background: #1e1e2f;
+        text-align: left;
+        padding: 10px;
+        border-left: 2px solid #ddd;
+        color: white;
+      }
+      td {
+        text-align: left;
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+        border-left: 2px solid #ddd;
+      }
+
+      button {
+        margin: 20px 30px;
+        padding: 10px 20px;
+        background: #1e1e2f;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background: #1e1e2f;
+      }
+
+      .user-header {
+        display: flex;
+        border-radius: 25px;
+        padding: 8px 14px;
+        gap: 20px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+        align-items: center;
+      }
+
+      .Avatar {
+        background-color: #1e1e2f;
+        color: white;
+        padding: 5px;
+        border-radius: 20px;
+        font-size: larger;
+      }
+
+      .user-info {
+        display: block;
+        align-items: center;
+      }
+
+      .user-name {
+        font: 30px;
+      }
+
+      .user-role {
+        font-size: 12px;
+        color: gray;
+      }
+
+      .icon-btn {
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        padding: 4px;
+        margin: 0 3px;
+      }
+
+      .icon-btn span {
+        font-size: 20px;
+        color: #444;
+      }
+
+      .icon-btn:hover span {
+        color: #1e1e2f;
+      }
+
+      .icon-btn.delete:hover span {
+        color: red;
+      }
+
+      .icon-btn.come:hover span {
+        color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="main-panel">
+      <!--left side-->
+      <aside class="sidebar">
+        <!--userprofile-->
+        <div class="user-profile">
+          <img src="Karibu-logo.png" />
+        </div>
+
+        <!--Manager options-->
+        <div class="manager-options">
+          <ul>
+            <li>
+              <a href="Karibu_Director_DashBoard.html">
+                <div class="material-icons">dashboard</div>
+                Main DashBoard</a
+              >
+            </li>
+            <li>
+              <a href="Karibu_Director_Sales_Report.html"
+                ><div class="material-icons">bar_chart</div>
+                Sales Report</a
+              >
+            </li>
+            <li>
+              <a href="Karibu_Director_Sales_Summaries.html">
+                <div class="material-icons">summarize</div>
+                Sales Summaries</a
+              >
+            </li>
+            <li>
+              <a href="Karibu_Director_AggregatedSummaries.html">
+                <div class="material-icons">point_of_sale</div>
+                Aggregated Sales</a
+              >
+            </li>
+
+            <li class="active">
+              <a href="Karibu_Employee.html">
+                <div class="material-icons">group</div>
+                Employees</a
+              >
+            </li>
+          </ul>
+        </div>
+      </aside>
+
+      <header>
+        <h2>EMPLOYEES</h2>
+
+        <input type="text" id="search" placeholder="search items" />
+        <div class="user-header">
+          <div class="Avatar">SB</div>
+          <div class="user-info">
+            <div class="user-name">
+              <h5>Simon</h5>
+            </div>
+            <div class="user-role">Director</div>
+          </div>
+        </div>
+      </header>
+
+      <div class="Right-panel">
+        <!-- Procurement form start -->
+        <div class="recent">
+          <table>
+            <h3>Recent Transactions</h3>
+            <br />
+            <thead>
+              <tr>
+                <th>No.</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+          <button id="Orderbtn">
+            <a href="Karibu-SignUp.html">Add Employee</a>
+          </button>
+          <!-- Supplier Name -->
+        </div>
+      </div>
+    </div>
+    <script>
+      const API_URL = 'http://localhost:3000';
+
+      //function to load users into the table
+      let table = document.querySelector('.recent tbody');
+      async function loadUsers() {
+        let response = await fetch(`${API_URL}/api/users`);
+        let result = await response.json();
+
+        let tablecontent = '';
+
+        result.data.forEach((user, index) => {
+          tablecontent += `
+              <tr>
+                <td>${index + 1}</td>
+                <td>${user.FirstName}</td>
+                <td>${user.LastName}</td>
+                <td>${user.Email}</td>
+                <td>${user.Role}</td> 
+                <td style="text-align:center;">
+                  <span>
+                    <button onclick="update_cashsale('${user._id}')" class="icon-btn come" title="Edit">
+                      <span class="material-icons-outlined">edit</span>
+                    </button>
+                    
+                    <button onclick = "UserDelete('${user._id}')" class="icon-btn delete" title="Delete">
+                        <span class="material-icons-outlined">delete</span>
+                    </button>
+                  </span>
+                </td>
+              </tr>
+                
+                `;
+        });
+        table.innerHTML = tablecontent;
+      }
+      loadUsers();
+
+      async function UserDelete(Id) {
+        try {
+          let response = await fetch(`${API_URL}/api/users/${Id}`, {
+            method: 'DELETE',
+          });
+
+          let userdelete = await response.json();
+
+          if (response.ok) {
+            alert('✅ User deleted successfully');
+          } else {
+            alert('❌ Failed to delete');
+          }
+        } catch (err) {
+          console.log(err);
+          alert('❌ Network error');
+        }
+      }
+    </script>
+  </body>
+</html>

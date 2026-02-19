@@ -315,6 +315,13 @@
                 ><span class="material-icons">bar_chart</span>Sales Report</a
               >
             </li>
+
+            <li>
+              <a href="Karibu_Employee.html">
+                <div class="material-icons">group</div>
+                Employees</a
+              >
+            </li>
           </ul>
         </div>
       </div>
@@ -429,6 +436,7 @@
     <script>
       const _form = document.querySelector('._Form');
       const API_URL = 'http://localhost:3000';
+      let editingId = null;
 
       _form.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -466,19 +474,37 @@
         }
 
         try {
-          let response = await fetch(`${API_URL}/api/cashsales`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data),
-          });
+          let response;
+
+          if (editingId) {
+            // UPDATE existing record
+            response = await fetch(`${API_URL}/api/cashsales/${editingId}`, {
+              method: 'PATCH',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(data),
+            });
+          } else {
+            // CREATE new record
+            response = await fetch(`${API_URL}/api/cashsales`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(data),
+            });
+          }
 
           const result = await response.json();
+
           if (response.ok) {
             alert('✅ Cash Sales saved successfully');
             _form.reset();
-            console.log('Saved:', result.data);
+
+            // 🔥 Reset edit mode
+            editingId = null;
+            document.querySelector('#Record-btn').textContent = 'Record Sale';
+
+            console.log('Success:', result.data);
           } else {
-            alert('❌ Failed to save: ' + result.message);
+            alert('❌ Failed: ' + result.message);
           }
         } catch (err) {
           console.error('Error:', err.message);
@@ -503,20 +529,22 @@
                 <td>${sale.Buyer_name}</td>
                 <td>${sale.Agent_name}</td>
                 <td>${sale.Tonnage}</td>
-                <td>${sale.Date_time}</td>
+               <td>${new Date(sale.Date_time).toISOString().split('T')[0]}</td>
+
                 <td>${sale.Amount_paid}</td>
                 <td style="text-align:right;">
                   <span>
                     <button onclick="update_cashsale('${sale._id}')" class="icon-btn come" title="Edit">
                       <span class="material-icons-outlined">edit</span>
                     </button>
+                    
                     <button onclick = "deleteUser('${sale._id}')" class="icon-btn delete" title="Delete">
                         <span class="material-icons-outlined">delete</span>
                     </button>
                   </span>
                 </td>
 
-             <tr>
+             </tr>
       `;
         });
         tableBody.innerHTML = innerHTML1;
@@ -527,6 +555,13 @@
 
       //DELETE CASH SALE
       async function deleteUser(id) {
+        let confirmation = confirm(
+          'Are you sure you want to delete the cash sale Record ?'
+        );
+
+        if (confirmation == false) {
+          return;
+        }
         try {
           const response = await fetch(`${API_URL}/api/cashsales/${id}`, {
             method: 'DELETE',
@@ -549,28 +584,29 @@
 
       //UPDATE CASH SALE
 
-      async function update_cashsale(id) {
+      async function update_cashsale(Id) {
         try {
+          editingId = Id;
+          document.querySelector('#Record-btn').textContent = 'Update Sale';
           // 1️⃣ Get sale data first
-          const response = await fetch(`${API_URL}/api/cashsales/${id}`);
+          const response = await fetch(`${API_URL}/api/cashsales/${Id}`, {
+            method: 'GET',
+          });
+          const result = await response.json();
+          console.log(result);
 
-          const data = await response.json();
-
-          if (!response.ok) {
-            alert('❌ Failed to load record');
-            return;
-          }
-
+          const data = result.data;
           // 2️⃣ Fill form inputs
           document.querySelector('#Produce_Name').value = data.Produce_name;
           document.querySelector('#Buyer_name').value = data.Buyer_name;
           document.querySelector('#sales_agent').value = data.Agent_name;
-          document.querySelector('#Purchase_Date').value = data.Date_time;
+          document.querySelector('#Purchase_Date').value = new Date(
+            data.Date_time
+          )
+            .toISOString()
+            .split('T')[0];
           document.querySelector('#produce_Tonnage').value = data.Tonnage;
           document.querySelector('#Amount_Paid').value = data.Amount_paid;
-
-          // 3️⃣ Store ID for later update
-          document.querySelector('#cashForm').dataset.id = id;
         } catch (error) {
           console.error(error);
           alert('❌ Network error');

@@ -184,6 +184,14 @@
         font-size: 12px;
         color: gray;
       }
+
+      #cash {
+        font-size: 400%;
+      }
+
+      #credit {
+        font-size: 400%;
+      }
     </style>
   </head>
   <body>
@@ -251,16 +259,16 @@
         <!--Sales  manager panel-->
 
         <div class="Panel-1">
-          <h4>Regular Sales</h4>
-          <h1>900</h1>
-          <h4>Last Updated</h4>
+          <h3>Regular Sales</h3>
+          <h1 id="cash"></h1>
+          <h5>Last Updated</h5>
         </div>
 
         <!--Procurement manager panel 0779761960-->
         <div class="Panel-1">
-          <h4>Credit Sales</h4>
-          <h1>200</h1>
-          <h4>Last Updated</h4>
+          <h3>Credit Sales</h3>
+          <h1 id="credit"></h1>
+          <h5>Last Updated</h5>
         </div>
 
         <div class="recent">
@@ -283,5 +291,35 @@
         </div>
       </main>
     </div>
+
+    <script>
+      cashArea = document.querySelector('#cash');
+      creditArea = document.querySelector('#credit');
+      const API_URL = 'http://localhost:3000';
+
+      //Regular/cash sales count
+
+      async function RegularSales_Count() {
+        let regular_Count = await fetch(`${API_URL}/api/cashsales`);
+        let result = await regular_Count.json();
+
+        let Total_Regular_sales = result.data.length;
+        console.log(Total_Regular_sales);
+        cashArea.textContent = Total_Regular_sales;
+      }
+      RegularSales_Count();
+
+      //Total credit sales count
+      async function Credit_Count() {
+        let credit_count = await fetch(`${API_URL}/api/creditsales`);
+        let result = await credit_count.json();
+
+        let Total_credit_sales = result.data.length;
+        console.log(Total_credit_sales);
+        creditArea.textContent = Total_credit_sales;
+      }
+
+      Credit_Count();
+    </script>
   </body>
 </html>

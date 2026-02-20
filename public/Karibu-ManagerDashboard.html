@@ -213,20 +213,67 @@
         color: #1e1e2f;
       }
 
+      .Panel-1 .parameters {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        margin: 0px;
+        gap: 5px;
+      }
+
       #cash {
-        font-size: 400%;
+        font-size: 300%;
+        text-align: right;
+        color: green;
+      }
+
+      #cash-title {
+        font-size: 150%;
+      }
+
+      #ugx_cash {
+        font-size: 200%;
+        margin-top: 20px;
+        text-align: right;
+        color: green;
       }
 
       #credit {
-        font-size: 400%;
+        font-size: 300%;
+        text-align: right;
+        color: green;
+      }
+
+      #credit-title {
+        font-size: 150%;
+      }
+
+      #ugx_credit {
+        font-size: 200%;
+        margin-top: 20px;
+        text-align: right;
+        color: green;
       }
 
       #procurement {
-        font-size: 400%;
+        font-size: 300%;
+      }
+      #procurement-title {
+        font-size: 150%;
+      }
+      #ugx_procurement {
+        font-size: 200%;
+        margin-top: 20px;
+        text-align: right;
+        color: green;
       }
 
       #user {
-        font-size: 400%;
+        font-size: 300%;
+      }
+
+      #number {
+        font-size: 150%;
+        margin-top: 30px;
       }
     </style>
   </head>
@@ -313,23 +360,42 @@
         <!--Sales  manager panel-->
 
         <div class="Panel-1">
-          <h3>Cash Sales:</h3>
-          <h1 id="cash"></h1>
-          <h5>Last Updated</h5>
+          <div class="parameters">
+            <!--Display area for total cash sales-->
+            <h2 id="cash-title">Cash Sales.</h2>
+            <h1 id="cash"></h1>
+
+            <!--Display area for total ugx for cash sales-->
+            <h2 id="number">UGX.</h2>
+            <h2 id="ugx_cash"></h2>
+            <h5>Last Updated</h5>
+          </div>
         </div>
 
         <!--Credit manager panel 0779761960-->
         <div class="Panel-1">
-          <h3>Credit Sales:</h3>
-          <h1 id="credit"></h1>
-          <h5>Last Updated</h5>
+          <div class="parameters">
+            <h3 id="credit-title">Credit Sales:</h3>
+            <h1 id="credit"></h1>
+
+            <!--Display area for total ugx for cash sales-->
+            <h2 id="number">UGX.</h2>
+            <h2 id="ugx_credit"></h2>
+            <h5>Last Updated</h5>
+          </div>
         </div>
 
         <!--Procurement manager panel 0779761960-->
         <div class="Panel-1">
-          <h3>Procurements:</h3>
-          <h1 id="procurement"></h1>
-          <h5>Last Updated</h5>
+          <div class="parameters">
+            <h3 id="procurement-title">Procurements:</h3>
+            <h1 id="procurement"></h1>
+
+            <h2 id="number">UGX.</h2>
+            <h2 id="ugx_procurement"></h2>
+
+            <h5>Last Updated</h5>
+          </div>
         </div>
 
         <!--Procurement manager panel 0779761960-->
@@ -364,8 +430,14 @@
     <script>
       //Value areas for the display panel
       let cash_area = document.querySelector('#cash');
+      let ugxCash = document.querySelector('#ugx_cash');
+
       let credit_area = document.querySelector('#credit');
+      let Credit_ugx_area = document.querySelector('#ugx_credit');
+
       let procurement_area = document.querySelector('#procurement');
+      ugxProcurement = document.querySelector('#ugx_procurement');
+
       let user_area = document.querySelector('#user');
       const API_URL = 'http://localhost:3000';
 
@@ -374,8 +446,17 @@
         let cash_getter = await fetch(`${API_URL}/api/cashsales`);
         let result = await cash_getter.json();
 
+        let cash_ugx = 0;
+
+        for (let i = 0; i < result.data.length; i++) {
+          if (result.data[i].Amount_paid) {
+            cash_ugx += result.data[i].Amount_paid;
+          }
+        }
+
         let totalcashsales = result.data.length;
         cash_area.textContent = totalcashsales;
+        ugxCash.textContent = cash_ugx.toLocaleString();
       }
       Cash_Count();
 
@@ -383,9 +464,17 @@
       async function Credit_Count() {
         let credit_getter = await fetch(`${API_URL}/api/creditsales`);
         let result = await credit_getter.json();
+        let credit_ugx = 0;
+
+        for (let i = 0; i < result.data.length; i++) {
+          if (result.data[i].Amount_Due) {
+            credit_ugx += result.data[i].Amount_Due;
+          }
+        }
 
         let totalCreditSales = result.data.length;
         credit_area.textContent = totalCreditSales;
+        Credit_ugx_area.textContent = credit_ugx.toLocaleString();
       }
       Credit_Count();
 
@@ -394,8 +483,17 @@
         let procurement_getter = await fetch(`${API_URL}/api/procurement`);
         let result = await procurement_getter.json();
 
+        let Procurement_ugx = 0;
+
+        for (let i = 0; i < result.data.length; i++) {
+          if (result.data[i].Produce_Cost) {
+            Procurement_ugx += result.data[i].Produce_Cost;
+          }
+        }
+
         let totalProcurement = result.data.length;
         procurement_area.textContent = totalProcurement;
+        ugxProcurement.textContent = Procurement_ugx.toLocaleString();
       }
       Procurement_Count();
 

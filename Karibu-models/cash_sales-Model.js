@@ -24,13 +24,13 @@ const cashSchema = new mongoose.Schema({
   Tonnage: {
     type: Number,
     required: true,
-    min: 1000,
+    min: 1_000,
   },
 
   Amount_paid: {
     type: Number,
     required: true,
-    min: 10000,
+    min: 10_000,
   },
 });
 

@@ -9,6 +9,10 @@
       rel="stylesheet"
     />
 
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined"
+      rel="stylesheet"
+    />
     <!-- Linking external CSS file for styling -->
     <style>
       * {
@@ -200,6 +204,62 @@
         font-size: 12px;
         color: gray;
       }
+
+      .recent {
+        grid-column: 1 / -1;
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        margin-top: 2%;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      th {
+        background: #1e1e2f;
+        text-align: left;
+        padding: 6px;
+        border-left: 1px solid #ddd;
+        color: white;
+        overflow: hidden;
+      }
+      td {
+        text-align: center;
+        padding: 10px;
+        font-size: 15px;
+      }
+
+      tbody tr:hover {
+        background-color: #f5f7fa;
+      }
+
+      .icon-btn {
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        padding: 4px;
+        margin: 0 3px;
+      }
+
+      .icon-btn span {
+        font-size: 20px;
+        color: #444;
+      }
+
+      .icon-btn:hover span {
+        color: #1e1e2f;
+      }
+
+      .icon-btn.delete:hover span {
+        color: red;
+      }
+
+      .icon-btn.come:hover span {
+        color: red;
+      }
     </style>
   </head>
   <body>
@@ -346,6 +406,26 @@
             <!-- Reset & Submit buttons -->
           </div>
           <button type="submit" id="Orderbtn">Create Order</button>
+
+          <div class="recent">
+            <table>
+              <h3>Recent Transactions</h3>
+              <br />
+              <thead>
+                <tr>
+                  <th>No.</th>
+                  <th>Produce Name</th>
+                  <th>Produce Tonnage (Kgs)</th>
+                  <th>Buying Price (Ugx)</th>
+                  <th>Dealer Name</th>
+                  <th>Date/ Time</th>
+                  <th>Karibu Branches</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
           <!-- Supplier Name -->
         </form>
       </div>
@@ -405,6 +485,41 @@
           alert('❌ Error submitting form');
         }
       });
+
+      const tableBody = document.querySelector('.recent tbody');
+      async function Load_Procurement() {
+        let response = await fetch(`${API_URL}/api/procurement`);
+        let result = await response.json();
+        let table_ = '';
+
+        result.data.forEach((procurements, index) => {
+          table_ += `<tr>
+                <td>${index + 1}</td>
+                <td>${procurements.Produce_name}</td>
+                <td>${procurements.Produce_tonnage.toLocaleString()}</td>
+                <td>${procurements.Produce_Cost.toLocaleString()}</td>
+                <td>${procurements.Dealer_Name}</td>
+               <td>${new Date(procurements.Date_time).toISOString().split('T')[0]}</td>
+                <td>${procurements.Branch}</td>
+                <td style="text-align:right;">
+                  <span>
+                    <button onclick="update_cashsale('${procurements._id}')" class="icon-btn come" title="Edit">
+                      <span class="material-icons-outlined">edit</span>
+                    </button>
+                    
+                    <button onclick = "deleteUser('${procurements._id}')" class="icon-btn delete" title="Delete">
+                        <span class="material-icons-outlined">delete</span>
+                    </button>
+                  </span>
+                </td>
+
+             </tr>`;
+        });
+
+        tableBody.innerHTML = table_;
+      }
+
+      Load_Procurement();
     </script>
   </body>
 </html>

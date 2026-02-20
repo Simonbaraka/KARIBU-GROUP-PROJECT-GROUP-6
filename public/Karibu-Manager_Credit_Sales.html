@@ -8,6 +8,11 @@
       href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet"
     />
+
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined"
+      rel="stylesheet"
+    />
     <!-- Linking external CSS file for styling -->
     <style>
       * {
@@ -192,6 +197,63 @@
       .user-role {
         font-size: 12px;
         color: gray;
+      }
+
+      .recent {
+        grid-column: 1 / -1;
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        margin-top: 2%;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      th {
+        background: #1e1e2f;
+        text-align: left;
+        padding: 6px;
+        border-left: 1px solid #ddd;
+        color: white;
+        overflow: hidden;
+      }
+      td {
+        text-align: left;
+        padding: 10px;
+        font-size: 15px;
+        text-align: center;
+      }
+
+      tbody tr:hover {
+        background-color: #f5f7fa;
+      }
+
+      .icon-btn {
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        padding: 4px;
+        margin: 0 3px;
+      }
+
+      .icon-btn span {
+        font-size: 20px;
+        color: #444;
+      }
+
+      .icon-btn:hover span {
+        color: #1e1e2f;
+      }
+
+      .icon-btn.delete:hover span {
+        color: red;
+      }
+
+      .icon-btn.come:hover span {
+        color: red;
       }
     </style>
   </head>
@@ -391,6 +453,29 @@
           </div>
 
           <button type="click" id="btn">Submit</button>
+          <div class="recent">
+            <table>
+              <h3>Recent Transactions</h3>
+              <br />
+              <thead>
+                <tr>
+                  <th>No.</th>
+                  <th>Buyer</th>
+                  <th>Sales Agent</th>
+                  <th>Contacts</th>
+                  <th>ID</th>
+                  <th>Location</th>
+                  <th>Produce Name</th>
+                  <th>Tonnage</th>
+                  <th>Amount Due</th>
+                  <th>Due Date</th>
+                  <th>Branch</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
         </form>
       </div>
     </div>
@@ -409,8 +494,12 @@
           Location: document.querySelector('#Location').value,
           National_ID: Number(document.querySelector('#NIN').value),
           Produce_name: document.querySelector('#Produce_Name').value,
-          Tonnage: document.querySelector('#produce_Tonnage').value,
-          Amount_Due: Number(document.querySelector('#Amount_Due').value),
+          Tonnage: Number(
+            document.querySelector('#produce_Tonnage').value
+          ).toLocaleString(),
+          Amount_Due: Number(
+            document.querySelector('#Amount_Due').value
+          ).toLocaleString(),
           Date_time:
             document.querySelector('#Purchase_Date').value ||
             new Date().toISOString(),
@@ -453,6 +542,45 @@
           alert('❌ Error submitting form');
         }
       });
+
+      const tableBody = document.querySelector('.recent tbody');
+      async function LoadCreditSales() {
+        let response = await fetch(`${API_URL}/api/creditsales`);
+        let result = await response.json();
+
+        let HTMLContent1 = '';
+        result.data.forEach((credit, index) => {
+          HTMLContent1 += ` <tr>
+                <td>${index + 1}</td>
+                <td>${credit.Buyer_name}</td>
+                <td>${credit.Agent_name}</td>
+                <td>${credit.Contact}</td>
+                 <td>${credit.National_ID}</td>
+                <td>${credit.Location}</td>
+               
+                <td>${credit.Produce_name}</td>
+                <td>${credit.Tonnage.toLocaleString()}</td>
+                <td>${credit.Amount_Due.toLocaleString()}</td>
+               <td>${new Date(credit.Date_time).toISOString().split('T')[0]}</td>
+
+                <td>${credit.Branch}</td>
+                <td style="text-align:right;">
+                  <span>
+                    <button onclick="update_cashsale('${credit._id}')" class="icon-btn come" title="Edit">
+                      <span class="material-icons-outlined">edit</span>
+                    </button>
+                    
+                    <button onclick = "deleteUser('${credit._id}')" class="icon-btn delete" title="Delete">
+                        <span class="material-icons-outlined">delete</span>
+                    </button>
+                  </span>
+                </td>
+
+             </tr>`;
+        });
+        tableBody.innerHTML = HTMLContent1;
+      }
+      LoadCreditSales();
     </script>
   </body>
 </html>

@@ -226,14 +226,15 @@
         background: #1e1e2f;
         text-align: left;
         padding: 10px;
-        border-left: 2px solid #ddd;
+        border-left: 1px solid #ddd;
         color: white;
       }
       td {
         text-align: left;
         padding: 10px;
-        border-bottom: 1px solid #ddd;
-        border-left: 2px solid #ddd;
+      }
+      tbody tr:hover {
+        background-color: #f5f7fa;
       }
 
       .icon-btn {
@@ -468,7 +469,7 @@
           alert('Tonnage must be greater than 1000');
           return;
         }
-        if (data.Amount_paid < 350000) {
+        if (data.Amount_paid < 10_000) {
           alert('Amount paid must be greater than 350000');
           return;
         }
@@ -528,7 +529,7 @@
                 <td>${sale.Produce_name}</td>
                 <td>${sale.Buyer_name}</td>
                 <td>${sale.Agent_name}</td>
-                <td>${sale.Tonnage}</td>
+                <td>${sale.Tonnage.toLocaleString()}</td>
                <td>${new Date(sale.Date_time).toISOString().split('T')[0]}</td>
 
                 <td>${sale.Amount_paid}</td>

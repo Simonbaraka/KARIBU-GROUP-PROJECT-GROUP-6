@@ -124,7 +124,6 @@
         font-size: 50px;
         color: green;
         font-weight: bolder;
-        text-align: right;
       }
 
       .recent {
@@ -189,8 +188,58 @@
         font-size: 400%;
       }
 
+      /*Working on the display area for credit title and its total number*/
+      /*Working on the display area for ugx title and its total amount*/
+      #cash {
+        font-size: 300%;
+        text-align: right;
+        color: green;
+      }
+
+      #cash-title {
+        font-size: 200%;
+      }
+
+      #ugx_credit {
+        font-size: 250%;
+        margin-top: 20px;
+        text-align: right;
+        color: green;
+      }
+
+      #ugx {
+        font-size: 200%;
+        margin-top: 30px;
+      }
+
+      /*Working on the display area for ugx title and its total amount*/
       #credit {
-        font-size: 400%;
+        font-size: 300%;
+        text-align: right;
+        color: green;
+      }
+
+      #credit_title {
+        font-size: 200%;
+      }
+
+      #ugx_cash {
+        font-size: 250%;
+        margin-top: 20px;
+        text-align: right;
+        color: green;
+      }
+
+      #number {
+        font-size: 200%;
+        margin-top: 30px;
+      }
+
+      .Panel-1 .parameters {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        margin: 0px;
+        gap: 5px;
       }
     </style>
   </head>
@@ -203,7 +252,6 @@
         <div class="user-profile">
           <img src="Karibu-logo.png" alt="Username" />
         </div>
-        <h1 id="he"></h1>
 
         <!--Manager options-->
         <div class="Agent-options">
@@ -259,16 +307,30 @@
         <!--Sales  manager panel-->
 
         <div class="Panel-1">
-          <h3>Regular Sales</h3>
-          <h1 id="cash"></h1>
-          <h5>Last Updated</h5>
+          <div class="parameters">
+            <!--Display area for total cash sales-->
+            <h2 id="cash-title">Cash Sales.</h2>
+            <h1 id="cash"></h1>
+
+            <!--Display area for total ugx for cash sales-->
+            <h2 id="number">UGX.</h2>
+            <h2 id="ugx_cash"></h2>
+            <h5>Last Updated</h5>
+          </div>
         </div>
 
         <!--Procurement manager panel 0779761960-->
         <div class="Panel-1">
-          <h3>Credit Sales</h3>
-          <h1 id="credit"></h1>
-          <h5>Last Updated</h5>
+          <div class="parameters">
+            <!--Display area for total credit sales-->
+            <h2 id="credit_title">Credit Sales.</h2>
+            <h2 id="credit"></h2>
+
+            <!--Display area for total ugx for credit sales-->
+            <h2 id="ugx">UGX.</h2>
+            <h3 id="ugx_credit"></h3>
+            <h5>Last Updated</h5>
+          </div>
         </div>
 
         <div class="recent">
@@ -295,6 +357,8 @@
     <script>
       cashArea = document.querySelector('#cash');
       creditArea = document.querySelector('#credit');
+      ugxCredit = document.querySelector('#ugx_credit');
+      ugxCash = document.querySelector('#ugx_cash');
       const API_URL = 'http://localhost:3000';
 
       //Regular/cash sales count
@@ -302,10 +366,17 @@
       async function RegularSales_Count() {
         let regular_Count = await fetch(`${API_URL}/api/cashsales`);
         let result = await regular_Count.json();
+        cash_counter = 0;
+        for (let i = 0; i < result.data.length; i++) {
+          if (result.data[i].Amount_paid) {
+            cash_counter += result.data[i].Amount_paid;
+          }
+        }
 
         let Total_Regular_sales = result.data.length;
         console.log(Total_Regular_sales);
-        cashArea.textContent = Total_Regular_sales;
+        ugxCash.textContent = cash_counter.toLocaleString();
+        cashArea.textContent = Total_Regular_sales.toLocaleString();
       }
       RegularSales_Count();
 
@@ -313,10 +384,20 @@
       async function Credit_Count() {
         let credit_count = await fetch(`${API_URL}/api/creditsales`);
         let result = await credit_count.json();
+        count = 0;
+
+        //Loop to get total amount of cash sales
+        for (let i = 0; i < result.data.length; i++) {
+          if (result.data[i].Amount_Due) {
+            count += result.data[i].Amount_Due;
+          }
+        }
 
         let Total_credit_sales = result.data.length;
         console.log(Total_credit_sales);
-        creditArea.textContent = Total_credit_sales;
+
+        ugxCredit.textContent = count.toLocaleString();
+        creditArea.textContent = Total_credit_sales.toLocaleString();
       }
 
       Credit_Count();

@@ -347,12 +347,12 @@
         /*
          * Value Validation
          */
-        if (data.Tonnage < 1000) {
-          alert('Tonnage must be greater than 1000');
+        if (data.Tonnage < 1_000) {
+          alert('Tonnage must be greater than 1,000');
           return;
         }
-        if (data.Amount_paid < 350000) {
-          alert('Amount paid must be greater than 350000');
+        if (data.Amount_paid < 10_000) {
+          alert('Amount paid must be greater than 10,000');
           return;
         }
 

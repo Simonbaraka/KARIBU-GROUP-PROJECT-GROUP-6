@@ -1,4 +1,5 @@
 const express = require('express');
+require('dotenv').config();
 const path = require('path');
 const database = require('./Karibu-database/Karibu-MongoDB');
 const cors = require('cors');
@@ -19,30 +20,30 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-const swaggerDefinition = {
-  openapi: '3.1.0',
-  info: {
-    title: 'This is a KGL REST Documentation',
-    version: '1.0.0',
-    description:
-      'This is the documentation for the KGL REST API for the frontend app',
-  },
-  servers: [
-    {
-      url: 'http://localhost:3000',
-      description: 'Developer Tools',
-    },
-  ],
-};
+// const swaggerDefinition = {
+//   openapi: '3.1.0',
+//   info: {
+//     title: 'This is a KGL REST Documentation',
+//     version: '1.0.0',
+//     description:
+//       'This is the documentation for the KGL REST API for the frontend app',
+//   },
+//   servers: [
+//     {
+//       url: 'http://localhost:3000',
+//       description: 'Developer Tools',
+//     },
+//   ],
+// };
 
-//Options for swagger -jsdoc
-const options = {
-  swaggerDefinition,
-  apis: ['./Karibu-routes/*.js'],
-};
+// //Options for swagger -jsdoc
+// const options = {
+//   swaggerDefinition,
+//   // apis: ['./Karibu-routes/*.js'],
+// };
 
-swaggerSpec = swaggerJSDoc(options);
-app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec));
+// swaggerSpec = swaggerJSDoc(options);
+// app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec));
 
 //allo
 app.use('/api/procurement', ProcurementRouter);

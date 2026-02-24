@@ -1,5 +1,6 @@
 const express = require('express');
 const CreditModel = require('../Karibu-models/credit_sales-Model');
+const Procurement_Model = require('../Karibu-models/procurement-Model');
 const router = express.Router();
 
 //Get All credit sales
@@ -18,13 +19,42 @@ router.get('/', async (req, res) => {
   }
 });
 
+router.get('/:id', async (req, res) => {
+  try {
+    let sale = await CreditModel.findById(req.params.id);
+    if (!sale) {
+      return res.status(404).json({ message: 'Not found' });
+    }
+    res
+      .status(200)
+      .json({ message: 'Sales Data collection was a success ', data: sale });
+  } catch (err) {
+    res.status(500).json({ message: 'Sales not found', error: err.message });
+  }
+});
 //POST
 
 router.post('/', async (req, res) => {
   try {
-    let body = req.body;
-    const _credit = new CreditModel(body);
+    const { Produce_name, Tonnage } = req.body;
+    const produce = await Procurement_Model.findOne({ Produce_name });
 
+    if (!produce) {
+      return res.status(400).json({
+        message: 'Produce not found in stock',
+      });
+    }
+
+    if (produce.Produce_tonnage < Tonnage) {
+      return res.status(400).json({
+        message: 'Not enough stock available',
+      });
+    }
+    produce.Produce_tonnage -= Tonnage;
+    console.log('New stock:', produce.Produce_tonnage);
+    await produce.save();
+
+    const _credit = new CreditModel(req.body);
     await _credit.save();
     res
       .status(201)
@@ -39,10 +69,10 @@ router.post('/', async (req, res) => {
 //UPDATE/PATCH
 router.patch('/:id', async (req, res) => {
   try {
-    let _id = req.params.id;
-    let body = req.params.body;
+    let id_ = req.params.id;
+    let body = req.body;
 
-    const _update = await CreditModel.findByIdAndUpdate(_id, body, {
+    const _update = await CreditModel.findByIdAndUpdate(id_, body, {
       new: true,
     });
     res.status(200).json({ message: 'Credit Sale Updated ', data: _update });

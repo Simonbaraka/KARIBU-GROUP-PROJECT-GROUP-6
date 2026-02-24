@@ -241,15 +241,15 @@
         const user = {
           FirstName: fname,
           LastName: lname,
-          Email: email,
+          Email: email.toLowerCase(),
           Role: role,
           Password: password,
           // send for backend validation
         };
 
         try {
-          const response = await fetch(`${API_URL}/api/users`, {
-            method: 'post',
+          const response = await fetch(`${API_URL}/api/users/register`, {
+            method: 'POST',
             headers: {
               'Content-Type': 'application/json',
             },
@@ -268,19 +268,9 @@
 
             // Redirect after 2 seconds to the different
 
-            if (user.Role === 'Sales Agent') {
-              setTimeout(() => {
-                window.location.href = 'Karibu_Sales_Agent_DashBoard.html';
-              }, 2000);
-            } else if (user.Role === 'Direcotr') {
-              setTimeout(() => {
-                window.location.href = 'Karibu_Director_DashBoard.html';
-              }, 2000);
-            } else if (user.Role === 'Manager') {
-              setTimeout(() => {
-                window.location.href = 'Karibu-ManagerDashboard.html';
-              }, 2000);
-            }
+            setTimeout(() => {
+              window.location.href = 'index.html';
+            }, 2000);
           } else {
             alert('❌ Failed: ' + result.message);
           }

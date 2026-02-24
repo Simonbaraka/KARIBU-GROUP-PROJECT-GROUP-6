@@ -10,7 +10,7 @@ const Produce_Schema = new mongoose.Schema({
   Produce_tonnage: {
     type: Number,
     required: true,
-    min: 1000,
+    min: 0,
   },
 
   Produce_Cost: {

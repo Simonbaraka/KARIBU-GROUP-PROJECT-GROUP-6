@@ -17,10 +17,41 @@ Router.get('/', async (req, res) => {
   }
 });
 
+Router.get('/:id', async (req, res, next) => {
+  try {
+    let sale = await Procurement_Model.findById(req.params.id);
+    if (!sale) {
+      return res.status(404).json({ message: 'Not found' });
+    }
+    res
+      .status(200)
+      .json({ message: 'Sales Data collection was a success ', data: sale });
+  } catch (err) {
+    res.status(500).json({ message: 'Sales not found', error: err.message });
+  }
+});
 //POST PROCUREMENT
 
 Router.post('/', async (req, res) => {
   try {
+    const { Produce_name, Produce_tonnage, Produce_Cost } = req.body;
+    console.log('RAW BODY:', req.body);
+    console.log('Produce_tonnage:', Produce_tonnage);
+    console.log('Type:', typeof Produce_tonnage);
+
+    let produce = await Procurement_Model.findOne({ Produce_name });
+
+    if (produce) {
+      produce.Produce_tonnage += Number(Produce_tonnage);
+      produce.Produce_Cost += Number(Produce_Cost);
+      await produce.save();
+
+      return res.status(200).json({
+        message: 'Stock updated successfully',
+        data: produce,
+      });
+    }
+
     const _procurement = new Procurement_Model(req.body);
     console.log('DATA RECEIVED:', req.body);
     await _procurement.save();
@@ -61,17 +92,16 @@ Router.patch('/:id', async (req, res) => {
 
 //DELETING PROCUREMENT
 
-Router.delete('/:Produce_name', async (req, res) => {
+Router.delete('/:id', async (req, res) => {
   try {
-    let _Produce_name = req.params.Produce_name;
+    let _Produce_name = req.params.id;
     //Validating input
     if (!_Produce_name) {
       res.status(400).json({ message: 'Produce name required' });
     }
 
-    const Produce_Deleted = await Procurement_Model.findOneAndDelete({
-      Produce_name: _Produce_name,
-    });
+    const Produce_Deleted =
+      await Procurement_Model.findByIdAndDelete(_Produce_name);
 
     if (!Produce_Deleted) {
       res.status(404).json({

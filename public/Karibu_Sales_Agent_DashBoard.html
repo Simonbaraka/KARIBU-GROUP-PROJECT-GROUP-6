@@ -278,7 +278,7 @@
             </li>
 
             <li>
-              <a href="Karibu_DashBoard.html"
+              <a href="index.html"
                 ><div class="material-icons">logout</div>
                 Log Out</a
               >
@@ -295,7 +295,7 @@
           <div class="Avatar">SB</div>
           <div class="user-info">
             <div class="user-name">
-              <h5>Simon</h5>
+              <h5 id="employee-name"></h5>
             </div>
             <div class="user-role">Sales Agent</div>
           </div>
@@ -358,11 +358,20 @@
       cashArea = document.querySelector('#cash');
       creditArea = document.querySelector('#credit');
       ugxCredit = document.querySelector('#ugx_credit');
+      employee_name = document.querySelector('#employee-name');
       ugxCash = document.querySelector('#ugx_cash');
       const API_URL = 'http://localhost:3000';
 
-      //Regular/cash sales count
+      async function profile() {
+        let response = await fetch(`${API_URL}/api/users`);
+        let result = await response.json();
 
+        employee_name.textContent =
+          result.data[0].FirstName + ' ' + result.data[0].LastName;
+      }
+      profile();
+
+      //Regular/cash sales count
       async function RegularSales_Count() {
         let regular_Count = await fetch(`${API_URL}/api/cashsales`);
         let result = await regular_Count.json();
@@ -375,6 +384,7 @@
 
         let Total_Regular_sales = result.data.length;
         console.log(Total_Regular_sales);
+        employee_name.textContent;
         ugxCash.textContent = cash_counter.toLocaleString();
         cashArea.textContent = Total_Regular_sales.toLocaleString();
       }

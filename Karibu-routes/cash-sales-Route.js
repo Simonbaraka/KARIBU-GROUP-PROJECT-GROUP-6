@@ -1,5 +1,6 @@
 const express = require('express');
 const CashModel = require('../Karibu-models/cash_sales-Model');
+const ProcurementModel = require('../Karibu-models/procurement-Model');
 
 const router = express.Router();
 /**
@@ -73,6 +74,26 @@ router.get('/:id', async (req, res, next) => {
 router.post('/', async (req, res) => {
   try {
     //console.log('DATA RECEIVED:', req.body);
+    const { Produce_name, Tonnage } = req.body;
+
+    console.log('Incoming name:', Produce_name);
+    const produce = await ProcurementModel.findOne({ Produce_name });
+    console.log('Found produce:', produce);
+
+    if (!produce) {
+      return res.status(400).json({
+        message: 'Produce not found in stock',
+      });
+    }
+    if (produce.Produce_tonnage < Tonnage) {
+      return res.status(400).json({
+        message: 'Not enough stock available',
+      });
+    }
+    // 3️⃣ Reduce stock
+    produce.Produce_tonnage -= Tonnage;
+    await produce.save();
+    console.log('New stock:', produce.Produce_tonnage);
     let newRecord = new CashModel(req.body);
     await newRecord.save();
     res

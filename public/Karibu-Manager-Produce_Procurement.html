@@ -216,20 +216,22 @@
       table {
         width: 100%;
         border-collapse: collapse;
+        font-size: 14px;
+        margin-top: 15px;
       }
 
       th {
         background: #1e1e2f;
         text-align: left;
-        padding: 6px;
-        border-left: 1px solid #ddd;
+        padding: 12px;
         color: white;
         overflow: hidden;
       }
       td {
-        text-align: center;
-        padding: 10px;
-        font-size: 15px;
+        text-align: left;
+        padding: 12px;
+        font-size: 14px;
+        border-bottom: 1px solid #eee;
       }
 
       tbody tr:hover {
@@ -405,7 +407,7 @@
 
             <!-- Reset & Submit buttons -->
           </div>
-          <button type="submit" id="Orderbtn">Create Order</button>
+          <button id="Orderbtn">Create Order</button>
 
           <div class="recent">
             <table>
@@ -433,7 +435,9 @@
 
     <script>
       const _form = document.querySelector('._Form');
+      let btn = document.querySelector('#Orderbtn');
       const API_URL = 'http://localhost:3000';
+      let editingId = null;
 
       _form.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -463,19 +467,29 @@
           alert('Please fill in all fields');
           return;
         }
-
+        let response;
         try {
-          const response = await fetch(`${API_URL}/api/procurement`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data),
-          });
+          if (editingId) {
+            response = await fetch(`${API_URL}/api/procurement/${editingId}`, {
+              method: 'PATCH',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(data),
+            });
+          } else {
+            response = await fetch(`${API_URL}/api/procurement`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(data),
+            });
+          }
 
           const result = await response.json();
 
           if (response.ok) {
             alert('✅ Procurement saved successfully!');
             _form.reset();
+            editingId = null;
+            btn.textContent = 'Create Order';
             console.log('Saved:', result.data);
           } else {
             alert('❌ Failed to save: ' + result.message);
@@ -503,11 +517,11 @@
                 <td>${procurements.Branch}</td>
                 <td style="text-align:right;">
                   <span>
-                    <button onclick="update_cashsale('${procurements._id}')" class="icon-btn come" title="Edit">
+                    <button onclick="Edit_Procurement('${procurements._id}')" class="icon-btn come" title="Edit">
                       <span class="material-icons-outlined">edit</span>
                     </button>
-                    
-                    <button onclick = "deleteUser('${procurements._id}')" class="icon-btn delete" title="Delete">
+
+                    <button onclick = "Delete_Procurement('${procurements._id}')" class="icon-btn delete" title="Delete">
                         <span class="material-icons-outlined">delete</span>
                     </button>
                   </span>
@@ -518,8 +532,51 @@
 
         tableBody.innerHTML = table_;
       }
-
       Load_Procurement();
+
+      async function Delete_Procurement(Id) {
+        try {
+          let response = await fetch(`${API_URL}/api/procurement/${Id}`, {
+            method: 'DELETE',
+          });
+
+          let result = await response.json();
+          if (response.ok) {
+            alert('✅ Procurement Record deleted successfully');
+          } else {
+            alert('❌ Failed: ' + result.message);
+          }
+        } catch (err) {
+          console.error(err);
+          alert('❌ Network error');
+        }
+      }
+
+      async function Edit_Procurement(Id) {
+        try {
+          editingId = Id;
+          btn.textContent = 'Update';
+          let response = await fetch(`${API_URL}/api/procurement/${Id}`, {
+            method: 'GET',
+          });
+
+          let result = await response.json();
+          console.log(result);
+
+          const data = result.data;
+
+          document.getElementById('Produce_Name').value = data.Produce_name;
+          document.getElementById('produce_Tonnage').value =
+            data.Produce_tonnage;
+          document.getElementById('cost').value = data.Produce_Cost;
+          document.getElementById('Dealer_Name').value = data.Dealer_Name;
+          document.getElementById('country').value = data.Branch;
+          document.getElementById('Purchase_Date').value = data.Date_time;
+        } catch (error) {
+          console.error(error);
+          alert('❌ Network error');
+        }
+      }
     </script>
   </body>
 </html>

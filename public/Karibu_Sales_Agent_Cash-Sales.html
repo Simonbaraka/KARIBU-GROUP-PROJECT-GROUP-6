@@ -8,6 +8,11 @@
       href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet"
     />
+
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined"
+      rel="stylesheet"
+    />
     <style>
       * {
         margin: 0px;
@@ -189,6 +194,61 @@
         font-size: 12px;
         color: gray;
       }
+
+      .recent {
+        grid-column: 1 / -1;
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        margin-top: 2%;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+        font-size: 14px;
+      }
+
+      th {
+        background: #1e1e2f;
+        text-align: left;
+        padding: 10px;
+        color: white;
+      }
+      td {
+        text-align: left;
+        padding: 10px;
+        border-bottom: 1px solid #eee;
+      }
+      tbody tr:hover {
+        background-color: #eef2f7;
+      }
+
+      .icon-btn {
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        padding: 4px;
+        margin: 0 3px;
+      }
+
+      .icon-btn span {
+        font-size: 20px;
+        color: #444;
+      }
+
+      .icon-btn:hover span {
+        color: #1e1e2f;
+      }
+
+      .icon-btn.delete:hover span {
+        color: red;
+      }
+
+      .icon-btn.come:hover span {
+        color: red;
+      }
     </style>
   </head>
   <body>
@@ -312,12 +372,35 @@
           <!-- Invoice buttons -->
 
           <button type="submit" id="Invoicebtn">Create Invoice</button>
+
+          <div class="recent">
+            <table>
+              <h3>Recent Transactions</h3>
+              <br />
+              <thead>
+                <tr>
+                  <th>No.</th>
+                  <th>Produce</th>
+                  <th>Buyer</th>
+                  <th>Agent</th>
+                  <th>Produce Tonnage</th>
+                  <th>Date</th>
+                  <th>Amount Paid</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
         </form>
       </div>
     </div>
 
     <script>
       const form = document.querySelector('.Form');
+      let tableBody = document.querySelector('.recent tbody ');
+      let btn = document.querySelector('#Invoicebtn');
+      let editingId = null;
       const API_URL = 'http://localhost:3000';
 
       form.addEventListener('submit', async (e) => {
@@ -357,11 +440,21 @@
         }
 
         try {
-          let response = await fetch(`${API_URL}/api/cashsales`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data),
-          });
+          let response;
+          if (editingId) {
+            response = await fetch(`${API_URL}/api/cashsales/${editingId}`, {
+              method: 'PATCH',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(data),
+            });
+          } else {
+            response = await fetch(`${API_URL}/api/cashsales`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(data),
+            });
+          }
+
           let result = await response.json();
 
           if (response.ok) {
@@ -376,6 +469,90 @@
           alert('❌ Error submitting form');
         }
       });
+
+      async function loadSales() {
+        const res = await fetch(`${API_URL}/api/cashsales`);
+        const result = await res.json();
+
+        let innerHTML1 = '';
+
+        result.data.forEach((sale, index) => {
+          innerHTML1 += `
+            <tr>
+                <td>${index + 1}</td>
+                <td>${sale.Produce_name}</td>
+                <td>${sale.Buyer_name}</td>
+                <td>${sale.Agent_name}</td>
+                <td>${sale.Tonnage.toLocaleString()}</td>
+               <td>${new Date(sale.Date_time).toISOString().split('T')[0]}</td>
+
+                <td>${sale.Amount_paid}</td>
+                <td style="text-align:right;">
+                  <span>
+                    <button onclick="Edit_Cash_Sale('${sale._id}')" class="icon-btn come" title="Edit">
+                      <span class="material-icons-outlined">edit</span>
+                    </button>
+
+                    <button onclick = "Delete_Cash_Sale('${sale._id}')" class="icon-btn delete" title="Delete">
+                        <span class="material-icons-outlined">delete</span>
+                    </button>
+                  </span>
+                </td>
+
+             </tr>
+      `;
+        });
+        tableBody.innerHTML = innerHTML1;
+      }
+      loadSales();
+
+      async function Edit_Cash_Sale(Id) {
+        try {
+          editingId = Id;
+          btn.textContent = 'Update';
+          let response = await fetch(`${API_URL}/api/cashsales/${editingId}`, {
+            method: 'GET',
+          });
+
+          let result = await response.json();
+          let data = result.data;
+
+          document.querySelector('#Produce_Name').value = data.Produce_name;
+          document.querySelector('#Buyer_name').value = data.Buyer_name;
+          document.querySelector('#sales_agent').value = data.Agent_name;
+          document.querySelector('#Purchase_Date').value = new Date(
+            data.Date_time
+          )
+            .toISOString()
+            .split('T')[0];
+          document.querySelector('#produce_Tonnage').value = data.Tonnage;
+          document.querySelector('#Amount_Paid').value = data.Amount_paid;
+        } catch (err) {
+          alert('Error found');
+          console.log(err);
+        }
+      }
+
+      async function Delete_Cash_Sale(Id) {
+        try {
+          let response = await fetch(`${API_URL}/api/cashsales/${Id}`, {
+            method: 'DELETE',
+          });
+
+          let result = await response.json();
+
+          if (response.ok) {
+            alert('✅ Cash sale Record deleted successfully');
+
+            // Optional: Refresh page or remove row
+          } else {
+            alert('❌ Failed: ' + result.message);
+          }
+        } catch (err) {
+          console.error(err);
+          alert('❌ Network error');
+        }
+      }
     </script>
   </body>
 </html>

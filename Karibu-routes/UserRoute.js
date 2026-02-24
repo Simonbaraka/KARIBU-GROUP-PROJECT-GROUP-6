@@ -1,4 +1,6 @@
 const express = require('express');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const userModel = require('../Karibu-models/userModel');
 let router = express.Router();
 
@@ -20,34 +22,89 @@ router.get('/', async (req, res) => {
   }
 });
 
-//POST USER (Create new user)
-router.post('/', async (req, res) => {
+router.post('/login', async (req, res) => {
   try {
-    // Remove confirm_Password before saving
-    const { ...userData } = req.body;
+    const { Email, Password } = req.body;
 
-    let user = new userModel(userData);
+    const user = await userModel.findOne({ Email });
+
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        message: 'Invalid credentials',
+      });
+    }
+
+    const isMatch = await bcrypt.compare(Password, user.Password);
+
+    if (!isMatch) {
+      return res.status(401).json({
+        success: false,
+        message: 'Invalid credentials',
+      });
+    }
+
+    const token = jwt.sign(
+      {
+        id: user._id,
+        role: user.Role,
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: '1h' }
+    );
+
+    res.status(200).json({
+      success: true,
+      message: 'Login successful',
+      token,
+      role: user.Role,
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: 'Login failed',
+      error: err.message,
+    });
+  }
+});
+
+//POST USER (Create new user)
+router.post('/register', async (req, res) => {
+  try {
+    const { Password, ...rest } = req.body;
+
+    // Check if email exists
+    const existingUser = await userModel.findOne({ Email: req.body.Email });
+    if (existingUser) {
+      return res.status(400).json({
+        success: false,
+        message: 'User already exists',
+      });
+    }
+
+    // Hash password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(Password, salt);
+
+    const user = new userModel({
+      ...rest,
+      Password: hashedPassword,
+    });
+
     await user.save();
-
-    // Don't send password in response
-    const userResponse = user.toObject();
-    delete userResponse.Password;
-    console.log(userResponse);
 
     res.status(201).json({
       success: true,
       message: 'User account created successfully',
-      data: userResponse,
     });
   } catch (err) {
-    res.status(401).json({
+    res.status(500).json({
       success: false,
       message: 'Failed to create user account',
       error: err.message,
     });
   }
 });
-
 //UPDATE USER
 router.patch('/:id', async (req, res) => {
   try {

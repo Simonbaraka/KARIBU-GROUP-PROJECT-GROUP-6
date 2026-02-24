@@ -8,6 +8,11 @@
       href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet"
     />
+
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined"
+      rel="stylesheet"
+    />
     <style>
       * {
         margin: 0px;
@@ -197,6 +202,75 @@
         font-size: 12px;
         color: gray;
       }
+
+      .recent {
+        grid-column: 1 / -1;
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        margin-top: 2%;
+        overflow-x: auto;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+        font-size: 14px;
+        min-width: 1100px; /* important for wide tables */
+      }
+
+      th {
+        background: #1e1e2f;
+        color: white;
+        padding: 12px;
+        text-align: left;
+        font-weight: 500;
+      }
+
+      td {
+        padding: 12px;
+        border-bottom: 1px solid #eee;
+        text-align: left;
+      }
+
+      tbody tr:nth-child(even) {
+        background-color: #f8f9fa;
+      }
+
+      tbody tr:hover {
+        background-color: #eef2f7;
+      }
+
+      th,
+      td {
+        white-space: nowrap;
+      }
+
+      .icon-btn {
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        padding: 4px;
+        margin: 0 3px;
+      }
+
+      .icon-btn span {
+        font-size: 20px;
+        color: #444;
+      }
+
+      .icon-btn:hover span {
+        color: #1e1e2f;
+      }
+
+      .icon-btn.delete:hover span {
+        color: red;
+      }
+
+      .icon-btn.come:hover span {
+        color: red;
+      }
     </style>
   </head>
   <body>
@@ -354,7 +428,7 @@
             <div class="input-box">
               <label for="Branch">Karibu Branch</label>
               <select id="Branch">
-                <option></option>
+                <option>Select branch</option>
                 <option>Kampala</option>
                 <option>Entebbe</option>
               </select>
@@ -362,13 +436,39 @@
 
             <!-- Reset & Submit buttons -->
           </div>
-          <button type="submit">Submit</button>
+          <button type="submit" id="Order">Submit</button>
+
+          <div class="recent">
+            <h3>Recent Transactions</h3>
+            <table>
+              <br />
+              <thead>
+                <tr>
+                  <th>No.</th>
+                  <th>Buyer</th>
+                  <th>Sales Agent</th>
+                  <th>Contacts</th>
+                  <th>ID</th>
+                  <th>Location</th>
+                  <th>Produce Name</th>
+                  <th>Tonnage</th>
+                  <th>Amount Due</th>
+                  <th>Due Date</th>
+                  <th>Branch</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
         </form>
       </div>
     </div>
 
     <script>
       _creditForm = document.querySelector('.Credit_form');
+      btn = document.querySelector('#Order');
+      editingId = null;
       const API_URL = 'http://localhost:3000';
       _creditForm.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -386,18 +486,29 @@
           Branch: document.querySelector('#Branch').value,
         };
 
+        let response;
         try {
-          let response = await fetch(`${API_URL}/api/creditsales`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data),
-          });
+          if (editingId) {
+            response = await fetch(`${API_URL}/api/creditsales/${editingId}`, {
+              method: 'PATCH',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(data),
+            });
+          } else {
+            response = await fetch(`${API_URL}/api/creditsales`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(data),
+            });
+          }
 
           let result = await response.json();
 
           if (response.ok) {
-            alert('✅ Cash Sales saved successfully');
+            alert('✅ Credit Sale Record saved successfully');
             _creditForm.reset();
+
+            editingId = null;
             console.log('Saved:', result.data);
           } else {
             alert('❌ Failed to save: ' + result.message);
@@ -407,6 +518,104 @@
           alert('❌ Error submitting form');
         }
       });
+
+      const tableBody = document.querySelector('.recent tbody');
+      async function LoadCreditSales() {
+        let response = await fetch(`${API_URL}/api/creditsales`);
+        let result = await response.json();
+
+        let HTMLContent1 = '';
+        result.data.forEach((credit, index) => {
+          HTMLContent1 += ` <tr>
+                <td>${index + 1}</td>
+                <td>${credit.Buyer_name}</td>
+                <td>${credit.Agent_name}</td>
+                <td>${credit.Contact}</td>
+                 <td>${credit.National_ID}</td>
+                <td>${credit.Location}</td>
+
+                <td>${credit.Produce_name}</td>
+                <td>${credit.Tonnage.toLocaleString()}</td>
+                <td>${credit.Amount_Due.toLocaleString()}</td>
+               <td>${new Date(credit.Date_time).toISOString().split('T')[0]}</td>
+
+                <td>${credit.Branch}</td>
+                <td style="text-align:right;">
+                  <span>
+                    <button onclick="Edit_Credit_sales('${credit._id}')" class="icon-btn come" title="Edit">
+                      <span class="material-icons-outlined">edit</span>
+                    </button>
+
+                    <button onclick = "Delete_Credit_Sale('${credit._id}')" class="icon-btn delete" title="Delete">
+                        <span class="material-icons-outlined">delete</span>
+                    </button>
+                  </span>
+                </td>
+
+             </tr>`;
+        });
+        tableBody.innerHTML = HTMLContent1;
+      }
+      LoadCreditSales();
+
+      async function Edit_Credit_sales(Id) {
+        try {
+          editingId = Id;
+          btn.textContent = 'Update credit';
+          const response = await fetch(`${API_URL}/api/creditsales/${Id}`, {
+            method: 'GET',
+          });
+
+          const result = await response.json();
+          const data = result.data;
+
+          if (!response.ok || !result.data) {
+            alert('❌ Record not found');
+            return;
+          }
+          console.log(result);
+
+          // 2️⃣ Fill form inputs
+          document.querySelector('#Buyer_Name').value = data.Buyer_name;
+          document.querySelector('#Agent_name').value = data.Agent_name;
+          document.querySelector('#Contact').value = data.Contact;
+          document.querySelector('#Location').value = data.Location;
+          document.querySelector('#NIN').value = data.National_ID;
+          document.querySelector('#Produce_Name').value = data.Produce_name;
+          document.querySelector('#produce_Tonnage').value = data.Tonnage;
+          document.querySelector('#Amount_Due').value = data.Amount_Due;
+          document.querySelector('#PurchaseDate').value = new Date(
+            data.Date_time
+          )
+            .toISOString()
+            .split('T')[0];
+          document.querySelector('#Branch').value = data.Branch;
+        } catch (err) {
+          console.error(error);
+          alert('❌ Error');
+        }
+      }
+
+      async function Delete_Credit_Sale(Id) {
+        try {
+          let response = await fetch(`${API_URL}/api/creditsales/${Id}`, {
+            method: 'DELETE',
+          });
+
+          let result = await response.json();
+
+          if (response.ok) {
+            alert('✅ Procurement Record deleted successfully');
+
+            // Optional: Refresh page or remove row
+          } else {
+            alert('❌ Failed: ' + result.message);
+          }
+        } catch (err) {
+          console.error(err);
+          alert('❌ Network error');
+        }
+      }
     </script>
   </body>
 </html>

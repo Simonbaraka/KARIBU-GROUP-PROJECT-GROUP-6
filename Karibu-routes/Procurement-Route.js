@@ -34,16 +34,14 @@ Router.get('/:id', async (req, res, next) => {
 
 Router.post('/', async (req, res) => {
   try {
-    const { Produce_name, Produce_tonnage, Produce_Cost } = req.body;
+    const { Produce_name, Produce_tonnage, Produce_Cost, Branch } = req.body;
     console.log('RAW BODY:', req.body);
     console.log('Produce_tonnage:', Produce_tonnage);
     console.log('Type:', typeof Produce_tonnage);
 
-    let produce = await Procurement_Model.findOne({ Produce_name });
-
+    let produce = await Procurement_Model.findOne({ Produce_name, Branch });
     if (produce) {
       produce.Produce_tonnage += Number(Produce_tonnage);
-      produce.Produce_Cost += Number(Produce_Cost);
       await produce.save();
 
       return res.status(200).json({
@@ -51,7 +49,6 @@ Router.post('/', async (req, res) => {
         data: produce,
       });
     }
-
     const _procurement = new Procurement_Model(req.body);
     console.log('DATA RECEIVED:', req.body);
     await _procurement.save();

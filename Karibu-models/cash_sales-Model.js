@@ -1,38 +1,48 @@
 const mongoose = require('mongoose');
 
-const cashSchema = new mongoose.Schema({
-  Produce_name: {
-    type: String,
-    required: true,
-  },
+const cashSchema = new mongoose.Schema(
+  {
+    Produce_name: {
+      type: String,
+      required: true,
+    },
 
-  Buyer_name: {
-    type: String,
-    required: true,
-  },
+    Buyer_name: {
+      type: String,
+      required: true,
+    },
 
-  Agent_name: {
-    type: String,
-    required: true,
-  },
+    Agent_name: {
+      type: String,
+      required: true,
+    },
 
-  Date_time: {
-    type: Date,
-    default: Date.now,
-  },
+    Date_time: {
+      type: Date,
+      default: Date.now,
+    },
 
-  Tonnage: {
-    type: Number,
-    required: true,
-    min: 1_000,
-  },
+    Tonnage: {
+      type: Number,
+      required: true,
+      min: 1_000,
+    },
 
-  Amount_paid: {
-    type: Number,
-    required: true,
-    min: 10_000,
+    Amount_paid: {
+      type: Number,
+      required: true,
+      min: 10_000,
+    },
+
+    Branch: {
+      type: String,
+      required: true,
+    },
   },
-});
+  {
+    timestamps: true, // Adds createdAt and updatedAt fields
+  }
+);
 
 const CashSales = mongoose.model('CashSales', cashSchema);
 

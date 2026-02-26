@@ -74,25 +74,29 @@ router.get('/:id', async (req, res, next) => {
 router.post('/', async (req, res) => {
   try {
     //console.log('DATA RECEIVED:', req.body);
-    const { Produce_name, Tonnage } = req.body;
+    const { Produce_name, Tonnage, Branch } = req.body;
 
     console.log('Incoming name:', Produce_name);
-    const produce = await ProcurementModel.findOne({ Produce_name });
+    const produce = await ProcurementModel.findOne({ Produce_name, Branch });
     console.log('Found produce:', produce);
 
     if (!produce) {
       return res.status(400).json({
         message: 'Produce not found in stock',
       });
+    } else {
+      if (produce.Produce_tonnage < Tonnage) {
+        return res.status(400).json({
+          message: 'Not enough stock available',
+        });
+      } else {
+        produce.Produce_tonnage -= Tonnage;
+        await produce.save();
+      }
     }
-    if (produce.Produce_tonnage < Tonnage) {
-      return res.status(400).json({
-        message: 'Not enough stock available',
-      });
-    }
+
     // 3️⃣ Reduce stock
-    produce.Produce_tonnage -= Tonnage;
-    await produce.save();
+
     console.log('New stock:', produce.Produce_tonnage);
     let newRecord = new CashModel(req.body);
     await newRecord.save();

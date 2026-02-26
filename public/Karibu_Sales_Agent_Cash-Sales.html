@@ -143,6 +143,14 @@
         background-color: #f8f9fa;
       }
 
+      .input-box select {
+        height: 45px;
+        width: 100%;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+        background-color: #f8f9fa;
+      }
+
       label {
         font-weight: 500;
         margin-bottom: 5px;
@@ -368,7 +376,17 @@
                 required
               />
             </div>
+
+            <div class="input-box">
+              <label for="Branch">Karibu Branch</label>
+              <select id="Branch">
+                <option>Select Branch</option>
+                <option>Kampala</option>
+                <option>Entebbe</option>
+              </select>
+            </div>
           </div>
+
           <!-- Invoice buttons -->
 
           <button type="submit" id="Invoicebtn">Create Invoice</button>
@@ -386,6 +404,7 @@
                   <th>Produce Tonnage</th>
                   <th>Date</th>
                   <th>Amount Paid</th>
+                  <th>Branch</th>
                   <th>Action</th>
                 </tr>
               </thead>
@@ -413,6 +432,7 @@
           Date_time: document.querySelector('#Purchase_Date').value,
           Tonnage: Number(document.querySelector('#produce_Tonnage').value),
           Amount_paid: Number(document.querySelector('#Amount_Paid').value),
+          Branch: document.querySelector('#Branch').value,
         };
 
         if (
@@ -421,7 +441,8 @@
           !data.Agent_name ||
           !data.Tonnage ||
           !data.Amount_paid ||
-          !data.Date_time
+          !data.Date_time ||
+          !data.Branch
         ) {
           alert('Fill in all fields');
           return;
@@ -487,6 +508,7 @@
                <td>${new Date(sale.Date_time).toISOString().split('T')[0]}</td>
 
                 <td>${sale.Amount_paid}</td>
+                <td>${sale.Branch}</td>
                 <td style="text-align:right;">
                   <span>
                     <button onclick="Edit_Cash_Sale('${sale._id}')" class="icon-btn come" title="Edit">
@@ -527,6 +549,7 @@
             .split('T')[0];
           document.querySelector('#produce_Tonnage').value = data.Tonnage;
           document.querySelector('#Amount_Paid').value = data.Amount_paid;
+          document.querySelector('#Branch').value = data.Branch;
         } catch (err) {
           alert('Error found');
           console.log(err);

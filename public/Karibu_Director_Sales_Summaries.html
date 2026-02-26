@@ -185,6 +185,55 @@
       font-size: 12px;
       color: gray;
     }
+
+    .Parameters {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      margin-top: 20px;
+      gap: 5px;
+    }
+
+    #numbers-1 {
+      font-size: 170%;
+      margin-top: 0px;
+      text-align: left;
+      color: green;
+    }
+    #numbers-2 {
+      font-size: 170%;
+      margin-top: 0px;
+      text-align: left;
+      color: green;
+    }
+    #numbers-3 {
+      font-size: 170%;
+      margin-top: 0px;
+      text-align: left;
+      color: green;
+    }
+    #numbers-4 {
+      font-size: 170%;
+      margin-top: 0px;
+      text-align: left;
+      color: green;
+    }
+    #numbers-5 {
+      font-size: 170%;
+      margin-top: 0px;
+      text-align: left;
+      color: green;
+    }
+    #numbers-6 {
+      font-size: 170%;
+      margin-top: 0px;
+      text-align: left;
+      color: green;
+    }
+
+    #title {
+      margin-top: 15px;
+      font-size: 100%;
+    }
   </style>
   <body>
     <div class="main-panel">
@@ -252,8 +301,12 @@
         <form>
           <div class="user-details">
             <div class="input-box">
-              <label for="Branch">Branch</label>
-              <input type="text" id="Branch" />
+              <label for="Branch">Karibu Branch</label>
+              <select id="Branch">
+                <option>Select Branch</option>
+                <option>Kampala</option>
+                <option>Entebbe</option>
+              </select>
             </div>
 
             <div class="input-box">
@@ -267,15 +320,77 @@
             </div>
 
             <div class="input-box">
-              <button>Generate</button>
+              <button type="button" onclick="Totals()">Filter</button>
             </div>
           </div>
         </form>
 
         <div class="Director-sales-report">
           <h2>SALES REPORT GRAPH</h2>
+          <div class="Parameters">
+            <h3 id="title">Total Revenue</h3>
+            <h4 id="numbers-1"></h4>
+            <h3 id="title">Total Cash Revenue</h3>
+            <h4 id="numbers-2"></h4>
+            <h3 id="title">Total Credit Revenue</h3>
+            <h4 id="numbers-3"></h4>
+            <h3 id="title">Total Tonnage</h3>
+            <h4 id="numbers-4"></h4>
+            <h3 id="title">Total Procurement Tonnage</h3>
+            <h4 id="numbers-5"></h4>
+            <h3 id="title">Total Procurement Cost</h3>
+            <h4 id="numbers-6"></h4>
+          </div>
         </div>
       </div>
     </div>
+
+    <script>
+      const API_URL = 'http://localhost:3000';
+
+      let numbers_1 = document.querySelector('#numbers-1');
+      let numbers_2 = document.querySelector('#numbers-2');
+      let numbers_3 = document.querySelector('#numbers-3');
+      let numbers_4 = document.querySelector('#numbers-4');
+      let numbers_5 = document.querySelector('#numbers-5');
+      let numbers_6 = document.querySelector('#numbers-6');
+      let startDate = document.querySelector('#start');
+      let endDate = document.querySelector('#end');
+      let Branch = document.querySelector('#Branch');
+
+      async function Totals() {
+        try {
+          const startDate = document.querySelector('#start').value;
+          const endDate = document.querySelector('#end').value;
+          const Branch = document.querySelector('#Branch').value;
+
+          let url = `${API_URL}/api/reports/sales-summary`; // 👈 lowercase reports
+
+          if (startDate && endDate) {
+            url += `?startDate=${startDate}&endDate=${endDate}&Branch=${Branch}`;
+          }
+
+          let response = await fetch(url);
+          let result = await response.json();
+
+          console.log('FULL RESULT:', result);
+
+          numbers_1.textContent = (result.totalRevenue || 0).toLocaleString();
+          numbers_2.textContent = (
+            result.totalCashRevenue || 0
+          ).toLocaleString();
+          numbers_3.textContent = (
+            result.totalCreditRevenue || 0
+          ).toLocaleString();
+          numbers_4.textContent = (result.totalTonnage || 0).toLocaleString();
+
+          numbers_5.textContent = (result.procureTonnage || 0).toLocaleString();
+
+          numbers_6.textContent = (result.procureCost || 0).toLocaleString();
+        } catch (error) {
+          console.error('Error fetching totals:', error);
+        }
+      }
+    </script>
   </body>
 </html>

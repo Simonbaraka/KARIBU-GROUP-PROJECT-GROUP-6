@@ -501,6 +501,7 @@
       });
 
       const tableBody = document.querySelector('.recent tbody');
+
       async function Load_Procurement() {
         let response = await fetch(`${API_URL}/api/procurement`);
         let result = await response.json();

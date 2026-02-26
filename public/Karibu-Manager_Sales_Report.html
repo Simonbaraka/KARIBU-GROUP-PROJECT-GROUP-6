@@ -132,6 +132,15 @@
         background-color: #f8f9fa;
       }
 
+      .user-details select {
+        padding: 5px;
+        border-radius: 5px;
+        border: 1px solid #1e1e2f;
+        width: 25%;
+        border: 1px solid #ddd;
+        background-color: #f8f9fa;
+      }
+
       label {
         font-weight: 500;
         font-size: 20px;
@@ -270,12 +279,27 @@
         <!-- Main container that holds the form and the display area for the graph-->
         <form>
           <div class="user-details">
+            <label for="Branch">Karibu Branch</label>
+            <select id="Branch">
+              <option>Select Branch</option>
+              <option>Kampala</option>
+              <option>Entebbe</option>
+            </select>
+
+            <label for="Branch">Category</label>
+            <select id="Branch">
+              <option>Select Category</option>
+              <option>Cash Sales</option>
+              <option>Credit Sales</option>
+            </select>
+
             <label for="start">Start Date</label>
             <input type="date" id="start" />
 
             <label for="end">End Date</label>
             <input type="date" id="end" />
           </div>
+
           <button>Generate Report</button>
         </form>
 

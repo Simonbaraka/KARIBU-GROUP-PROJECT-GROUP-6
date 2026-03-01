@@ -109,14 +109,13 @@
         grid-area: Right-panel;
         display: grid;
         grid-template-columns: repeat(1, minmax(400px, 1fr));
-        gap: 20px;
         border-radius: 10px;
         margin: 5%;
       }
 
       .user-details {
         display: grid;
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(5, 1fr);
         gap: 15px;
         padding: 20px;
         align-items: end;
@@ -124,8 +123,20 @@
         border: 1px solid#1e1e2f;
         border-radius: 5px;
       }
+      .input-box {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+      }
 
       .input-box input {
+        padding: 5px;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+        background-color: #f8f9fa;
+      }
+
+      .input-box select {
         padding: 5px;
         border-radius: 5px;
         border: 1px solid #ddd;
@@ -145,10 +156,9 @@
         cursor: pointer;
       }
 
-      h2 {
+      form h2 {
         text-align: center;
-        border-bottom: 1px solid black;
-        margin: 5px;
+        margin-top: 35px;
       }
 
       button {
@@ -159,12 +169,31 @@
         padding: 7px;
       }
 
-      .Director-graphs {
-        background-color: white;
-        padding: 20px;
-        border: 1px solid#1e1e2f;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-        min-height: 350px;
+      #salesTable {
+        width: 100%;
+        border-collapse: collapse;
+        border-radius: 12px;
+        overflow: hidden;
+        margin-top: 10px;
+      }
+
+      th {
+        background: #34435c;
+        text-align: left;
+        padding: 15px;
+        color: white;
+        overflow: hidden;
+      }
+      td {
+        text-align: left;
+        padding: 10px;
+        font-size: 14px;
+        border-bottom: 1px solid #eee;
+        background: white;
+      }
+
+      tbody tr:hover {
+        background-color: #f5f7fa;
       }
 
       .user-header {
@@ -229,12 +258,6 @@
                 Sales Summaries</a
               >
             </li>
-            <li>
-              <a href="Karibu_Director_AggregatedSummaries.html">
-                <div class="material-icons">point_of_sale</div>
-                Aggregated Sales</a
-              >
-            </li>
 
             <li>
               <a href="Karibu_Employee.html">
@@ -264,8 +287,21 @@
         <form>
           <div class="user-details">
             <div class="input-box">
-              <label for="start">Branch</label>
-              <input type="text" />
+              <label for="ReportType">Report Type</label>
+              <select id="ReportType">
+                <option>Select Report</option>
+                <option>Cash</option>
+                <option>Credit</option>
+              </select>
+            </div>
+
+            <div class="input-box">
+              <label for="Branch">Karibu Branch</label>
+              <select id="Branch">
+                <option>Select branch</option>
+                <option>Kampala</option>
+                <option>Entebbe</option>
+              </select>
             </div>
 
             <div class="input-box">
@@ -274,15 +310,89 @@
             </div>
 
             <div class="input-box">
-              <label for="end">End Date</label> <input type="date" id="end" />
+              <label for="end">End Date</label>
+              <input type="date" id="end" />
             </div>
 
-            <div class="input-box"><button>Generate</button></div>
+            <div class="input-box">
+              <button type="button" onclick="Load_Report()">
+                Generate Report
+              </button>
+            </div>
           </div>
-        </form>
 
-        <div class="Director-graphs"><h2>Report is displayed here</h2></div>
+          <h2>Report is displayed here</h2>
+          <table id="salesTable">
+            <thead>
+              <tr>
+                <th>No.</th>
+                <th>Date</th>
+                <th>Customer</th>
+                <th>Agent</th>
+                <th>Produce</th>
+                <th>Branch</th>
+                <th>Tonnage</th>
+                <th>Selling Price</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Data inserted dynamically -->
+            </tbody>
+          </table>
+        </form>
       </div>
     </div>
+
+    <script>
+      const API_URL = 'http://localhost:3000';
+      const tablebody = document.querySelector('#salesTable tbody');
+
+      async function Load_Report() {
+        try {
+          const startDate = document.querySelector('#start').value;
+          const endDate = document.querySelector('#end').value;
+          const branch = document.querySelector('#Branch').value;
+          const ReportType = document.querySelector('#ReportType');
+
+          let url = `${API_URL}/api/reports/sales-report`;
+          const params = new URLSearchParams();
+
+          if (startDate) params.append('startDate', startDate);
+          if (endDate) params.append('endDate', endDate);
+          if (branch && branch !== 'Select Branch') {
+            params.append('Branch', branch);
+          }
+
+          if (params.toString()) {
+            url += `?${params.toString()}`;
+          }
+
+          console.log('Fetching:', url);
+
+          const response = await fetch(url);
+          const result = await response.json();
+          console.log(result);
+          let table_ = '';
+
+          result.data.forEach((sale, index) => {
+            table_ += `
+            <tr>
+                    <td>${index + 1}</td>
+                    <td>${new Date(sale.createdAt).toISOString().split('T')[0]}</td>
+                    <td>${sale.Buyer_name || '-'}</td>
+                    <td>${sale.Agent_name || '-'}</td>
+                    <td>${sale.Produce_name || '-'}</td>
+                    <td>${sale.Branch || '-'}</td>
+                    <td>${(sale.Tonnage || 0).toLocaleString()}</td>
+                    <td>${(sale.Amount_paid || 0).toLocaleString()}</td>
+            </tr>`;
+          });
+
+          tablebody.innerHTML = table_;
+        } catch (error) {
+          console.error('Error loading report:', error);
+        }
+      }
+    </script>
   </body>
 </html>

@@ -115,44 +115,34 @@
       grid-template-columns: repeat(4, 1fr);
       gap: 15px;
       padding: 20px;
-      align-items: end;
-      background-color: white;
-      border: 1px solid#1e1e2f;
-      border-radius: 5px;
+      background: white;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      align-items: flex-end;
     }
-
-    .input-box input {
-      padding: 5px;
-      border-radius: 5px;
-      border: 1px solid #ddd;
-      background-color: #f8f9fa;
+    .input-box {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
     }
 
     .input-box label {
-      font-size: 20px;
+      font-size: 14px;
+      color: #666;
     }
-
+    .input-box input,
+    .input-box select {
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
     .input-box button {
       background: #1e1e2f;
       color: white;
-      border-radius: 5px;
-      padding: 7px;
-      height: 36px;
+      border: none;
+      padding: 10px;
+      border-radius: 4px;
       cursor: pointer;
-    }
-
-    .Director-sales-report {
-      background-color: white;
-      padding: 20px;
-      border: 1px solid#1e1e2f;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-      min-height: 350px;
-      border-radius: 5px;
-    }
-
-    .Director-sales-report h2 {
-      border-bottom: 1px solid black;
-      text-align: center;
     }
 
     .user-header {
@@ -184,13 +174,6 @@
     .user-role {
       font-size: 12px;
       color: gray;
-    }
-
-    .Parameters {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      margin-top: 20px;
-      gap: 5px;
     }
 
     #numbers-1 {
@@ -230,9 +213,39 @@
       color: green;
     }
 
-    #title {
-      margin-top: 15px;
-      font-size: 100%;
+    #salesTable {
+      width: 100%;
+      border-collapse: collapse;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    #salesTable th {
+      background: #34435c;
+      color: white;
+      padding: 15px;
+      text-align: left;
+    }
+
+    #salesTable td {
+      font-size: 130%;
+      padding: 10px;
+      background-color: whitesmoke;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    #salesTable tr:hover {
+      background-color: #cfd9e3;
+    }
+
+    .title {
+      font-weight: 100;
+    }
+
+    .figure {
+      text-align: right;
+      font-weight: bold;
+      font-size: 18px;
     }
   </style>
   <body>
@@ -263,12 +276,6 @@
               <a href="Karibu_Director_Sales_Summaries.html">
                 <div class="material-icons">summarize</div>
                 Sales Summaries</a
-              >
-            </li>
-            <li>
-              <a href="Karibu_Director_AggregatedSummaries.html">
-                <div class="material-icons">point_of_sale</div>
-                Aggregated Sales</a
               >
             </li>
 
@@ -325,29 +332,53 @@
           </div>
         </form>
 
-        <div class="Director-sales-report">
-          <h2>SALES REPORT GRAPH</h2>
-          <div class="Parameters">
-            <h3 id="title">Total Revenue</h3>
-            <h4 id="numbers-1"></h4>
-            <h3 id="title">Total Cash Revenue</h3>
-            <h4 id="numbers-2"></h4>
-            <h3 id="title">Total Credit Revenue</h3>
-            <h4 id="numbers-3"></h4>
-            <h3 id="title">Total Tonnage</h3>
-            <h4 id="numbers-4"></h4>
-            <h3 id="title">Total Procurement Tonnage</h3>
-            <h4 id="numbers-5"></h4>
-            <h3 id="title">Total Procurement Cost</h3>
-            <h4 id="numbers-6"></h4>
-          </div>
-        </div>
+        <h3>SALES REPORT GRAPH</h3>
+        <table id="salesTable">
+          <thead>
+            <tr>
+              <th>Type</th>
+              <th>Figures</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr>
+              <td class="title">Total Revenue</td>
+              <td id="numbers-1" class="figure"></td>
+            </tr>
+
+            <tr>
+              <td class="title">Total Cash Revenue</td>
+              <td id="numbers-2" class="figure"></td>
+            </tr>
+
+            <tr>
+              <td class="title">Total Credit Revenue</td>
+              <td id="numbers-3" class="figure"></td>
+            </tr>
+
+            <tr>
+              <td class="title">Total Tonnage</td>
+              <td id="numbers-4" class="figure"></td>
+            </tr>
+
+            <tr>
+              <td class="title">Total Procurement Tonnage</td>
+              <td id="numbers-5" class="figure"></td>
+            </tr>
+
+            <tr>
+              <td class="title">Total Procurement Cost</td>
+              <td id="numbers-6" class="figure"></td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
     <script>
       const API_URL = 'http://localhost:3000';
-
+      let url = `${API_URL}/api/reports/sales-summary`;
       let numbers_1 = document.querySelector('#numbers-1');
       let numbers_2 = document.querySelector('#numbers-2');
       let numbers_3 = document.querySelector('#numbers-3');
@@ -363,8 +394,6 @@
           const startDate = document.querySelector('#start').value;
           const endDate = document.querySelector('#end').value;
           const Branch = document.querySelector('#Branch').value;
-
-          let url = `${API_URL}/api/reports/sales-summary`; // 👈 lowercase reports
 
           if (startDate && endDate) {
             url += `?startDate=${startDate}&endDate=${endDate}&Branch=${Branch}`;
@@ -391,6 +420,29 @@
           console.error('Error fetching totals:', error);
         }
       }
+
+      const tableBody = document.querySelector('#salesTable');
+
+      async function Load_Procurement() {
+        let response = await fetch(url);
+        let result = await response.json();
+        let table_ = '';
+
+        result.data.forEach((procurements, index) => {
+          table_ += `<tr>
+                <td>${index + 1}</td>
+                <td>${procurements.totalRevenue}</td>  
+                <td>${procurements.totalCashRevenue}</td>
+                <td>${procurements.totalCreditRevenue}</td>
+                <td>${procurements.totalTonnage}</td>
+                <td>${procurements.procureTonnage}</td>
+                <td>${procurements.procureCost}</td>
+             </tr>`;
+        });
+
+        tableBody.innerHTML = table_;
+      }
+      Load_Procurement();
     </script>
   </body>
 </html>

@@ -489,6 +489,10 @@
           if (result.data[i].Produce_Cost) {
             Procurement_ugx += result.data[i].Produce_Cost;
           }
+
+          if (result.data[i].Produce_tonnage < 1500) {
+            alert(result.data[i].Produce_name + ' Produce needs a restock');
+          }
         }
 
         let totalProcurement = result.data.length;

@@ -31,7 +31,6 @@ const Produce_Schema = new mongoose.Schema(
 
     Branch: {
       type: String,
-      enum: ['Kampala', 'Entebbe'],
       required: true,
     },
   },

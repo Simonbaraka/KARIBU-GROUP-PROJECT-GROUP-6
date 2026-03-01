@@ -170,6 +170,17 @@
         cursor: pointer;
       }
 
+      #button-1 {
+        padding: 5px 10px;
+        background: white;
+        color: black;
+        border: none;
+        border-radius: 5px;
+        border: 1px solid rgb(97, 238, 97);
+        font-size: 16px;
+        cursor: pointer;
+      }
+
       button:hover {
         background: #1e1e2f;
       }
@@ -229,7 +240,7 @@
       }
       td {
         text-align: left;
-        padding: 12px;
+        padding: 2px;
         font-size: 14px;
         border-bottom: 1px solid #eee;
       }
@@ -511,7 +522,12 @@
           table_ += `<tr>
                 <td>${index + 1}</td>
                 <td>${procurements.Produce_name}</td>
-                <td>${procurements.Produce_tonnage.toLocaleString()}</td>
+                <td>  <button 
+                      id="button-1" 
+                      style="color:${procurements.Produce_tonnage < 2000 ? 'red' : 'black'}">
+                      ${procurements.Produce_tonnage.toLocaleString()}
+                    </button>
+                </td>
                 <td>${procurements.Produce_Cost.toLocaleString()}</td>
                 <td>${procurements.Dealer_Name}</td>
                <td>${new Date(procurements.Date_time).toISOString().split('T')[0]}</td>

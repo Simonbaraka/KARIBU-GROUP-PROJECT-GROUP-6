@@ -179,13 +179,13 @@
 
       th {
         background: #34435c;
-        text-align: left;
+        text-align: center;
         padding: 15px;
         color: white;
         overflow: hidden;
       }
       td {
-        text-align: left;
+        text-align: center;
         padding: 10px;
         font-size: 14px;
         border-bottom: 1px solid #eee;
@@ -327,12 +327,13 @@
               <tr>
                 <th>No.</th>
                 <th>Date</th>
-                <th>Customer</th>
-                <th>Agent</th>
-                <th>Produce</th>
+                <th>Customer Name</th>
+                <th>Agent Name</th>
+                <th>Produce Name</th>
                 <th>Branch</th>
                 <th>Tonnage</th>
                 <th>Selling Price</th>
+                <th>Amount Due</th>
               </tr>
             </thead>
             <tbody>
@@ -352,7 +353,7 @@
           const startDate = document.querySelector('#start').value;
           const endDate = document.querySelector('#end').value;
           const branch = document.querySelector('#Branch').value;
-          const ReportType = document.querySelector('#ReportType');
+          const ReportType = document.querySelector('#ReportType').value;
 
           let url = `${API_URL}/api/reports/sales-report`;
           const params = new URLSearchParams();
@@ -361,6 +362,9 @@
           if (endDate) params.append('endDate', endDate);
           if (branch && branch !== 'Select Branch') {
             params.append('Branch', branch);
+          }
+          if (ReportType && ReportType !== 'Select Report') {
+            params.append('ReportType', ReportType);
           }
 
           if (params.toString()) {
@@ -385,8 +389,27 @@
                     <td>${sale.Branch || '-'}</td>
                     <td>${(sale.Tonnage || 0).toLocaleString()}</td>
                     <td>${(sale.Amount_paid || 0).toLocaleString()}</td>
+                     <td>${(sale.Amount_Due || 0).toLocaleString()}</td>
             </tr>`;
           });
+
+          let totalAmountPaid = 0;
+          let totalAmountDue = 0;
+          let totalTonnage = 0;
+
+          result.data.forEach((sale, index) => {
+            totalAmountPaid += sale.Amount_paid || 0;
+            totalAmountDue += sale.Amount_Due || 0;
+            totalTonnage += sale.Tonnage || 0;
+          });
+
+          table_ += `
+              <tr style="font-weight:bold; background:#eaeaea">
+                <td colspan="6">TOTAL</td>
+                <td>${totalTonnage.toLocaleString()}</td>
+                <td>${totalAmountPaid.toLocaleString()}</td>
+                <td>${totalAmountDue.toLocaleString()}</td>
+              </tr>`;
 
           tablebody.innerHTML = table_;
         } catch (error) {

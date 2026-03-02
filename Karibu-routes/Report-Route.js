@@ -16,13 +16,11 @@ router.get('/sales-summary', async (req, res) => {
       const end = new Date(endDate);
       end.setHours(23, 59, 59, 999); // 🔥 include entire end day
 
-      dateFilter = {
-        createdAt: {
-          $gte: start,
-          $lte: end,
-        },
-        Branch: Branch,
-      };
+      dateFilter.createdAt = { $gte: start, $lte: end };
+    }
+
+    if (Branch && Branch !== 'Select branch') {
+      dateFilter.Branch = Branch;
     }
     console.log('Query:', req.query);
     console.log('Date Filter:', dateFilter);
@@ -70,44 +68,51 @@ router.get('/sales-summary', async (req, res) => {
 
 router.get('/sales-report', async (req, res) => {
   try {
-    const { startDate, endDate, Branch } = req.query;
+    const { startDate, endDate, Branch, ReportType } = req.query;
+
     let filter = {};
+
     if (startDate && endDate) {
       const start = new Date(startDate);
       const end = new Date(endDate);
-      end.setHours(23, 59, 59, 999); // 🔥 include entire end day
+      end.setHours(23, 59, 59, 999);
 
-      filter = {
-        createdAt: {
-          $gte: start,
-          $lte: end,
-        },
+      filter.createdAt = {
+        $gte: start,
+        $lte: end,
       };
     }
 
-    if (Branch && Branch !== 'Select Branch') {
+    if (Branch && Branch !== 'Select branch') {
       filter.Branch = Branch;
     }
-    console.log('Query:', req.query);
-    console.log('Date Filter:', filter);
-    const cash = await CashModel.find(filter).sort({ createdAt: -1 }); //makes newest sales appear first
 
-    const totalcash = cash.reduce((sum, amount) => {
-      return sum + amount.Amount_paid;
-    }, 0);
+    let salesData = [];
 
-    const totalTonnage = cash.reduce((sum, tonage) => {
-      return sum + tonage.Tonnage;
-    }, 0);
+    if (ReportType === 'Credit') {
+      salesData = await CreditModel.find(filter).sort({ createdAt: -1 });
+    } else {
+      // Default to cash
+      salesData = await CashModel.find(filter).sort({ createdAt: -1 });
+    }
+
+    const totalAmount = salesData.reduce(
+      (sum, sale) => sum + (sale.Amount_paid || sale.Amount_Due || 0),
+      0
+    );
+
+    const totalTonnage = salesData.reduce(
+      (sum, sale) => sum + (sale.Tonnage || 0),
+      0
+    );
 
     res.json({
-      totalcash,
+      totalAmount,
       totalTonnage,
-      data: cash,
+      data: salesData,
     });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 });
-
 module.exports = router;

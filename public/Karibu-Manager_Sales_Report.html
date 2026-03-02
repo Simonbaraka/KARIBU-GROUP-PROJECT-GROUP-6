@@ -201,21 +201,21 @@
 
       th {
         background: #1e1e2f;
-        text-align: left;
+        text-align: center;
         padding: 10px;
         color: white;
       }
 
       td {
-        text-align: left;
+        text-align: center;
         padding: 5px;
         font-size: 14px;
         border-bottom: 1px solid #eee;
         background: #fafafc;
       }
 
-      tbody tr:hover {
-        background: #f5f7fa;
+      tr:hover {
+        background-color: #aeb9cb;
       }
     </style>
   </head>
@@ -302,9 +302,9 @@
         <form>
           <div class="user-details">
             <div class="input-box">
-              <label for="Report-type">Report Type</label>
-              <select id="Report-type">
-                <option>Select Branch</option>
+              <label for="ReportType">Report Type</label>
+              <select id="ReportType">
+                <option>Select Report</option>
                 <option>Cash</option>
                 <option>Credit</option>
               </select>
@@ -339,12 +339,13 @@
               <tr>
                 <th>No.</th>
                 <th>Date</th>
-                <th>Customer</th>
-                <th>Agent</th>
-                <th>Produce</th>
+                <th>Customer Name</th>
+                <th>Agent Name</th>
+                <th>Produce Name</th>
                 <th>Branch</th>
                 <th>Tonnage</th>
                 <th>Selling Price</th>
+                <th>Amount Due</th>
               </tr>
             </thead>
             <tbody></tbody>
@@ -361,6 +362,7 @@
           const startDate = document.querySelector('#start').value;
           const endDate = document.querySelector('#end').value;
           const branch = document.querySelector('#Branch').value;
+          const ReportType = document.querySelector('#ReportType').value;
 
           let url = `${API_URL}/api/reports/sales-report`;
           const params = new URLSearchParams();
@@ -370,10 +372,17 @@
           if (branch && branch !== 'Select Branch') {
             params.append('Branch', branch);
           }
+          if (ReportType && ReportType !== 'Select Report') {
+            params.append('ReportType', ReportType);
+          }
 
           if (params.toString()) {
             url += `?${params.toString()}`;
           }
+          tablebody.innerHTML = `
+            <tr>
+              <td colspan="9">Loading report...</td>
+            </tr>`;
 
           console.log('Fetching:', url);
 
@@ -393,8 +402,27 @@
                     <td>${sale.Branch || '-'}</td>
                     <td>${(sale.Tonnage || 0).toLocaleString()}</td>
                     <td>${(sale.Amount_paid || 0).toLocaleString()}</td>
+                     <td>${(sale.Amount_Due || 0).toLocaleString()}</td>
             </tr>`;
           });
+
+          let totalAmountPaid = 0;
+          let totalAmountDue = 0;
+          let totalTonnage = 0;
+
+          result.data.forEach((sale, index) => {
+            totalAmountPaid += sale.Amount_paid || 0;
+            totalAmountDue += sale.Amount_Due || 0;
+            totalTonnage += sale.Tonnage || 0;
+          });
+
+          table_ += `
+              <tr style="font-weight:bold; background:#eaeaea">
+                <td colspan="6">TOTAL</td>
+                <td>${totalTonnage.toLocaleString()}</td>
+                <td>${totalAmountPaid.toLocaleString()}</td>
+                <td>${totalAmountDue.toLocaleString()}</td>
+              </tr>`;
 
           tablebody.innerHTML = table_;
         } catch (error) {

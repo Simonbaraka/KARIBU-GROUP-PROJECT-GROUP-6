@@ -37,35 +37,45 @@ router.get('/:id', async (req, res) => {
 router.post('/', async (req, res) => {
   try {
     const { Produce_name, Tonnage } = req.body;
+
+    if (!Produce_name || !Tonnage) {
+      return res.status(400).json({ message: 'Missing required fields' });
+    }
+
+    const tonnageNumber = Number(Tonnage);
+
     const produce = await Procurement_Model.findOne({ Produce_name });
 
     if (!produce) {
-      return res.status(400).json({
-        message: 'Produce not found in stock',
-      });
+      return res.status(400).json({ message: 'Produce not found in stock' });
     }
 
-    if (produce.Produce_tonnage < Tonnage) {
-      return res.status(400).json({
-        message: 'Not enough stock available',
-      });
+    if (produce.Produce_tonnage < tonnageNumber) {
+      return res.status(400).json({ message: 'Not enough stock available' });
     }
-    produce.Produce_tonnage -= Tonnage;
-    console.log('New stock:', produce.Produce_tonnage);
+
+    produce.Produce_tonnage -= tonnageNumber;
     await produce.save();
 
-    const _credit = new CreditModel(req.body);
-    await _credit.save();
-    res
-      .status(201)
-      .json({ message: 'Credit sale saved successfully', data: _credit });
+    const credit = new CreditModel({
+      ...req.body,
+      Tonnage: tonnageNumber,
+    });
+
+    await credit.save();
+
+    res.status(201).json({
+      message: 'Credit sale saved successfully',
+      data: credit,
+    });
   } catch (err) {
-    res
-      .status(500)
-      .json({ message: 'Failed to save data', error: err.message });
+    console.error('CREDIT ERROR:', err);
+    res.status(500).json({
+      message: 'Internal server error',
+      error: err.message,
+    });
   }
 });
-
 //UPDATE/PATCH
 router.patch('/:id', async (req, res) => {
   try {

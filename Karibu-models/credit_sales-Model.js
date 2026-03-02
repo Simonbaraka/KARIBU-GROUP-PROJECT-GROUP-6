@@ -35,7 +35,7 @@ const CreditSchema = new mongoose.Schema(
     Tonnage: {
       type: Number,
       required: true,
-      min: 1000, // Minimum allowed value
+      min: 500, // Minimum allowed value
     },
 
     Amount_Due: {
@@ -50,7 +50,6 @@ const CreditSchema = new mongoose.Schema(
     },
 
     Branch: {
-      enum: [''],
       type: String,
       required: true,
     },

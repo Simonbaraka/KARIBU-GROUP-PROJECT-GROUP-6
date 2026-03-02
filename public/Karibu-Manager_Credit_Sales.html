@@ -551,6 +551,10 @@
           alert('Incomplete Form filling ');
           return;
         }
+        if (dataObject.Branch === 'Select Branch') {
+          alert('Please select a branch');
+          return;
+        }
 
         let response;
         try {
@@ -680,7 +684,7 @@
             .split('T')[0];
           document.querySelector('#Branch').value = data.Branch;
         } catch (err) {
-          console.error(error);
+          console.error(err);
           alert('❌ Error');
         }
       }

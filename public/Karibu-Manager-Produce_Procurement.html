@@ -445,14 +445,33 @@
     </div>
 
     <script>
+      /* =========================================
+   GLOBAL VARIABLES
+========================================= */
+
+      // Select form
       const _form = document.querySelector('._Form');
+
+      // Submit button
       let btn = document.querySelector('#Orderbtn');
+
+      // Backend API base URL
       const API_URL = 'http://localhost:3000';
+
+      // Used to know whether we are editing or creating
       let editingId = null;
 
-      _form.addEventListener('submit', async (e) => {
-        e.preventDefault();
+      // Select table body for procurement records
+      const tableBody = document.querySelector('.recent tbody');
 
+      /* =========================================
+   FORM SUBMISSION (CREATE / UPDATE)
+========================================= */
+
+      _form.addEventListener('submit', async (e) => {
+        e.preventDefault(); // Prevent page reload
+
+        // Collect form data
         const data = {
           Produce_name: document.getElementById('Produce_Name').value.trim(),
           Produce_tonnage: Number(
@@ -466,7 +485,10 @@
             new Date().toISOString(),
         };
 
-        // Validation
+        /* ===========================
+     BASIC VALIDATION
+  ============================ */
+
         if (
           !data.Produce_name ||
           !data.Produce_tonnage ||
@@ -478,15 +500,22 @@
           alert('Please fill in all fields');
           return;
         }
-        let response;
+
         try {
+          btn.disabled = true; // Prevent double click
+
+          let response;
+
+          // If editing, use PATCH
           if (editingId) {
             response = await fetch(`${API_URL}/api/procurement/${editingId}`, {
               method: 'PATCH',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify(data),
             });
-          } else {
+          }
+          // Otherwise create new record
+          else {
             response = await fetch(`${API_URL}/api/procurement`, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
@@ -501,65 +530,104 @@
             _form.reset();
             editingId = null;
             btn.textContent = 'Create Order';
-            console.log('Saved:', result.data);
+
+            // Reload table after save
+            Load_Procurement();
           } else {
-            alert('❌ Failed to save: ' + result.message);
+            alert('❌ Failed: ' + result.message);
           }
         } catch (err) {
           console.error('Error:', err.message);
-          alert('❌ Error submitting form');
+          alert('❌ Network error');
+        } finally {
+          btn.disabled = false;
         }
       });
 
-      const tableBody = document.querySelector('.recent tbody');
+      /* =========================================
+   LOAD PROCUREMENT TABLE
+========================================= */
 
       async function Load_Procurement() {
-        let response = await fetch(`${API_URL}/api/procurement`);
-        let result = await response.json();
-        let table_ = '';
+        try {
+          const response = await fetch(`${API_URL}/api/procurement`);
+          const result = await response.json();
 
-        result.data.forEach((procurements, index) => {
-          table_ += `<tr>
-                <td>${index + 1}</td>
-                <td>${procurements.Produce_name}</td>
-                <td>  <button 
-                      id="button-1" 
-                      style="color:${procurements.Produce_tonnage < 2000 ? 'red' : 'black'}">
-                      ${procurements.Produce_tonnage.toLocaleString()}
-                    </button>
-                </td>
-                <td>${procurements.Produce_Cost.toLocaleString()}</td>
-                <td>${procurements.Dealer_Name}</td>
-               <td>${new Date(procurements.Date_time).toISOString().split('T')[0]}</td>
-                <td>${procurements.Branch}</td>
-                <td style="text-align:right;">
-                  <span>
-                    <button onclick="Edit_Procurement('${procurements._id}')" class="icon-btn come" title="Edit">
-                      <span class="material-icons-outlined">edit</span>
-                    </button>
+          let table_ = '';
 
-                    <button onclick = "Delete_Procurement('${procurements._id}')" class="icon-btn delete" title="Delete">
-                        <span class="material-icons-outlined">delete</span>
-                    </button>
-                  </span>
-                </td>
+          result.data.forEach((procurements, index) => {
+            table_ += `
+        <tr>
+          <td>${index + 1}</td>
+          <td>${procurements.Produce_name}</td>
 
-             </tr>`;
-        });
+          <!-- Highlight low stock below 1000 -->
+          <td>
+            <button 
+              id="button-1" 
+              style="color:${procurements.Produce_tonnage < 1000 ? 'red' : 'black'}">
+              ${procurements.Produce_tonnage.toLocaleString()}
+            </button>
+          </td>
 
-        tableBody.innerHTML = table_;
+          <td>${procurements.Produce_Cost.toLocaleString()}</td>
+          <td>${procurements.Dealer_Name}</td>
+
+          <!-- Format date properly -->
+          <td>
+            ${new Date(procurements.Date_time).toISOString().split('T')[0]}
+          </td>
+
+          <td>${procurements.Branch}</td>
+
+          <!-- Action buttons -->
+          <td style="text-align:right;">
+            <button onclick="Edit_Procurement('${procurements._id}')" 
+                    class="icon-btn come" 
+                    title="Edit">
+              <span class="material-icons-outlined">edit</span>
+            </button>
+
+            <button onclick="Delete_Procurement('${procurements._id}')" 
+                    class="icon-btn delete" 
+                    title="Delete">
+              <span class="material-icons-outlined">delete</span>
+            </button>
+          </td>
+        </tr>`;
+          });
+
+          tableBody.innerHTML = table_;
+        } catch (error) {
+          console.error('Failed to load procurement:', error);
+        }
       }
+
+      // Load records when page opens
       Load_Procurement();
 
+      /* =========================================
+   DELETE PROCUREMENT
+========================================= */
+
       async function Delete_Procurement(Id) {
+        // Confirm before deleting
+        const confirmDelete = confirm(
+          'Are you sure you want to delete this record?'
+        );
+
+        if (!confirmDelete) return;
+
         try {
-          let response = await fetch(`${API_URL}/api/procurement/${Id}`, {
+          const response = await fetch(`${API_URL}/api/procurement/${Id}`, {
             method: 'DELETE',
           });
 
-          let result = await response.json();
+          const result = await response.json();
+
           if (response.ok) {
-            alert('✅ Procurement Record deleted successfully');
+            alert('✅ Procurement record deleted');
+            Load_Procurement(); // Reload table
           } else {
             alert('❌ Failed: ' + result.message);
           }
@@ -569,26 +637,34 @@
         }
       }
 
+      /* =========================================
+   EDIT PROCUREMENT
+========================================= */
+
       async function Edit_Procurement(Id) {
         try {
           editingId = Id;
           btn.textContent = 'Update';
-          let response = await fetch(`${API_URL}/api/procurement/${Id}`, {
-            method: 'GET',
-          });
 
-          let result = await response.json();
-          console.log(result);
+          const response = await fetch(`${API_URL}/api/procurement/${Id}`);
+          const result = await response.json();
 
           const data = result.data;
 
+          // Populate form fields
           document.getElementById('Produce_Name').value = data.Produce_name;
           document.getElementById('produce_Tonnage').value =
             data.Produce_tonnage;
           document.getElementById('cost').value = data.Produce_Cost;
           document.getElementById('Dealer_Name').value = data.Dealer_Name;
           document.getElementById('country').value = data.Branch;
-          document.getElementById('Purchase_Date').value = data.Date_time;
+
+          // Format date correctly for input[type="date"]
+          document.getElementById('Purchase_Date').value = new Date(
+            data.Date_time
+          )
+            .toISOString()
+            .split('T')[0];
         } catch (error) {
           console.error(error);
           alert('❌ Network error');

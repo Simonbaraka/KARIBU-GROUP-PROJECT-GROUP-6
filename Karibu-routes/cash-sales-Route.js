@@ -3,200 +3,192 @@ const CashModel = require('../Karibu-models/cash_sales-Model');
 const ProcurementModel = require('../Karibu-models/procurement-Model');
 
 const router = express.Router();
-/**
- * @openapi
- * tags:
- *   name: CashSales
- *   description: Cash sales management
- */
 
 /**
- * @openapi
- * /api/cashsales:
- *   get:
- *     summary: Get all cash sales
- *     tags: [CashSales]
- *     responses:
- *       200:
- *         description: Sales retrieved successfully
- *       500:
- *         description: Server error
+ * ===============================
+ * GET ALL CASH SALES
+ * ===============================
  */
-
-router.get('/', async (req, res, next) => {
+router.get('/', async (req, res) => {
   try {
-    let sale = await CashModel.find();
-    res
-      .status(200)
-      .json({ message: 'Sales Data collection was a success ', data: sale });
-  } catch (err) {
-    res.status(500).json({ message: 'Sales not found', error: err.message });
-  }
-});
+    const sale = await CashModel.find();
 
-router.get('/:id', async (req, res, next) => {
-  try {
-    let sale = await CashModel.findById(req.params.id);
-    res
-      .status(200)
-      .json({ message: 'Sales Data collection was a success ', data: sale });
+    res.status(200).json({
+      message: 'Sales Data collection was a success',
+      data: sale,
+    });
   } catch (err) {
-    res.status(500).json({ message: 'Sales not found', error: err.message });
+    res.status(500).json({
+      message: 'Sales not found',
+      error: err.message,
+    });
   }
 });
 
 /**
- * @openapi
- * /api/cashsales:
- *   post:
- *     summary: Create new cash sale
- *     tags: [CashSales]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               Buyer_name:
- *                 type: string
- *               Amount:
- *                 type: number
- *               Product:
- *                 type: string
- *     responses:
- *       201:
- *         description: Sale created successfully
- *       500:
- *         description: Failed to save data
+ * ===============================
+ * GET SINGLE CASH SALE BY ID
+ * ===============================
  */
+router.get('/:id', async (req, res) => {
+  try {
+    const sale = await CashModel.findById(req.params.id);
 
+    if (!sale) {
+      return res.status(404).json({ message: 'Record not found' });
+    }
+
+    res.status(200).json({
+      message: 'Sales Data collection was a success',
+      data: sale,
+    });
+  } catch (err) {
+    res.status(500).json({
+      message: 'Sales not found',
+      error: err.message,
+    });
+  }
+});
+
+/**
+ * ===============================
+ * CREATE NEW CASH SALE
+ * ===============================
+ */
 router.post('/', async (req, res) => {
   try {
-    //console.log('DATA RECEIVED:', req.body);
     const { Produce_name, Tonnage, Branch } = req.body;
 
-    console.log('Incoming name:', Produce_name);
-    const produce = await ProcurementModel.findOne({ Produce_name, Branch });
-    console.log('Found produce:', produce);
+    // Validate required fields
+    if (!Produce_name || !Tonnage || !Branch) {
+      return res.status(400).json({
+        message: 'Produce_name, Tonnage and Branch are required',
+      });
+    }
+
+    const tonnageNumber = Number(Tonnage);
+
+    if (isNaN(tonnageNumber) || tonnageNumber <= 0) {
+      return res.status(400).json({
+        message: 'Tonnage must be a positive number',
+      });
+    }
+
+    // Find produce in procurement stock
+    const produce = await ProcurementModel.findOne({
+      Produce_name,
+      Branch,
+    });
 
     if (!produce) {
       return res.status(400).json({
         message: 'Produce not found in stock',
       });
-    } else {
-      if (produce.Produce_tonnage < Tonnage) {
-        return res.status(400).json({
-          message: 'Not enough stock available',
-        });
-      } else {
-        produce.Produce_tonnage -= Tonnage;
-        await produce.save();
-      }
     }
 
-    // 3️⃣ Reduce stock
+    // Check stock availability
+    if (produce.Produce_tonnage < tonnageNumber) {
+      return res.status(400).json({
+        message: 'Not enough stock available',
+      });
+    }
 
-    console.log('New stock:', produce.Produce_tonnage);
-    let newRecord = new CashModel(req.body);
+    // Reduce stock
+    produce.Produce_tonnage -= tonnageNumber;
+    await produce.save();
+
+    // Create new cash sale record
+    const newRecord = new CashModel({
+      ...req.body,
+      Tonnage: tonnageNumber,
+    });
+
     await newRecord.save();
-    res
-      .status(201)
-      .json({ message: 'Sales saved successfully', data: newRecord });
+
+    res.status(201).json({
+      message: 'Sales saved successfully',
+      data: newRecord,
+    });
   } catch (err) {
     console.error('Error in /api/cashsales:', err);
-    res.status(500).json({ message: 'Failed to save sales data ' });
+    res.status(500).json({
+      message: 'Failed to save sales data',
+      error: err.message,
+    });
   }
 });
 
 /**
- * @openapi
- * /api/cashsales/{id}:
- *   patch:
- *     summary: Update cash sale
- *     tags: [CashSales]
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *         description: Sale ID
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *     responses:
- *       200:
- *         description: Sale updated successfully
- *       404:
- *         description: Record not found
- *       500:
- *         description: Update failed
+ * ===============================
+ * UPDATE CASH SALE
+ * ===============================
  */
-
 router.patch('/:id', async (req, res) => {
   try {
     const id = req.params.id;
+
     const updated = await CashModel.findByIdAndUpdate(id, req.body, {
       new: true,
     });
 
     if (!updated) {
-      res.status(404).json({
+      return res.status(404).json({
         message: 'Record not found',
       });
     }
 
-    res
-      .status(200)
-      .json({ message: 'Updated Sales Successfully', data: updated });
+    res.status(200).json({
+      message: 'Updated Sales Successfully',
+      data: updated,
+    });
   } catch (err) {
-    res.status(500).json({ message: 'Update Failed', error: err.message });
+    res.status(500).json({
+      message: 'Update Failed',
+      error: err.message,
+    });
   }
 });
 
 /**
- * @openapi
- * /api/cashsales/{id}:
- *   delete:
- *     summary: Delete cash sale
- *     tags: [CashSales]
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *         description: Sale ID
- *     responses:
- *       200:
- *         description: Sale deleted successfully
- *       404:
- *         description: Record not found
- *       500:
- *         description: Delete failed
+ * ===============================
+ * DELETE CASH SALE (WITH STOCK ROLLBACK)
+ * ===============================
  */
-
 router.delete('/:id', async (req, res) => {
   try {
-    let id_ = req.params.id;
+    const id_ = req.params.id;
 
-    const delete_data = await CashModel.findByIdAndDelete(id_);
+    // 1️⃣ Find sale first
+    const sale = await CashModel.findById(id_);
 
-    if (!delete_data) {
-      res.status(404).json({ message: 'Record Not found' });
+    if (!sale) {
+      return res.status(404).json({ message: 'Record Not found' });
     }
 
-    res
-      .status(200)
-      .json({ message: 'Data deleted successfully', data: delete_data });
+    const { Produce_name, Tonnage, Branch } = sale;
+
+    // 2️⃣ Restore stock
+    const produce = await ProcurementModel.findOne({
+      Produce_name,
+      Branch,
+    });
+
+    if (produce) {
+      produce.Produce_tonnage += Number(Tonnage);
+      await produce.save();
+    }
+
+    // 3️⃣ Delete sale
+    await CashModel.findByIdAndDelete(id_);
+
+    res.status(200).json({
+      message: 'Cash sale deleted and stock restored successfully',
+    });
   } catch (err) {
-    res
-      .status(500)
-      .json({ message: 'Failed to delete data', error: err.message });
+    res.status(500).json({
+      message: 'Failed to delete data',
+      error: err.message,
+    });
   }
 });
 

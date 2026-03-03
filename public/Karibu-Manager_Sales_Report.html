@@ -367,6 +367,7 @@
           let url = `${API_URL}/api/reports/sales-report`;
           const params = new URLSearchParams();
 
+          // Append filters if provided
           if (startDate) params.append('startDate', startDate);
           if (endDate) params.append('endDate', endDate);
           if (branch && branch !== 'Select Branch') {
@@ -379,50 +380,53 @@
           if (params.toString()) {
             url += `?${params.toString()}`;
           }
-          tablebody.innerHTML = `
-            <tr>
-              <td colspan="9">Loading report...</td>
-            </tr>`;
 
-          console.log('Fetching:', url);
+          // Show loading message
+          tablebody.innerHTML = `
+      <tr>
+        <td colspan="9">Loading report...</td>
+      </tr>`;
 
           const response = await fetch(url);
           const result = await response.json();
-          console.log(result);
+
           let table_ = '';
 
-          result.data.forEach((sale, index) => {
-            table_ += `
-            <tr>
-                    <td>${index + 1}</td>
-                    <td>${new Date(sale.createdAt).toISOString().split('T')[0]}</td>
-                    <td>${sale.Buyer_name || '-'}</td>
-                    <td>${sale.Agent_name || '-'}</td>
-                    <td>${sale.Produce_name || '-'}</td>
-                    <td>${sale.Branch || '-'}</td>
-                    <td>${(sale.Tonnage || 0).toLocaleString()}</td>
-                    <td>${(sale.Amount_paid || 0).toLocaleString()}</td>
-                     <td>${(sale.Amount_Due || 0).toLocaleString()}</td>
-            </tr>`;
-          });
-
+          // Totals
           let totalAmountPaid = 0;
           let totalAmountDue = 0;
           let totalTonnage = 0;
 
+          // Loop through sales
           result.data.forEach((sale, index) => {
+            // Add to totals
             totalAmountPaid += sale.Amount_paid || 0;
             totalAmountDue += sale.Amount_Due || 0;
             totalTonnage += sale.Tonnage || 0;
+
+            // Display individual row values (NOT totals)
+            table_ += `
+        <tr>
+          <td>${index + 1}</td>
+          <td>${new Date(sale.createdAt).toISOString().split('T')[0]}</td>
+          <td>${sale.Buyer_name || '-'}</td>
+          <td>${sale.Agent_name || '-'}</td>
+          <td>${sale.Produce_name || '-'}</td>
+          <td>${sale.Branch || '-'}</td>
+          <td>${(sale.Tonnage || 0).toLocaleString()}</td>
+          <td>${(sale.Amount_paid || 0).toLocaleString()}</td>
+          <td>${(sale.Amount_Due || 0).toLocaleString()}</td>
+        </tr>`;
           });
 
+          // Add final totals row
           table_ += `
-              <tr style="font-weight:bold; background:#eaeaea">
-                <td colspan="6">TOTAL</td>
-                <td>${totalTonnage.toLocaleString()}</td>
-                <td>${totalAmountPaid.toLocaleString()}</td>
-                <td>${totalAmountDue.toLocaleString()}</td>
-              </tr>`;
+      <tr style="font-weight:bold; background:#eaeaea">
+        <td colspan="6">TOTAL</td>
+        <td>${totalTonnage.toLocaleString()}</td>
+        <td>${totalAmountPaid.toLocaleString()}</td>
+        <td>${totalAmountDue.toLocaleString()}</td>
+      </tr>`;
 
           tablebody.innerHTML = table_;
         } catch (error) {

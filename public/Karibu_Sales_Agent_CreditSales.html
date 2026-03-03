@@ -466,28 +466,83 @@
     </div>
 
     <script>
-      _creditForm = document.querySelector('.Credit_form');
-      btn = document.querySelector('#Order');
-      editingId = null;
-      const API_URL = 'http://localhost:3000';
-      _creditForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
+      /* ===========================================
+   GLOBAL VARIABLES
+   =========================================== */
 
+      // Reference to the credit sales form
+      const _creditForm = document.querySelector('.Credit_form');
+
+      // Reference to the submit button
+      const btn = document.querySelector('#Order');
+
+      // Reference to the table body where recent transactions will appear
+      const tableBody = document.querySelector('.recent tbody');
+
+      // API base URL
+      const API_URL = 'http://localhost:3000';
+
+      // ID of the currently editing record (null if creating new)
+      let editingId = null;
+
+      /* ===========================================
+   FORM SUBMISSION: CREATE OR UPDATE RECORD
+   =========================================== */
+
+      _creditForm.addEventListener('submit', async (e) => {
+        e.preventDefault(); // Prevent default form submission
+
+        // Gather form data and trim strings
         let data = {
-          Buyer_name: document.querySelector('#Buyer_Name').value,
-          Agent_name: document.querySelector('#Agent_name').value,
+          Buyer_name: document.querySelector('#Buyer_Name').value.trim(),
+          Agent_name: document.querySelector('#Agent_name').value.trim(),
           Contact: Number(document.querySelector('#Contact').value),
-          Location: document.querySelector('#Location').value,
+          Location: document.querySelector('#Location').value.trim(),
           National_ID: Number(document.querySelector('#NIN').value),
-          Produce_name: document.querySelector('#Produce_Name').value,
+          Produce_name: document.querySelector('#Produce_Name').value.trim(),
           Tonnage: Number(document.querySelector('#produce_Tonnage').value),
           Amount_Due: Number(document.querySelector('#Amount_Due').value),
           Date_time: document.querySelector('#PurchaseDate').value,
           Branch: document.querySelector('#Branch').value,
         };
 
-        let response;
+        /* ========== FORM VALIDATION ========== */
+
+        if (
+          !data.Buyer_name ||
+          !data.Agent_name ||
+          !data.Contact ||
+          !data.National_ID ||
+          !data.Produce_name ||
+          !data.Tonnage ||
+          !data.Amount_Due ||
+          !data.Date_time
+        ) {
+          alert('❌ Please fill all required fields');
+          return;
+        }
+
+        if (data.Branch === 'Select branch') {
+          alert('❌ Please select a branch');
+          return;
+        }
+
+        if (data.Tonnage <= 0) {
+          alert('❌ Tonnage must be greater than 0');
+          return;
+        }
+
+        if (data.Amount_Due <= 0) {
+          alert('❌ Amount due must be greater than 0');
+          return;
+        }
+
         try {
+          btn.disabled = true; // Disable button to prevent multiple submissions
+
+          let response;
+
+          // If editingId is set, update existing record
           if (editingId) {
             response = await fetch(`${API_URL}/api/creditsales/${editingId}`, {
               method: 'PATCH',
@@ -495,6 +550,7 @@
               body: JSON.stringify(data),
             });
           } else {
+            // Otherwise, create a new record
             response = await fetch(`${API_URL}/api/creditsales`, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
@@ -502,80 +558,100 @@
             });
           }
 
-          let result = await response.json();
+          const result = await response.json();
 
           if (response.ok) {
-            alert('✅ Credit Sale Record saved successfully');
-            _creditForm.reset();
+            alert('✅ Credit Sale saved successfully');
 
-            editingId = null;
-            console.log('Saved:', result.data);
+            _creditForm.reset(); // Reset form fields
+            editingId = null; // Reset edit mode
+            btn.textContent = 'Submit'; // Reset button text
+
+            LoadCreditSales(); // Refresh table to show updated data
           } else {
-            alert('❌ Failed to save: ' + result.message);
+            alert('❌ Failed: ' + result.message);
           }
         } catch (err) {
-          console.error('Error:', err.message);
-          alert('❌ Error submitting form');
+          console.error(err);
+          alert('❌ Network error while submitting form');
+        } finally {
+          btn.disabled = false; // Re-enable button
         }
       });
 
-      const tableBody = document.querySelector('.recent tbody');
+      /* ===========================================
+   LOAD TABLE: FETCH ALL CREDIT SALES
+   =========================================== */
+
       async function LoadCreditSales() {
-        let response = await fetch(`${API_URL}/api/creditsales`);
-        let result = await response.json();
+        try {
+          let response = await fetch(`${API_URL}/api/creditsales`);
+          let result = await response.json();
 
-        let HTMLContent1 = '';
-        result.data.forEach((credit, index) => {
-          HTMLContent1 += ` <tr>
-                <td>${index + 1}</td>
-                <td>${credit.Buyer_name}</td>
-                <td>${credit.Agent_name}</td>
-                <td>${credit.Contact}</td>
-                 <td>${credit.National_ID}</td>
-                <td>${credit.Location}</td>
+          let HTMLContent = '';
 
-                <td>${credit.Produce_name}</td>
-                <td>${credit.Tonnage.toLocaleString()}</td>
-                <td>${credit.Amount_Due.toLocaleString()}</td>
-               <td>${new Date(credit.Date_time).toISOString().split('T')[0]}</td>
+          // Loop through each record and create table rows
+          result.data.forEach((credit, index) => {
+            HTMLContent += `
+        <tr>
+          <td>${index + 1}</td>
+          <td>${credit.Buyer_name}</td>
+          <td>${credit.Agent_name}</td>
+          <td>${credit.Contact}</td>
+          <td>${credit.National_ID}</td>
+          <td>${credit.Location}</td>
+          <td>${credit.Produce_name}</td>
+          <td>${credit.Tonnage.toLocaleString()}</td>
+          <td>${credit.Amount_Due.toLocaleString()}</td>
+          <td>${new Date(credit.Date_time).toISOString().split('T')[0]}</td>
+          <td>${credit.Branch}</td>
+          <td style="text-align:right;">
+            <!-- Edit button -->
+            <button onclick="Edit_Credit_sales('${credit._id}')" 
+              class="icon-btn come" title="Edit">
+              <span class="material-icons-outlined">edit</span>
+            </button>
 
-                <td>${credit.Branch}</td>
-                <td style="text-align:right;">
-                  <span>
-                    <button onclick="Edit_Credit_sales('${credit._id}')" class="icon-btn come" title="Edit">
-                      <span class="material-icons-outlined">edit</span>
-                    </button>
+            <!-- Delete button -->
+            <button onclick="Delete_Credit_Sale('${credit._id}')" 
+              class="icon-btn delete" title="Delete">
+              <span class="material-icons-outlined">delete</span>
+            </button>
+          </td>
+        </tr>
+      `;
+          });
 
-                    <button onclick = "Delete_Credit_Sale('${credit._id}')" class="icon-btn delete" title="Delete">
-                        <span class="material-icons-outlined">delete</span>
-                    </button>
-                  </span>
-                </td>
-
-             </tr>`;
-        });
-        tableBody.innerHTML = HTMLContent1;
+          tableBody.innerHTML = HTMLContent; // Update table
+        } catch (err) {
+          console.error(err);
+          alert('❌ Failed to load credit sales');
+        }
       }
+
+      // Load table when page opens
       LoadCreditSales();
+
+      /* ===========================================
+   EDIT RECORD
+   =========================================== */
 
       async function Edit_Credit_sales(Id) {
         try {
-          editingId = Id;
-          btn.textContent = 'Update credit';
-          const response = await fetch(`${API_URL}/api/creditsales/${Id}`, {
-            method: 'GET',
-          });
+          editingId = Id; // Set edit mode
+          btn.textContent = 'Update Credit'; // Change button text
 
+          const response = await fetch(`${API_URL}/api/creditsales/${Id}`);
           const result = await response.json();
-          const data = result.data;
 
           if (!response.ok || !result.data) {
             alert('❌ Record not found');
             return;
           }
-          console.log(result);
 
-          // 2️⃣ Fill form inputs
+          const data = result.data;
+
+          // Populate form fields with existing data
           document.querySelector('#Buyer_Name').value = data.Buyer_name;
           document.querySelector('#Agent_name').value = data.Agent_name;
           document.querySelector('#Contact').value = data.Contact;
@@ -591,12 +667,22 @@
             .split('T')[0];
           document.querySelector('#Branch').value = data.Branch;
         } catch (err) {
-          console.error(error);
-          alert('❌ Error');
+          console.error(err);
+          alert('❌ Network error while editing record');
         }
       }
 
+      /* ===========================================
+   DELETE RECORD
+   =========================================== */
+
       async function Delete_Credit_Sale(Id) {
+        const confirmDelete = confirm(
+          'Are you sure you want to delete this credit sale record?'
+        );
+
+        if (!confirmDelete) return;
+
         try {
           let response = await fetch(`${API_URL}/api/creditsales/${Id}`, {
             method: 'DELETE',
@@ -605,15 +691,14 @@
           let result = await response.json();
 
           if (response.ok) {
-            alert('✅ Procurement Record deleted successfully');
-
-            // Optional: Refresh page or remove row
+            alert('✅ Credit Sale deleted successfully');
+            LoadCreditSales(); // Refresh table
           } else {
-            alert('❌ Failed: ' + result.message);
+            alert('❌ Failed to delete: ' + result.message);
           }
         } catch (err) {
           console.error(err);
-          alert('❌ Network error');
+          alert('❌ Network error while deleting record');
         }
       }
     </script>

@@ -428,87 +428,137 @@
     </div>
 
     <script>
-      //Value areas for the display panel
-      let cash_area = document.querySelector('#cash');
-      let ugxCash = document.querySelector('#ugx_cash');
+      // ==============================
+      // DASHBOARD DISPLAY ELEMENTS
+      // ==============================
 
-      let credit_area = document.querySelector('#credit');
-      let Credit_ugx_area = document.querySelector('#ugx_credit');
+      // Cash Sales display areas
+      const cash_area = document.querySelector('#cash');
+      const ugxCash = document.querySelector('#ugx_cash');
 
-      let procurement_area = document.querySelector('#procurement');
-      ugxProcurement = document.querySelector('#ugx_procurement');
+      // Credit Sales display areas
+      const credit_area = document.querySelector('#credit');
+      const Credit_ugx_area = document.querySelector('#ugx_credit');
 
-      let user_area = document.querySelector('#user');
+      // Procurement display areas
+      const procurement_area = document.querySelector('#procurement');
+      const ugxProcurement = document.querySelector('#ugx_procurement'); // FIXED (added const)
+
+      // Employee display area
+      const user_area = document.querySelector('#user');
+
+      // Backend API base URL
       const API_URL = 'http://localhost:3000';
 
-      //Cash Sales Count
+      // ==========================================
+      // 1️⃣ CASH SALES COUNT FUNCTION
+      // ==========================================
       async function Cash_Count() {
-        let cash_getter = await fetch(`${API_URL}/api/cashsales`);
-        let result = await cash_getter.json();
+        try {
+          // Fetch all cash sales from backend
+          const response = await fetch(`${API_URL}/api/cashsales`);
+          const result = await response.json();
 
-        let cash_ugx = 0;
+          // Calculate total UGX using reduce (cleaner than loop)
+          const cash_ugx = result.data.reduce((total, sale) => {
+            return total + (sale.Amount_paid || 0);
+          }, 0);
 
-        for (let i = 0; i < result.data.length; i++) {
-          if (result.data[i].Amount_paid) {
-            cash_ugx += result.data[i].Amount_paid;
-          }
+          // Total number of cash sales
+          const totalcashsales = result.data.length;
+
+          // Display results on dashboard
+          cash_area.textContent = totalcashsales;
+          ugxCash.textContent = cash_ugx.toLocaleString();
+        } catch (error) {
+          console.error('Error fetching cash sales:', error);
         }
-
-        let totalcashsales = result.data.length;
-        cash_area.textContent = totalcashsales;
-        ugxCash.textContent = cash_ugx.toLocaleString();
       }
+
+      // Call function immediately when page loads
       Cash_Count();
 
-      //Credit sales Count
+      // ==========================================
+      // 2️⃣ CREDIT SALES COUNT FUNCTION
+      // ==========================================
       async function Credit_Count() {
-        let credit_getter = await fetch(`${API_URL}/api/creditsales`);
-        let result = await credit_getter.json();
-        let credit_ugx = 0;
+        try {
+          // Fetch all credit sales
+          const response = await fetch(`${API_URL}/api/creditsales`);
+          const result = await response.json();
 
-        for (let i = 0; i < result.data.length; i++) {
-          if (result.data[i].Amount_Due) {
-            credit_ugx += result.data[i].Amount_Due;
-          }
+          // Calculate total credit amount due
+          const credit_ugx = result.data.reduce((total, sale) => {
+            return total + (sale.Amount_Due || 0);
+          }, 0);
+
+          // Count total credit transactions
+          const totalCreditSales = result.data.length;
+
+          // Display values
+          credit_area.textContent = totalCreditSales;
+          Credit_ugx_area.textContent = credit_ugx.toLocaleString();
+        } catch (error) {
+          console.error('Error fetching credit sales:', error);
         }
-
-        let totalCreditSales = result.data.length;
-        credit_area.textContent = totalCreditSales;
-        Credit_ugx_area.textContent = credit_ugx.toLocaleString();
       }
+
       Credit_Count();
 
-      //Procurement Count
+      // ==========================================
+      // 3️⃣ PROCUREMENT COUNT FUNCTION
+      // ==========================================
       async function Procurement_Count() {
-        let procurement_getter = await fetch(`${API_URL}/api/procurement`);
-        let result = await procurement_getter.json();
+        try {
+          // Fetch procurement records
+          const response = await fetch(`${API_URL}/api/procurement`);
+          const result = await response.json();
 
-        let Procurement_ugx = 0;
+          // Calculate total procurement cost
+          const Procurement_ugx = result.data.reduce((total, item) => {
+            return total + (item.Produce_Cost || 0);
+          }, 0);
 
-        for (let i = 0; i < result.data.length; i++) {
-          if (result.data[i].Produce_Cost) {
-            Procurement_ugx += result.data[i].Produce_Cost;
-          }
+          // Count total procurement entries
+          const totalProcurement = result.data.length;
 
-          if (result.data[i].Produce_tonnage < 1500) {
-            alert(result.data[i].Produce_name + ' Produce needs a restock');
-          }
+          // Display values
+          procurement_area.textContent = totalProcurement;
+          ugxProcurement.textContent = Procurement_ugx.toLocaleString();
+
+          // STOCK ALERT SYSTEM
+          // Check if any produce tonnage is below threshold
+          result.data.forEach((item) => {
+            if (item.Produce_tonnage < 1500) {
+              alert(`${item.Produce_name} needs restocking!`);
+            }
+          });
+        } catch (error) {
+          console.error('Error fetching procurement data:', error);
         }
-
-        let totalProcurement = result.data.length;
-        procurement_area.textContent = totalProcurement;
-        ugxProcurement.textContent = Procurement_ugx.toLocaleString();
       }
+
       Procurement_Count();
 
-      //Empolyee count
+      // ==========================================
+      // 4️⃣ EMPLOYEE COUNT FUNCTION
+      // ==========================================
       async function Employee_Count() {
-        let employee_getter = await fetch(`${API_URL}/api/users`);
-        let result = await employee_getter.json();
+        try {
+          // Fetch users from backend
+          const response = await fetch(`${API_URL}/api/users`);
+          const result = await response.json();
 
-        let EmployeeCount = result.data.length;
-        user_area.textContent = EmployeeCount;
+          // Count number of employees
+          const EmployeeCount = result.data.length;
+
+          // Display count
+          user_area.textContent = EmployeeCount;
+        } catch (error) {
+          console.error('Error fetching employee data:', error);
+        }
       }
+
       Employee_Count();
     </script>
   </body>

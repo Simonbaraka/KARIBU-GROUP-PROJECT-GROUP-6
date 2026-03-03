@@ -1,23 +1,29 @@
+<!-- Director Sales Report Page -->
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Director Sales Report</title>
+
+    <!-- Material Icons -->
     <link
       href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet"
     />
+
     <style>
+      /* Reset all margins and paddings */
       * {
         margin: 0px;
         padding: 0px;
       }
 
       body {
-        background: #e2e7eb;
+        background: #e2e7eb; /* Light gray background for the page */
       }
 
+      /* Main layout: sidebar + header + right panel */
       .main-panel {
         display: grid;
         grid-template-columns: 250px 1fr;
@@ -29,6 +35,7 @@
         gap: 3px;
       }
 
+      /* Sidebar styling */
       .sidebar {
         grid-area: sidebar;
         background-color: white;
@@ -39,16 +46,16 @@
         margin: 20px;
         padding: 20px;
         border-radius: 20px;
-        padding: 20px;
       }
 
       img {
         width: 180px;
         height: 100px;
         border-radius: 50%;
-        object-fit: cover;
+        object-fit: cover; /* Ensures the image covers the box nicely */
       }
 
+      /* Sidebar navigation options */
       .Director-Options {
         margin-top: 20px;
       }
@@ -61,12 +68,11 @@
       li {
         padding: 15px;
         box-sizing: border-box;
-        margin: 10px 0; /* Only vertical margin between items */
+        margin: 10px 0;
         text-align: left;
         border-bottom: 1px solid rgba(63, 61, 61, 0.2);
         cursor: pointer;
         border-radius: 10px;
-        margin: 10px;
         font-size: large;
       }
 
@@ -75,12 +81,13 @@
         gap: 14px;
         align-items: center;
       }
+
       li:hover {
-        background-color: rgb(185, 184, 182);
+        background-color: rgb(185, 184, 182); /* Highlight on hover */
       }
 
       li.active {
-        background-color: rgb(227, 226, 223);
+        background-color: rgb(227, 226, 223); /* Active page highlight */
       }
 
       .sidebar a {
@@ -88,6 +95,7 @@
         color: black;
       }
 
+      /* Header styling */
       header {
         grid-area: header;
         background: white;
@@ -105,6 +113,7 @@
         width: 25%;
       }
 
+      /* Right panel layout */
       .Right-panel {
         grid-area: Right-panel;
         display: grid;
@@ -113,6 +122,7 @@
         margin: 5%;
       }
 
+      /* Form section */
       .user-details {
         display: grid;
         grid-template-columns: repeat(5, 1fr);
@@ -120,22 +130,16 @@
         padding: 20px;
         align-items: end;
         background-color: white;
-        border: 1px solid#1e1e2f;
         border-radius: 5px;
       }
+
       .input-box {
         display: flex;
         flex-direction: column;
         gap: 5px;
       }
 
-      .input-box input {
-        padding: 5px;
-        border-radius: 5px;
-        border: 1px solid #ddd;
-        background-color: #f8f9fa;
-      }
-
+      .input-box input,
       .input-box select {
         padding: 5px;
         border-radius: 5px;
@@ -156,19 +160,7 @@
         cursor: pointer;
       }
 
-      form h2 {
-        text-align: center;
-        margin-top: 35px;
-      }
-
-      button {
-        background-color: #1e1e2f;
-        color: white;
-        margin-left: 20px;
-        border-radius: 3px;
-        padding: 7px;
-      }
-
+      /* Table styling */
       #salesTable {
         width: 100%;
         border-collapse: collapse;
@@ -182,8 +174,8 @@
         text-align: center;
         padding: 15px;
         color: white;
-        overflow: hidden;
       }
+
       td {
         text-align: center;
         padding: 10px;
@@ -196,6 +188,7 @@
         background-color: #f5f7fa;
       }
 
+      /* User header display (top right) */
       .user-header {
         display: flex;
         border-radius: 25px;
@@ -230,62 +223,59 @@
   </head>
   <body>
     <div class="main-panel">
-      <!--left side-->
+      <!-- Sidebar -->
       <div class="sidebar">
-        <!--userprofile-->
         <div class="user-profile">
           <img src="Karibu-logo.png" alt="Username" />
         </div>
-
-        <!--Manager options-->
         <div class="Director-Options">
           <ul>
             <li>
               <a href="Karibu_Director_DashBoard.html">
                 <div class="material-icons">dashboard</div>
-                Main DashBoard</a
-              >
+                Main DashBoard
+              </a>
             </li>
             <li class="active">
-              <a href="Karibu_Director_Sales_Report.html"
-                ><div class="material-icons">bar_chart</div>
-                Sales Report</a
-              >
+              <a href="Karibu_Director_Sales_Report.html">
+                <div class="material-icons">bar_chart</div>
+                Sales Report
+              </a>
             </li>
             <li>
               <a href="Karibu_Director_Sales_Summaries.html">
                 <div class="material-icons">summarize</div>
-                Sales Summaries</a
-              >
+                Sales Summaries
+              </a>
             </li>
-
             <li>
               <a href="Karibu_Employee.html">
                 <div class="material-icons">group</div>
-                Employees</a
-              >
+                Employees
+              </a>
             </li>
           </ul>
         </div>
       </div>
 
+      <!-- Header -->
       <header>
         <h2>Sales Report</h2>
         <input type="text" id="search" placeholder="search items" />
         <div class="user-header">
           <div class="Avatar">SB</div>
           <div class="user-info">
-            <div class="user-name">
-              <h5>Simon</h5>
-            </div>
+            <div class="user-name"><h5>Simon</h5></div>
             <div class="user-role">Director</div>
           </div>
         </div>
       </header>
-      <!--Right panel-->
+
+      <!-- Right panel: Filters + Table -->
       <div class="Right-panel">
         <form>
           <div class="user-details">
+            <!-- Filter: Report Type -->
             <div class="input-box">
               <label for="ReportType">Report Type</label>
               <select id="ReportType">
@@ -295,6 +285,7 @@
               </select>
             </div>
 
+            <!-- Filter: Branch -->
             <div class="input-box">
               <label for="Branch">Karibu Branch</label>
               <select id="Branch">
@@ -304,16 +295,19 @@
               </select>
             </div>
 
+            <!-- Filter: Start Date -->
             <div class="input-box">
               <label for="start">Start Date</label>
               <input type="date" id="start" />
             </div>
 
+            <!-- Filter: End Date -->
             <div class="input-box">
               <label for="end">End Date</label>
               <input type="date" id="end" />
             </div>
 
+            <!-- Generate Report Button -->
             <div class="input-box">
               <button type="button" onclick="Load_Report()">
                 Generate Report
@@ -321,6 +315,7 @@
             </div>
           </div>
 
+          <!-- Sales Table -->
           <h2>Report is displayed here</h2>
           <table id="salesTable">
             <thead>
@@ -345,9 +340,11 @@
     </div>
 
     <script>
+      // API endpoint
       const API_URL = 'http://localhost:3000';
       const tablebody = document.querySelector('#salesTable tbody');
 
+      // Function to fetch report based on selected filters
       async function Load_Report() {
         try {
           const startDate = document.querySelector('#start').value;
@@ -358,59 +355,61 @@
           let url = `${API_URL}/api/reports/sales-report`;
           const params = new URLSearchParams();
 
+          // Append filters if selected
           if (startDate) params.append('startDate', startDate);
           if (endDate) params.append('endDate', endDate);
-          if (branch && branch !== 'Select Branch') {
+          if (branch && branch !== 'Select Branch')
             params.append('Branch', branch);
-          }
-          if (ReportType && ReportType !== 'Select Report') {
+          if (ReportType && ReportType !== 'Select Report')
             params.append('ReportType', ReportType);
-          }
 
-          if (params.toString()) {
-            url += `?${params.toString()}`;
-          }
+          if (params.toString()) url += `?${params.toString()}`;
 
           console.log('Fetching:', url);
 
+          // Fetch report data from server
           const response = await fetch(url);
           const result = await response.json();
           console.log(result);
-          let table_ = '';
 
+          // Build table rows dynamically
+          let table_ = '';
           result.data.forEach((sale, index) => {
             table_ += `
-            <tr>
-                    <td>${index + 1}</td>
-                    <td>${new Date(sale.createdAt).toISOString().split('T')[0]}</td>
-                    <td>${sale.Buyer_name || '-'}</td>
-                    <td>${sale.Agent_name || '-'}</td>
-                    <td>${sale.Produce_name || '-'}</td>
-                    <td>${sale.Branch || '-'}</td>
-                    <td>${(sale.Tonnage || 0).toLocaleString()}</td>
-                    <td>${(sale.Amount_paid || 0).toLocaleString()}</td>
-                     <td>${(sale.Amount_Due || 0).toLocaleString()}</td>
-            </tr>`;
+              <tr>
+                <td>${index + 1}</td>
+                <td>${new Date(sale.createdAt).toISOString().split('T')[0]}</td>
+                <td>${sale.Buyer_name || '-'}</td>
+                <td>${sale.Agent_name || '-'}</td>
+                <td>${sale.Produce_name || '-'}</td>
+                <td>${sale.Branch || '-'}</td>
+                <td>${(sale.Tonnage || 0).toLocaleString()}</td>
+                <td>${(sale.Amount_paid || 0).toLocaleString()}</td>
+                <td>${(sale.Amount_Due || 0).toLocaleString()}</td>
+              </tr>`;
           });
 
+          // Compute totals
           let totalAmountPaid = 0;
           let totalAmountDue = 0;
           let totalTonnage = 0;
 
-          result.data.forEach((sale, index) => {
+          result.data.forEach((sale) => {
             totalAmountPaid += sale.Amount_paid || 0;
             totalAmountDue += sale.Amount_Due || 0;
             totalTonnage += sale.Tonnage || 0;
           });
 
+          // Append totals row
           table_ += `
-              <tr style="font-weight:bold; background:#eaeaea">
-                <td colspan="6">TOTAL</td>
-                <td>${totalTonnage.toLocaleString()}</td>
-                <td>${totalAmountPaid.toLocaleString()}</td>
-                <td>${totalAmountDue.toLocaleString()}</td>
-              </tr>`;
+            <tr style="font-weight:bold; background:#eaeaea">
+              <td colspan="6">TOTAL</td>
+              <td>${totalTonnage.toLocaleString()}</td>
+              <td>${totalAmountPaid.toLocaleString()}</td>
+              <td>${totalAmountDue.toLocaleString()}</td>
+            </tr>`;
 
+          // Insert table rows into the DOM
           tablebody.innerHTML = table_;
         } catch (error) {
           console.error('Error loading report:', error);

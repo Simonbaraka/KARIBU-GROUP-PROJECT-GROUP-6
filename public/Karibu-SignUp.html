@@ -6,12 +6,12 @@
     <title>Create Account - Karibu</title>
 
     <style>
+      /* General Reset & Body Styling */
       * {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
       }
-
       body {
         background: #e2e7eb;
         font-family: Arial, sans-serif;
@@ -22,8 +22,9 @@
         padding: 20px;
       }
 
+      /* Main form container styling */
       .main-panel {
-        background-color: white;
+        background: white;
         width: 100%;
         max-width: 520px;
         border-radius: 10px;
@@ -31,12 +32,12 @@
         padding: 40px;
       }
 
+      /* Logo */
       .logo-container {
         display: flex;
         justify-content: center;
         margin-bottom: 20px;
       }
-
       img {
         border-radius: 50%;
         width: 120px;
@@ -44,6 +45,7 @@
         object-fit: cover;
       }
 
+      /* Heading */
       h1 {
         text-align: center;
         color: #1e1e2f;
@@ -51,33 +53,30 @@
         font-size: 1.7rem;
       }
 
+      /* Form layout */
       .user-details {
         display: flex;
         flex-direction: column;
         gap: 18px;
       }
-
       .input-box {
         display: flex;
         flex-direction: column;
         gap: 6px;
       }
-
       .input-box label {
         font-size: 0.95rem;
         font-weight: 600;
         color: #333;
       }
-
       .input-box input,
       .input-box select {
         padding: 12px;
         border: 1px solid #ddd;
         border-radius: 5px;
         font-size: 1rem;
-        background-color: #f8f9fa;
+        background: #f8f9fa;
       }
-
       .input-box input:focus,
       .input-box select:focus {
         outline: none;
@@ -85,13 +84,13 @@
         background: white;
       }
 
+      /* Buttons & Links */
       .button-section {
         margin-top: 15px;
         display: flex;
         flex-direction: column;
         gap: 12px;
       }
-
       button {
         padding: 12px;
         background: #1e1e2f;
@@ -102,39 +101,36 @@
         font-weight: bold;
         cursor: pointer;
       }
-
       button:hover {
         background: #2a2a3f;
       }
-
       .links {
         text-align: center;
       }
-
       .links a {
         color: #1e1e2f;
         text-decoration: none;
         font-size: 0.9rem;
       }
-
       .links a:hover {
         text-decoration: underline;
       }
 
+      /* Success & error message styling */
+      .message {
+        font-size: 0.9rem;
+        text-align: center;
+        margin-top: 8px;
+        display: none;
+      }
       .error {
         color: red;
-        font-size: 0.9rem;
-        text-align: center;
-        display: none;
       }
-
       .success {
         color: green;
-        font-size: 0.9rem;
-        text-align: center;
-        display: none;
       }
 
+      /* Responsive */
       @media (max-width: 600px) {
         .main-panel {
           padding: 25px 18px;
@@ -195,10 +191,13 @@
             <input type="password" id="confirm" required />
           </div>
 
+          <!-- Inline messages for validation -->
+          <div class="message error" id="errorMessage"></div>
+          <div class="message success" id="successMessage"></div>
+
           <!-- Buttons -->
           <div class="button-section">
-            <button type="submit">Create Account</button>
-
+            <button type="submit" id="submitBtn">Create Account</button>
             <div class="links">
               <a href="index.html">Already have an account? Login</a>
             </div>
@@ -207,76 +206,93 @@
       </form>
     </div>
 
-    <!-- JavaScript -->
     <script>
       const form = document.getElementById('signupForm');
       const API_URL = 'http://localhost:3000';
+      const errorMessage = document.getElementById('errorMessage');
+      const successMessage = document.getElementById('successMessage');
+      const submitBtn = document.getElementById('submitBtn');
 
+      // Listen for form submission
       form.addEventListener('submit', async (e) => {
-        e.preventDefault();
+        e.preventDefault(); // prevent default form submission
+        errorMessage.style.display = 'none';
+        successMessage.style.display = 'none';
+        submitBtn.disabled = true; // prevent double submission
 
+        // Get input values
         const fname = document.getElementById('fname').value.trim();
         const lname = document.getElementById('lname').value.trim();
-        const email = document.getElementById('email').value.trim();
+        const email = document
+          .getElementById('email')
+          .value.trim()
+          .toLowerCase();
         const role = document.getElementById('role').value;
         const password = document.getElementById('password').value;
         const confirm = document.getElementById('confirm').value;
 
-        // Validation
+        // Client-side validation
         if (!fname || !lname || !email || !role || !password || !confirm) {
-          alert('Please fill in all fields.');
+          errorMessage.textContent = 'All fields are required.';
+          errorMessage.style.display = 'block';
+          submitBtn.disabled = false;
           return;
         }
 
         if (password.length < 6) {
-          alert('Password must be at least 6 characters.');
+          errorMessage.textContent = 'Password must be at least 6 characters.';
+          errorMessage.style.display = 'block';
+          submitBtn.disabled = false;
           return;
         }
 
         if (password !== confirm) {
-          alert('Passwords do not match.');
+          errorMessage.textContent = 'Passwords do not match.';
+          errorMessage.style.display = 'block';
+          submitBtn.disabled = false;
           return;
         }
 
+        // Prepare user object to send to backend
         const user = {
           FirstName: fname,
           LastName: lname,
-          Email: email.toLowerCase(),
+          Email: email,
           Role: role,
           Password: password,
-          // send for backend validation
         };
 
         try {
+          // Send POST request to backend API
           const response = await fetch(`${API_URL}/api/users/register`, {
             method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(user),
           });
 
           const result = await response.json();
 
+          // Handle backend response
           if (response.ok) {
-            alert('✅ Account created successfully');
-
-            console.log('Saved:', result.data);
-
-            // Clear form
+            successMessage.textContent = '✅ Account created successfully!';
+            successMessage.style.display = 'block';
             form.reset();
 
-            // Redirect after 2 seconds to the different
-
+            // Redirect to login page after 2 seconds
             setTimeout(() => {
               window.location.href = 'index.html';
             }, 2000);
           } else {
-            alert('❌ Failed: ' + result.message);
+            errorMessage.textContent = '❌ ' + result.message;
+            errorMessage.style.display = 'block';
           }
         } catch (error) {
           console.error('Network error:', error);
-          alert('❌ Cannot connect to server. Try again later.');
+          errorMessage.textContent =
+            '❌ Cannot connect to server. Try again later.';
+          errorMessage.style.display = 'block';
+        } finally {
+          submitBtn.disabled = false; // re-enable submit button
         }
       });
     </script>

@@ -1,47 +1,88 @@
+// Import express
 const express = require('express');
+
+// Import Procurement model
 const Procurement_Model = require('../Karibu-models/procurement-Model');
+
+// Create router instance
 const Router = express.Router();
 
-//Get Procurement
-
+// ===============================
+// GET ALL PROCUREMENT RECORDS
+// ===============================
 Router.get('/', async (req, res) => {
   try {
+    // Fetch all procurement records from database
     const _procurement = await Procurement_Model.find();
-    res
-      .status(200)
-      .json({ message: 'Procurement Received ', data: _procurement });
+
+    res.status(200).json({
+      message: 'Procurement Received',
+      data: _procurement,
+    });
   } catch (err) {
-    res
-      .status(500)
-      .json({ message: 'Procurement Not Received', error: err.message });
+    res.status(500).json({
+      message: 'Procurement Not Received',
+      error: err.message,
+    });
   }
 });
 
-Router.get('/:id', async (req, res, next) => {
+// ===============================
+// GET SINGLE PROCUREMENT BY ID
+// ===============================
+Router.get('/:id', async (req, res) => {
   try {
+    // Find procurement by MongoDB ID
     let sale = await Procurement_Model.findById(req.params.id);
+
     if (!sale) {
       return res.status(404).json({ message: 'Not found' });
     }
-    res
-      .status(200)
-      .json({ message: 'Sales Data collection was a success ', data: sale });
+
+    res.status(200).json({
+      message: 'Procurement Data collection was a success',
+      data: sale,
+    });
   } catch (err) {
-    res.status(500).json({ message: 'Sales not found', error: err.message });
+    res.status(500).json({
+      message: 'Procurement not found',
+      error: err.message,
+    });
   }
 });
-//POST PROCUREMENT
 
+// ===============================
+// CREATE / UPDATE PROCUREMENT (STOCK MERGE)
+// ===============================
 Router.post('/', async (req, res) => {
   try {
-    const { Produce_name, Produce_tonnage, Produce_Cost, Branch } = req.body;
-    console.log('RAW BODY:', req.body);
-    console.log('Produce_tonnage:', Produce_tonnage);
-    console.log('Type:', typeof Produce_tonnage);
+    const { Produce_name, Produce_tonnage, Branch } = req.body;
 
-    let produce = await Procurement_Model.findOne({ Produce_name, Branch });
+    // Validate required fields
+    if (!Produce_name || !Produce_tonnage || !Branch) {
+      return res.status(400).json({
+        message: 'Produce_name, Produce_tonnage and Branch are required',
+      });
+    }
+
+    // Convert tonnage to number
+    const tonnageNumber = Number(Produce_tonnage);
+
+    if (isNaN(tonnageNumber) || tonnageNumber <= 0) {
+      return res.status(400).json({
+        message: 'Produce_tonnage must be a positive number',
+      });
+    }
+
+    // Check if produce already exists in the same branch
+    let produce = await Procurement_Model.findOne({
+      Produce_name,
+      Branch,
+    });
+
     if (produce) {
-      produce.Produce_tonnage += Number(Produce_tonnage);
+      // If produce exists, update stock (merge stock)
+      produce.Produce_tonnage += tonnageNumber;
       await produce.save();
 
       return res.status(200).json({
@@ -49,15 +90,20 @@ Router.post('/', async (req, res) => {
         data: produce,
       });
     }
-    const _procurement = new Procurement_Model(req.body);
-    console.log('DATA RECEIVED:', req.body);
+
+    // If not existing, create new procurement record
+    const _procurement = new Procurement_Model({
+      ...req.body,
+      Produce_tonnage: tonnageNumber,
+    });
+
     await _procurement.save();
+
     res.status(201).json({
       message: 'Procurement Recorded Successfully',
       data: _procurement,
     });
   } catch (err) {
-    console.log('SAVE ERROR:', err.message);
     res.status(500).json({
       message: 'Failed to Create Procurement Data',
       error: err.message,
@@ -65,55 +111,69 @@ Router.post('/', async (req, res) => {
   }
 });
 
-//UPDATE PROCUREMENT
-
+// ===============================
+// UPDATE PROCUREMENT RECORD
+// ===============================
 Router.patch('/:id', async (req, res) => {
   try {
-    let pro_id = req.params.id;
-    let pro_body = req.body;
+    const pro_id = req.params.id;
+    const pro_body = req.body;
+
     const _Updated = await Procurement_Model.findByIdAndUpdate(
       pro_id,
       pro_body,
       { new: true }
     );
 
-    res
-      .status(200)
-      .json({ message: 'Procurement Update successful', data: _Updated });
+    if (!_Updated) {
+      return res.status(404).json({
+        message: 'Procurement record not found',
+      });
+    }
+
+    res.status(200).json({
+      message: 'Procurement Update successful',
+      data: _Updated,
+    });
   } catch (err) {
-    res
-      .status(500)
-      .json({ message: 'Procurement Update Failed', error: err.message });
+    res.status(500).json({
+      message: 'Procurement Update Failed',
+      error: err.message,
+    });
   }
 });
 
-//DELETING PROCUREMENT
-
+// ===============================
+// DELETE PROCUREMENT
+// ===============================
 Router.delete('/:id', async (req, res) => {
   try {
-    let _Produce_name = req.params.id;
-    //Validating input
-    if (!_Produce_name) {
-      res.status(400).json({ message: 'Produce name required' });
+    const procurementId = req.params.id;
+
+    if (!procurementId) {
+      return res.status(400).json({
+        message: 'Procurement ID required',
+      });
     }
 
     const Produce_Deleted =
-      await Procurement_Model.findByIdAndDelete(_Produce_name);
+      await Procurement_Model.findByIdAndDelete(procurementId);
 
     if (!Produce_Deleted) {
-      res.status(404).json({
+      return res.status(404).json({
         message: 'Produce Not found',
       });
     }
 
     res.status(200).json({
-      message: 'Procurement Deleted Successfully ',
+      message: 'Procurement Deleted Successfully',
       data: Produce_Deleted,
     });
   } catch (err) {
-    res
-      .status(500)
-      .json({ message: 'Procurement Deletion Failed', error: err.message });
+    res.status(500).json({
+      message: 'Procurement Deletion Failed',
+      error: err.message,
+    });
   }
 });
 

@@ -8,6 +8,7 @@ let router = express.Router();
 router.get('/', async (req, res) => {
   try {
     let users = await userModel.find().select('-Password'); // Exclude password from response
+
     res.status(200).json({
       success: true,
       message: 'Users retrieved successfully',
@@ -25,6 +26,14 @@ router.get('/', async (req, res) => {
 router.post('/login', async (req, res) => {
   try {
     const { Email, Password } = req.body;
+
+    // Validate inputs
+    if (!Email || !Password) {
+      return res.status(400).json({
+        success: false,
+        message: 'Email and Password are required',
+      });
+    }
 
     const user = await userModel.findOne({ Email });
 
@@ -73,7 +82,7 @@ router.post('/register', async (req, res) => {
   try {
     const { Password, ...rest } = req.body;
 
-    // Check if email exists
+    // Check if user already exists
     const existingUser = await userModel.findOne({ Email: req.body.Email });
     if (existingUser) {
       return res.status(400).json({
@@ -83,8 +92,7 @@ router.post('/register', async (req, res) => {
     }
 
     // Hash password
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(Password, salt);
+    const hashedPassword = await bcrypt.hash(Password, 10);
 
     const user = new userModel({
       ...rest,
@@ -109,6 +117,13 @@ router.post('/register', async (req, res) => {
 router.patch('/:id', async (req, res) => {
   try {
     // Prevent password updates through this route (should have separate route)
+    if (req.user.role !== 'Director') {
+      return res.status(403).json({
+        success: false,
+        message: 'Forbidden: Only Director can update users',
+      });
+    }
+
     const { Password, confirm_Password, ...updateData } = req.body;
 
     let user_update = await userModel

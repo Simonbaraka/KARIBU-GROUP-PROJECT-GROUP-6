@@ -377,72 +377,81 @@
     </div>
 
     <script>
+      // ================================
+      // BASE API CONFIGURATION
+      // ================================
       const API_URL = 'http://localhost:3000';
-      let url = `${API_URL}/api/reports/sales-summary`;
-      let numbers_1 = document.querySelector('#numbers-1');
-      let numbers_2 = document.querySelector('#numbers-2');
-      let numbers_3 = document.querySelector('#numbers-3');
-      let numbers_4 = document.querySelector('#numbers-4');
-      let numbers_5 = document.querySelector('#numbers-5');
-      let numbers_6 = document.querySelector('#numbers-6');
-      let startDate = document.querySelector('#start');
-      let endDate = document.querySelector('#end');
-      let Branch = document.querySelector('#Branch');
 
+      // ================================
+      // DOM REFERENCES (CACHE FOR PERFORMANCE)
+      // ================================
+      const numbers_1 = document.querySelector('#numbers-1'); // Total Revenue
+      const numbers_2 = document.querySelector('#numbers-2'); // Cash Revenue
+      const numbers_3 = document.querySelector('#numbers-3'); // Credit Revenue
+      const numbers_4 = document.querySelector('#numbers-4'); // Total Tonnage
+      const numbers_5 = document.querySelector('#numbers-5'); // Procurement Tonnage
+      const numbers_6 = document.querySelector('#numbers-6'); // Procurement Cost
+
+      // ================================
+      // MAIN FUNCTION TO FETCH TOTALS
+      // ================================
       async function Totals() {
         try {
+          // Get filter values from UI
           const startDate = document.querySelector('#start').value;
           const endDate = document.querySelector('#end').value;
           const Branch = document.querySelector('#Branch').value;
 
-          if (startDate && endDate) {
-            url += `?startDate=${startDate}&endDate=${endDate}&Branch=${Branch}`;
+          // Always rebuild URL fresh (prevents URL duplication bug)
+          let url = `${API_URL}/api/reports/sales-summary`;
+
+          // Use URLSearchParams for clean query building
+          const params = new URLSearchParams();
+
+          if (startDate) params.append('startDate', startDate);
+          if (endDate) params.append('endDate', endDate);
+
+          // Only append branch if user selected real branch
+          if (Branch && Branch !== 'Select Branch') {
+            params.append('Branch', Branch);
           }
 
-          let response = await fetch(url);
-          let result = await response.json();
+          // Attach query string if filters exist
+          if (params.toString()) {
+            url += `?${params.toString()}`;
+          }
 
-          console.log('FULL RESULT:', result);
+          // Fetch data from backend
+          const response = await fetch(url);
 
-          numbers_1.textContent = (result.totalRevenue || 0).toLocaleString();
-          numbers_2.textContent = (
-            result.totalCashRevenue || 0
-          ).toLocaleString();
-          numbers_3.textContent = (
-            result.totalCreditRevenue || 0
-          ).toLocaleString();
-          numbers_4.textContent = (result.totalTonnage || 0).toLocaleString();
+          if (!response.ok) {
+            throw new Error('Server error while fetching summary');
+          }
 
-          numbers_5.textContent = (result.procureTonnage || 0).toLocaleString();
+          const result = await response.json();
 
-          numbers_6.textContent = (result.procureCost || 0).toLocaleString();
+          console.log('Sales Summary:', result);
+
+          // ================================
+          // DISPLAY DATA (SAFE FALLBACK TO 0)
+          // ================================
+
+          numbers_1.textContent = result.totalRevenue;
+          numbers_2.textContent = result.totalCashRevenue;
+          numbers_3.textContent = result.totalCreditRevenue;
+          numbers_4.textContent = result.totalTonnage;
+          numbers_5.textContent = result.procureTonnage;
+          numbers_6.textContent = result.procureCost;
         } catch (error) {
           console.error('Error fetching totals:', error);
+          alert('Failed to load sales summary.');
         }
       }
 
-      const tableBody = document.querySelector('#salesTable');
-
-      async function Load_Procurement() {
-        let response = await fetch(url);
-        let result = await response.json();
-        let table_ = '';
-
-        result.data.forEach((procurements, index) => {
-          table_ += `<tr>
-                <td>${index + 1}</td>
-                <td>${procurements.totalRevenue}</td>  
-                <td>${procurements.totalCashRevenue}</td>
-                <td>${procurements.totalCreditRevenue}</td>
-                <td>${procurements.totalTonnage}</td>
-                <td>${procurements.procureTonnage}</td>
-                <td>${procurements.procureCost}</td>
-             </tr>`;
-        });
-
-        tableBody.innerHTML = table_;
-      }
-      Load_Procurement();
+      // ================================
+      // AUTO LOAD ON PAGE OPEN
+      // ================================
+      Totals();
     </script>
   </body>
 </html>

@@ -310,6 +310,12 @@
 
         <input type="text" id="search" placeholder="search items" />
         <div class="user-header">
+          <div
+            id="sales-agent-count"
+            style="margin-left: 20px; font-weight: bold"
+          >
+            Sales Agents: 0
+          </div>
           <div class="Avatar">SB</div>
           <div class="user-info">
             <div class="user-name">
@@ -333,6 +339,7 @@
                 <th>Last Name</th>
                 <th>Email</th>
                 <th>Role</th>
+                <th>Branch</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -374,6 +381,7 @@
           <td>${user.FirstName}</td>
           <td>${user.LastName}</td>
           <td>${user.Email}</td>
+           <td>${user.Branch}</td> 
           <td>${user.Role}</td> 
 
           <!-- Action buttons: Edit & Delete -->
@@ -402,6 +410,35 @@
         }
       }
 
+      //Function to check number of employees
+      async function updateSalesAgentCount() {
+        try {
+          const response = await fetch(`${API_URL}/api/users`);
+          const result = await response.json();
+
+          // Count Sales Agents
+          const salesAgents = result.data.filter((emp) =>
+            emp.Role.includes('Sales Agent')
+          );
+          const agentCountDiv = document.querySelector('#sales-agent-count');
+
+          agentCountDiv.textContent = `Sales Agents: ${salesAgents.length}`;
+
+          // Highlight if more than 2
+          if (salesAgents.length > 2) {
+            agentCountDiv.style.color = 'red';
+            agentCountDiv.style.fontWeight = 'bold';
+            agentCountDiv.title = 'Limit exceeded! Max 2 allowed.';
+          } else {
+            agentCountDiv.style.color = 'black';
+            agentCountDiv.style.fontWeight = 'normal';
+            agentCountDiv.title = '';
+          }
+        } catch (error) {
+          console.error('Error updating sales agent count:', error);
+        }
+      }
+      updateSalesAgentCount();
       // Call the function to load users when page loads
       loadUsers();
 

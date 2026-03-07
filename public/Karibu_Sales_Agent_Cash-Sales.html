@@ -318,12 +318,13 @@
           <div class="user-details">
             <div class="input-box">
               <label for="Produce_Name">Produce Name</label>
-              <input
-                type="text"
-                id="Produce_Name"
-                required
-                placeholder="Eg cereals, cabbages"
-              />
+              <select id="Produce_Name" required>
+                <option>Select Produce</option>
+                <option>Grain Maize</option>
+                <option>Cow peas</option>
+                <option>Soybeans</option>
+                <option>Beans</option>
+              </select>
             </div>
 
             <!--Buyer name -->
@@ -379,10 +380,10 @@
 
             <div class="input-box">
               <label for="Branch">Karibu Branch</label>
-              <select id="Branch">
-                <option>Select Branch</option>
-                <option>Kampala</option>
-                <option>Entebbe</option>
+              <select id="Branch" required>
+                <option value="">Select Branch</option>
+                <option value="Maganjo">Maganjo</option>
+                <option value="Matugga">Matugga</option>
               </select>
             </div>
           </div>
@@ -473,7 +474,12 @@
           alert('❌ Tonnage must be greater than 1,000');
           return;
         }
-        if (data.Amount_paid < 10000) {
+
+        if (data.Branch === 'Select Branch') {
+          alert('❌ Please select a branch');
+          return;
+        }
+        if (data.Amount_paid < 10_000) {
           alert('❌ Amount paid must be greater than 10,000');
           return;
         }

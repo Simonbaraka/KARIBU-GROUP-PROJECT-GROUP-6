@@ -179,6 +179,16 @@
             </select>
           </div>
 
+          <!-- Branch -->
+          <div class="input-box">
+            <label for="branch">Karibu Branch</label>
+            <select id="branch" required>
+              <option value="">Select Branch</option>
+              <option value="Maganjo">Maganjo</option>
+              <option value="Matugga">Matugga</option>
+            </select>
+          </div>
+
           <!-- Password -->
           <div class="input-box">
             <label for="password">Password</label>
@@ -212,6 +222,34 @@
       const errorMessage = document.getElementById('errorMessage');
       const successMessage = document.getElementById('successMessage');
       const submitBtn = document.getElementById('submitBtn');
+      const role = document.getElementById('role');
+
+      // Function to fetch total Sales Agents
+      const response = await fetch(`${API_URL}/api/users`);
+      const result = await response.json();
+      async function getSalesAgentCount() {
+        try {
+
+          if (!result.data) return 0;
+          return result.data.filter((user) => user.Role === 'Sales Agent')
+            .length;
+
+        } catch (err) {
+          console.error('Error fetching users:', err);
+          return 0;
+        }
+      }
+
+      async function  getManagerCount() {
+        try{
+          if(!result.data) return 0;
+          return result.data.forEach(manager => manager.Role==="Manager").length;
+
+        }catch(err){
+          console.error('Error fetching users:', err);
+          return 0;}
+
+      }
 
       // Listen for form submission
       form.addEventListener('submit', async (e) => {
@@ -230,6 +268,7 @@
         const role = document.getElementById('role').value;
         const password = document.getElementById('password').value;
         const confirm = document.getElementById('confirm').value;
+        const branch = document.getElementById('branch').value;
 
         // Client-side validation
         if (!fname || !lname || !email || !role || !password || !confirm) {
@@ -260,6 +299,7 @@
           Email: email,
           Role: role,
           Password: password,
+          Branch: branch,
         };
 
         try {
@@ -270,7 +310,28 @@
             body: JSON.stringify(user),
           });
 
+          //Checks if there are more than 2 sales agent per branch
+
           const result = await response.json();
+          console.log('RESULT OF USER: ', result);
+
+          const counter = await getSalesAgentCount();
+          const managerCounter = await getManagerCount()
+
+          if (role === 'Sales Agent' && counter > 2) {
+            errorMessage.textContent =
+              'Contact Director For Clearance: Max 2 Sales Agents';
+            errorMessage.style.color = 'red';
+            errorMessage.style.display = 'block';
+            submitBtn.disabled = false;
+            return;
+          }else if (role==="Manager" && managerCounter>2){
+             errorMessage.textContent =
+              'Contact Director For Clearance: Max 2 Managers';
+            errorMessage.style.color = 'red';
+            errorMessage.style.display = 'block';
+            submitBtn.disabled = false;
+          }
 
           // Handle backend response
           if (response.ok) {

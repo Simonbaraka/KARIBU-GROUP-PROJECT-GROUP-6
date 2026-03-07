@@ -350,12 +350,13 @@
           <div class="user-details">
             <div class="input-box">
               <label for="Produce_Name">Produce Name</label>
-              <input
-                type="text"
-                id="Produce_Name"
-                required
-                placeholder="Eg cereals, cabbages"
-              />
+              <select id="Produce_Name" required>
+                <option>Select Produce</option>
+                <option>Grain Maize</option>
+                <option>Cow peas</option>
+                <option>Soybeans</option>
+                <option>Beans</option>
+              </select>
             </div>
 
             <!--Buyer name -->
@@ -410,10 +411,10 @@
             </div>
             <div class="input-box">
               <label for="Branch">Karibu Branch</label>
-              <select id="Branch">
-                <option>Select Branch</option>
-                <option>Kampala</option>
-                <option>Entebbe</option>
+              <select id="Branch" required>
+                <option value="">Select Branch</option>
+                <option value="Maganjo">Maganjo</option>
+                <option value="Matugga">Matugga</option>
               </select>
             </div>
           </div>
@@ -491,13 +492,18 @@
           return;
         }
 
+        if (data.Produce_name === 'Select Produce') {
+          alert('❌ Please select a Produce');
+          return;
+        }
+
         if (data.Tonnage <= 0) {
           alert('❌ Tonnage must be greater than 0');
           return;
         }
 
-        if (data.Amount_paid <= 0) {
-          alert('❌ Amount paid must be greater than 0');
+        if (data.Amount_paid <= 10_000) {
+          alert('❌ Amount paid must be greater than 10,000');
           return;
         }
 
@@ -540,6 +546,37 @@
           recordBtn.disabled = false;
         }
       });
+
+      /* ========================================
+LOAD PRICE WHEN PRODUCE IS SELECTED
+======================================== */
+
+      document
+        .querySelector('#Produce_Name')
+        .addEventListener('change', async function () {
+          const produce = this.value;
+
+          // stop if default option
+          if (produce === 'Select Produce') return;
+
+          try {
+            const response = await fetch(
+              `http://localhost:3000/api/prices/${produce}`
+            );
+
+            const result = await response.json();
+
+            if (response.ok) {
+              // automatically fill selling price
+              document.querySelector('#Amount_Paid').value = result.data.price;
+            } else {
+              alert('Price not found for this produce');
+            }
+          } catch (error) {
+            console.error(error);
+            alert('Failed to load price');
+          }
+        });
 
       /* ========================================
    LOAD SALES TABLE

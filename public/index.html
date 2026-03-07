@@ -176,10 +176,10 @@
               id="Password"
               name="password"
               placeholder="Enter your password"
-              required
               autocomplete="current-password"
             />
           </div>
+          <div class="message error" id="message"></div>
 
           <div class="button-section">
             <button type="submit">Sign In</button>
@@ -193,6 +193,7 @@
     </div>
     <script>
       let form = document.querySelector('.Form-Detail');
+      let message = document.querySelector('#message');
       const API_URL = 'http://localhost:3000';
 
       form.addEventListener('submit', async (e) => {
@@ -202,7 +203,9 @@
         const Password = document.querySelector('#Password').value.trim();
 
         if (!Email || !Password) {
-          alert('Fill in all fields');
+          message.textContent = 'Fill in all fields';
+          message.style.color = 'red';
+          message.style.display = 'flex';
           return;
         }
 
@@ -216,7 +219,9 @@
           const result = await response.json();
 
           if (response.ok) {
-            alert('Login successful');
+            message.textContent = 'Login Successful';
+            message.style.color = 'green';
+            message.style.display = 'flex';
 
             // Save token
             localStorage.setItem('token', result.token);
@@ -224,11 +229,17 @@
 
             // Redirect by role
             if (result.role === 'Director') {
-              window.location.href = 'Karibu_Director_DashBoard.html';
+              setTimeout(() => {
+                window.location.href = 'Karibu_Director_DashBoard.html';
+              }, 2000);
             } else if (result.role === 'Manager') {
-              window.location.href = 'Karibu-ManagerDashboard.html';
+              setTimeout(() => {
+                window.location.href = 'Karibu-ManagerDashboard.html';
+              }, 2000);
             } else if (result.role === 'Sales Agent') {
-              window.location.href = 'Karibu_Sales_Agent_DashBoard.html';
+              setTimeout(() => {
+                window.location.href = 'Karibu_Sales_Agent_DashBoard.html';
+              }, 2000);
             }
           } else {
             alert(result.message);

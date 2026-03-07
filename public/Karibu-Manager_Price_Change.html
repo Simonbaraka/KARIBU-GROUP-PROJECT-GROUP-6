@@ -208,7 +208,7 @@
               >
             </li>
             <li>
-              <a href="Karibu-Manager_Sales_Produce.html"
+              <a href="Karibu-Manager_Cash-Sales.html"
                 ><span class="material-icons">payments</span>Cash Sales</a
               >
             </li>
@@ -259,7 +259,7 @@
         </div>
       </header>
       <div class="Right-panel">
-        <form>
+        <form class="form">
           <div class="user-details">
             <div class="input-box">
               <label for="name">Produce Name</label>
@@ -288,5 +288,69 @@
         </form>
       </div>
     </div>
+
+    <script>
+      /* ===============================
+GLOBAL VARIABLES
+================================ */
+
+      const form = document.querySelector('.form');
+      const API_URL = 'http://localhost:3000';
+
+      /* ===============================
+SUBMIT PRICE CHANGE
+================================ */
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const produce = document.querySelector('#name').value.trim();
+        const price = Number(document.querySelector('#price').value);
+        const date = document.querySelector('#amount').value;
+
+        /* ===== VALIDATION ===== */
+
+        if (!produce || !price || !date) {
+          alert('❌ Please fill all fields');
+          return;
+        }
+
+        if (price <= 10_000) {
+          alert('❌ Price must be greater than 0');
+          return;
+        }
+
+        const data = {
+          produce,
+          price,
+          date,
+        };
+
+        try {
+          const response = await fetch(`${API_URL}/api/prices`, {
+            method: 'POST',
+
+            headers: {
+              'Content-Type': 'application/json',
+            },
+
+            body: JSON.stringify(data),
+          });
+
+          const result = await response.json();
+
+          if (response.ok) {
+            alert('✅ Price updated successfully');
+
+            form.reset();
+          } else {
+            alert('❌ ' + result.message);
+          }
+        } catch (error) {
+          console.error(error);
+          alert('❌ Network error');
+        }
+      });
+    </script>
   </body>
 </html>

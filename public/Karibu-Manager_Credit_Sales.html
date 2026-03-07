@@ -440,12 +440,13 @@
 
             <div class="input-box">
               <label for="Produce_Name">Produce Name/Type </label>
-              <input
-                type="text"
-                id="Produce_Name"
-                placeholder="Eg cereals, cabbages"
-                required
-              />
+              <select id="Produce_Name" required>
+                <option>Select Produce</option>
+                <option>Grain Maize</option>
+                <option>Cow peas</option>
+                <option>Soybeans</option>
+                <option>Beans</option>
+              </select>
             </div>
 
             <!-- Produce Tonnage -->
@@ -479,10 +480,10 @@
             <!--dealer name -->
             <div class="input-box">
               <label for="Branch">Karibu Branch</label>
-              <select id="Branch">
-                <option>Select Branch</option>
-                <option>Kampala</option>
-                <option>Entebbe</option>
+              <select id="Branch" required>
+                <option value="">Select Branch</option>
+                <option value="Maganjo">Maganjo</option>
+                <option value="Matugga">Matugga</option>
               </select>
             </div>
             <!-- Reset & Submit buttons -->
@@ -571,6 +572,11 @@
 
         if (dataObject.Branch === 'Select Branch') {
           alert('❌ Please select a branch');
+          return;
+        }
+
+        if (dataObject.Produce_name === 'Select Produce') {
+          alert('❌ Please select a Produce ');
           return;
         }
 

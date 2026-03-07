@@ -32,6 +32,11 @@ const userschema = mongoose.Schema(
       required: true,
       minlength: 6, // Add minimum password length
     },
+
+    Branch: {
+      type: String,
+      required: true,
+    },
   },
   {
     timestamps: true, // Adds createdAt and updatedAt fields

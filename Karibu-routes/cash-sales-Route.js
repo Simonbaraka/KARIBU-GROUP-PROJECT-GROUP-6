@@ -10,6 +10,7 @@ const {
 const {
   restoreStockOnDelete,
 } = require('../Karibu-middleware/restoreStockMiddleware');
+const { authorizeBranch } = require('../Karibu-middleware/BranchMiddleware');
 
 const router = express.Router();
 
@@ -68,6 +69,7 @@ router.post(
   '/',
   authenticateToken,
   authorizeRole('Sales Agent', 'Manager'),
+  authorizeBranch,
   validateSale,
   checkStock,
   deductStock,
@@ -97,6 +99,7 @@ router.patch(
   '/:id',
   authenticateToken,
   authorizeRole('Manager'), // only manager can edit sales
+  authorizeBranch,
   validateSale,
   checkStock,
   deductStock, // if updating tonnage
@@ -136,6 +139,7 @@ router.delete(
   '/:id',
   authenticateToken,
   authorizeRole('Director', 'Manager'), // Only privileged roles can delete
+  authorizeBranch,
   restoreStockOnDelete,
   async (req, res) => {
     try {

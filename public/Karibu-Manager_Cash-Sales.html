@@ -278,7 +278,7 @@
         <div class="manager-options">
           <ul>
             <li>
-              <a href="Karibu_DashBoard.html"
+              <a href="Karibu-ManagerDashboard.html"
                 ><span class="material-icons">dashboard</span>Main DashBoard</a
               >
             </li>
@@ -444,6 +444,7 @@
                   <th>Date</th>
                   <th>Amount Paid</th>
                   <th>Branch</th>
+                  <th>Price Per Kg</th>
                   <th>Action</th>
                 </tr>
               </thead>
@@ -469,7 +470,12 @@
 
       employee_name = document.querySelector('#employee-name');
       async function profile() {
-        let response = await fetch(`${API_URL}/api/users`);
+        let response = await fetch(`${API_URL}/api/users`, {
+          headers: {
+            'Content-Type': 'Application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        });
         let result = await response.json();
 
         result.data.forEach((user) => {
@@ -478,6 +484,7 @@
             managerBranch = user.Branch; // save the branch
           }
         });
+        loadSales();
       }
       profile();
 
@@ -496,6 +503,7 @@
           Tonnage: Number(document.querySelector('#produce_Tonnage').value),
           Amount_paid: Number(document.querySelector('#Amount_Paid').value),
           Branch: document.querySelector('#Branch').value,
+          Price_per_kg: Number(document.querySelector('#price_per_kg').value),
         };
 
         /* ========= VALIDATION ========= */
@@ -533,6 +541,7 @@
         }
 
         try {
+          console.log('Sending sale data:', data);
           recordBtn.disabled = true;
 
           let response;
@@ -622,6 +631,7 @@
             },
           });
           const result = await res.json();
+
           // Filter only the records for the manager's branch
           const branchData = result.data.filter(
             (item) => item.Branch === managerBranch && isToday(item.Date_time)
@@ -629,7 +639,7 @@
 
           let innerHTML = '';
 
-          result.data.forEach((sale, index) => {
+          branchData.forEach((sale, index) => {
             innerHTML += `
               <tr>
                 <td>${index + 1}</td>
@@ -640,6 +650,7 @@
                 <td>${new Date(sale.Date_time).toISOString().split('T')[0]}</td>
                 <td>${sale.Amount_paid.toLocaleString()}</td>
                 <td>${sale.Branch}</td>
+                <td>${sale.Price_per_kg}</td>
 
                 <td style="text-align:center;">
                   <button onclick="update_cashsale('${sale._id}')"
@@ -651,7 +662,14 @@
                     class="icon-btn delete" title="Delete">
                     <span class="material-icons-outlined">delete</span>
                   </button>
+
+                  <button onclick="generateReceipt('${sale._id}')"
+                    class="icon-btn" title="Receipt">
+                    <span class="material-icons-outlined">receipt_long</span>
+                  </button>
                 </td>
+
+                
               </tr>
             `;
           });
@@ -662,8 +680,6 @@
           alert('❌ Failed to load sales');
         }
       }
-
-      loadSales();
 
       /* ========================================
          DELETE CASH SALE

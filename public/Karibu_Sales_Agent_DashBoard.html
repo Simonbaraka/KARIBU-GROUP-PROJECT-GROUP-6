@@ -315,7 +315,7 @@
             <!--Display area for total ugx for cash sales-->
             <h2 id="number">UGX.</h2>
             <h2 id="ugx_cash"></h2>
-            <h5>Last Updated</h5>
+            <h5>Last Updated: <span id="today"></span></h5>
           </div>
         </div>
 
@@ -329,7 +329,7 @@
             <!--Display area for total ugx for credit sales-->
             <h2 id="ugx">UGX.</h2>
             <h3 id="ugx_credit"></h3>
-            <h5>Last Updated</h5>
+            <h5>Last Updated: <span id="today"></span></h5>
           </div>
         </div>
       </main>
@@ -340,6 +340,8 @@
       creditArea = document.querySelector('#credit');
       ugxCredit = document.querySelector('#ugx_credit');
       const token = localStorage.getItem('token');
+      document.querySelector('#today').textContent =
+        new Date().toLocaleDateString();
 
       ugxCash = document.querySelector('#ugx_cash');
       const API_URL = 'http://localhost:3000';
@@ -371,17 +373,26 @@
             Authorization: `Bearer ${token}`,
           },
         });
-        let result = await regular_Count.json();
-        cash_counter = 0;
-        for (let i = 0; i < result.data.length; i++) {
-          if (result.data[i].Amount_paid) {
-            cash_counter += result.data[i].Amount_paid;
-          }
-        }
 
-        let Total_Regular_sales = result.data.length;
-        console.log(Total_Regular_sales);
-        employee_name.textContent;
+        let result = await regular_Count.json();
+
+        let today = new Date().toDateString();
+
+        let cash_counter = 0;
+        let Total_Regular_sales = 0;
+
+        result.data.forEach((sale) => {
+          let saleDate = new Date(sale.createdAt).toDateString();
+
+          if (saleDate === today) {
+            Total_Regular_sales++;
+
+            if (sale.Amount_paid) {
+              cash_counter += sale.Amount_paid;
+            }
+          }
+        });
+
         ugxCash.textContent = cash_counter.toLocaleString();
         cashArea.textContent = Total_Regular_sales.toLocaleString();
       }
@@ -389,19 +400,31 @@
 
       //Total credit sales count
       async function Credit_Count() {
-        let credit_count = await fetch(`${API_URL}/api/creditsales`);
+        let credit_count = await fetch(`${API_URL}/api/creditsales`, {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
         let result = await credit_count.json();
-        count = 0;
 
-        //Loop to get total amount of cash sales
-        for (let i = 0; i < result.data.length; i++) {
-          if (result.data[i].Amount_Due) {
-            count += result.data[i].Amount_Due;
+        let today = new Date().toDateString();
+
+        let count = 0;
+        let Total_credit_sales = 0;
+
+        result.data.forEach((sale) => {
+          let saleDate = new Date(sale.createdAt).toDateString();
+
+          if (saleDate === today) {
+            Total_credit_sales++;
+
+            if (sale.Amount_Due) {
+              count += sale.Amount_Due;
+            }
           }
-        }
-
-        let Total_credit_sales = result.data.length;
-        console.log(Total_credit_sales);
+        });
 
         ugxCredit.textContent = count.toLocaleString();
         creditArea.textContent = Total_credit_sales.toLocaleString();

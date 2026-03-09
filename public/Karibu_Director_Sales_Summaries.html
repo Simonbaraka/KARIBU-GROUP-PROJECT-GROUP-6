@@ -137,12 +137,17 @@
       border-radius: 4px;
     }
     .input-box button {
-      background: #1e1e2f;
+      background: #2f3e56;
       color: white;
       border: none;
       padding: 10px;
-      border-radius: 4px;
+      border-radius: 6px;
       cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .input-box button:hover {
+      background: #1d293d;
     }
 
     .user-header {
@@ -218,26 +223,27 @@
       border-collapse: collapse;
       border-radius: 12px;
       overflow: hidden;
+      background: white;
     }
 
     #salesTable th {
-      background: #34435c;
+      background: #2f3e56;
       color: white;
-      padding: 15px;
+      padding: 14px;
       text-align: left;
+      font-size: 14px;
+      letter-spacing: 0.5px;
     }
 
     #salesTable td {
-      font-size: 130%;
-      padding: 10px;
-      background-color: whitesmoke;
+      padding: 14px;
+      font-size: 16px;
       border-bottom: 1px solid #e5e7eb;
     }
 
     #salesTable tr:hover {
-      background-color: #cfd9e3;
+      background: #f3f6f9;
     }
-
     .title {
       font-weight: 100;
     }
@@ -246,6 +252,95 @@
       text-align: right;
       font-weight: bold;
       font-size: 18px;
+    }
+
+    /* CARDS */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+    .card {
+      background: white;
+      border-radius: 12px;
+      border: 1px solid #e5e7eb;
+      padding: 18px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+    .card-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #9ca3af;
+    }
+    .card-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .card-icon .material-icons {
+      font-size: 18px;
+    }
+    .card-value {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 22px;
+      font-weight: 500;
+      color: #111827;
+      line-height: 1;
+    }
+    .card-sub {
+      font-size: 11px;
+      color: #9ca3af;
+    }
+
+    /* icon colour variants */
+    .ic-indigo {
+      background: #eef2ff;
+    }
+    .ic-indigo .material-icons {
+      color: #6366f1;
+    }
+    .ic-emerald {
+      background: #ecfdf5;
+    }
+    .ic-emerald .material-icons {
+      color: #059669;
+    }
+    .ic-amber {
+      background: #fffbeb;
+    }
+    .ic-amber .material-icons {
+      color: #d97706;
+    }
+    .ic-sky {
+      background: #f0f9ff;
+    }
+    .ic-sky .material-icons {
+      color: #0284c7;
+    }
+    .ic-rose {
+      background: #fff1f2;
+    }
+    .ic-rose .material-icons {
+      color: #e11d48;
+    }
+    .ic-violet {
+      background: #f5f3ff;
+    }
+    .ic-violet .material-icons {
+      color: #7c3aed;
     }
   </style>
   <body>
@@ -331,6 +426,70 @@
             </div>
           </div>
         </form>
+
+        <!-- CARDS -->
+        <div class="cards-grid">
+          <div class="card">
+            <div class="card-top">
+              <span class="card-label">Total Revenue</span>
+              <div class="card-icon ic-indigo">
+                <span class="material-icons">payments</span>
+              </div>
+            </div>
+            <div class="card-value" id="c-1">—</div>
+            <div class="card-sub">Cash + Credit combined</div>
+          </div>
+          <div class="card">
+            <div class="card-top">
+              <span class="card-label">Cash Revenue</span>
+              <div class="card-icon ic-emerald">
+                <span class="material-icons">point_of_sale</span>
+              </div>
+            </div>
+            <div class="card-value" id="c-2">—</div>
+            <div class="card-sub">Direct cash transactions</div>
+          </div>
+          <div class="card">
+            <div class="card-top">
+              <span class="card-label">Credit Revenue</span>
+              <div class="card-icon ic-amber">
+                <span class="material-icons">credit_card</span>
+              </div>
+            </div>
+            <div class="card-value" id="c-3">—</div>
+            <div class="card-sub">Outstanding credit sales</div>
+          </div>
+          <div class="card">
+            <div class="card-top">
+              <span class="card-label">Sales Tonnage</span>
+              <div class="card-icon ic-sky">
+                <span class="material-icons">scale</span>
+              </div>
+            </div>
+            <div class="card-value" id="c-4">—</div>
+            <div class="card-sub">Total kg sold</div>
+          </div>
+          <div class="card">
+            <div class="card-top">
+              <span class="card-label">Procurement Tonnage</span>
+              <div class="card-icon ic-violet">
+                <span class="material-icons">local_shipping</span>
+              </div>
+            </div>
+            <div class="card-value" id="c-5">—</div>
+            <div class="card-sub">Total kg procured</div>
+          </div>
+          <div class="card">
+            <div class="card-top">
+              <span class="card-label">Procurement Cost</span>
+              <div class="card-icon ic-rose">
+                <span class="material-icons">receipt</span>
+              </div>
+            </div>
+            <div class="card-value" id="c-6">—</div>
+            <div class="card-sub">Total procurement spend</div>
+          </div>
+        </div>
 
         <h3>SALES REPORT GRAPH</h3>
         <table id="salesTable">
@@ -442,6 +601,23 @@
           numbers_4.textContent = result.totalTonnage;
           numbers_5.textContent = result.procureTonnage;
           numbers_6.textContent = result.procureCost;
+
+          // Cards
+          document.getElementById('c-1').textContent =
+            result.totalRevenue.toLocaleString();
+          document.getElementById('c-2').textContent =
+            result.totalCashRevenue.toLocaleString();
+          document.getElementById('c-3').textContent =
+            result.totalCreditRevenue.toLocaleString();
+
+          document.getElementById('c-4').textContent =
+            result.totalTonnage.toLocaleString() +
+            (result.totalTonnage.toLocaleString() ? ' kg' : '');
+          document.getElementById('c-5').textContent =
+            result.procureTonnage.toLocaleString() +
+            (result.procureTonnage.toLocaleString() ? ' kg' : '');
+          document.getElementById('c-6').textContent =
+            result.procureCost.toLocaleString();
         } catch (error) {
           console.error('Error fetching totals:', error);
           alert('Failed to load sales summary.');

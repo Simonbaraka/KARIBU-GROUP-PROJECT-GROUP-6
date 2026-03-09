@@ -104,25 +104,33 @@
 
       .Right-panel {
         grid-area: Right-panel;
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-        gap: 20px;
-        border-radius: 10px;
-        margin: 5%;
+        overflow-y: auto;
+        padding: 28px 32px;
       }
 
+      /* STATS GRID */
       .stats {
         display: grid;
-        grid-template-columns: 1fr 1fr 1fr;
-        gap: 20px;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
       }
+
+      /* CARDS */
       .Panel-1 {
-        background-color: white;
-        border-radius: 5px;
-        padding: 25px;
-        box-shadow: black;
-        margin: 20px;
-        margin-bottom: 300px;
+        background: white;
+        border-radius: 12px;
+        border: 1px solid #e5e7eb;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        transition:
+          box-shadow 0.2s,
+          transform 0.2s;
+      }
+      .Panel-1:hover {
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+        transform: translateY(-2px);
       }
 
       .Panel-1 h1 {
@@ -131,6 +139,52 @@
         color: green;
         font-weight: bolder;
         text-align: right;
+      }
+
+      /* Card top row: label + icon */
+      .card-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+      }
+      .card-label {
+        font-size: 10px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: #9ca3af;
+      }
+      .card-icon {
+        width: 38px;
+        height: 38px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+      .card-icon .material-icons {
+        font-size: 19px;
+      }
+
+      /* Icon colour variants */
+      .ic-emerald {
+        background: #ecfdf5;
+      }
+      .ic-emerald .material-icons {
+        color: #059669;
+      }
+      .ic-amber {
+        background: #fffbeb;
+      }
+      .ic-amber .material-icons {
+        color: #d97706;
+      }
+      .ic-violet {
+        background: #f5f3ff;
+      }
+      .ic-violet .material-icons {
+        color: #7c3aed;
       }
 
       .user-header {
@@ -293,45 +347,46 @@
         </div>
       </header>
 
-      <!--Right side panel-->
+      <!-- RIGHT PANEL -->
       <div class="Right-panel">
         <div class="stats">
+          <!-- Cash Sales Card -->
           <div class="Panel-1">
-            <div class="parameters">
-              <!--Display area for total cash sales-->
-              <h2 id="cash-title">Cash Sales.</h2>
-              <h1 id="cash"></h1>
-
-              <!--Display area for total ugx for cash sales-->
-              <h2 id="number">UGX.</h2>
-              <h2 id="ugx_cash"></h2>
+            <div class="card-top">
+              <span class="card-label">Cash Sales Today</span>
+              <div class="card-icon ic-emerald">
+                <span class="material-icons">point_of_sale</span>
+              </div>
             </div>
-            <h5 class="last-updated">last-updated</h5>
+            <div class="card-count" id="cash">—</div>
+            <div class="card-ugx">UGX <span id="ugx_cash">—</span></div>
+            <div class="last-updated" id="ft-cash">Last updated: —</div>
           </div>
 
-          <!--Credit manager panel 0779761960-->
+          <!-- Credit Sales Card -->
           <div class="Panel-1">
-            <div class="parameters">
-              <h3 id="credit-title">Credit Sales:</h3>
-              <h1 id="credit"></h1>
-
-              <!--Display area for total ugx for cash sales-->
-              <h2 id="number">UGX.</h2>
-              <h2 id="ugx_credit"></h2>
+            <div class="card-top">
+              <span class="card-label">Credit Sales Today</span>
+              <div class="card-icon ic-amber">
+                <span class="material-icons">credit_card</span>
+              </div>
             </div>
-            <h5 class="last-updated">last-updated</h5>
+            <div class="card-count" id="credit">—</div>
+            <div class="card-ugx">UGX <span id="ugx_credit">—</span></div>
+            <div class="last-updated" id="ft-credit">Last updated: —</div>
           </div>
 
-          <!--Procurement manager panel 0779761960-->
+          <!-- Procurement Card -->
           <div class="Panel-1">
-            <div class="parameters">
-              <h3 id="procurement-title">Procurements:</h3>
-              <h1 id="procurement"></h1>
-
-              <h2 id="number">UGX.</h2>
-              <h2 id="ugx_procurement"></h2>
+            <div class="card-top">
+              <span class="card-label">Procurements Today</span>
+              <div class="card-icon ic-violet">
+                <span class="material-icons">local_shipping</span>
+              </div>
             </div>
-            <h5 class="last-updated">last-updated</h5>
+            <div class="card-count" id="procurement">—</div>
+            <div class="card-ugx">UGX <span id="ugx_procurement">—</span></div>
+            <div class="last-updated" id="ft-proc">Last updated: —</div>
           </div>
         </div>
       </div>
@@ -353,17 +408,28 @@
       async function cash_sale_counter() {
         let response = await fetch(`${API_URL}/api/cashsales`);
         let result = await response.json();
+
         let cash_counter = 0;
+        let totalsales = 0;
+
+        const today = getTodayDate();
 
         for (let k = 0; k < result.data.length; k++) {
-          if (result.data[k].Amount_paid) {
-            cash_counter += result.data[k].Amount_paid;
+          let saleDate = new Date(result.data[k].createdAt)
+            .toISOString()
+            .split('T')[0];
+
+          if (saleDate === today) {
+            totalsales++;
+
+            if (result.data[k].Amount_paid) {
+              cash_counter += result.data[k].Amount_paid;
+            }
           }
         }
-        let totalsales = result.data.length;
+
         display.textContent = totalsales;
         ugxCash.textContent = cash_counter.toLocaleString();
-        console.log(totalsales);
       }
       cash_sale_counter();
 
@@ -371,18 +437,28 @@
       async function credit_counter() {
         let credit_getter = await fetch(`${API_URL}/api/creditsales`);
         let result = await credit_getter.json();
+
         let credit_count = 0;
+        let totalcredit = 0;
+
+        const today = getTodayDate();
 
         for (let k = 0; k < result.data.length; k++) {
-          if (result.data[k].Amount_Due) {
-            credit_count += result.data[k].Amount_Due;
+          let saleDate = new Date(result.data[k].createdAt)
+            .toISOString()
+            .split('T')[0];
+
+          if (saleDate === today) {
+            totalcredit++;
+
+            if (result.data[k].Amount_Due) {
+              credit_count += result.data[k].Amount_Due;
+            }
           }
         }
 
-        let totalcredit = result.data.length;
         credit_display.textContent = totalcredit;
         ugxCredit.textContent = credit_count.toLocaleString();
-        console.log(totalcredit);
       }
       credit_counter();
 
@@ -390,19 +466,35 @@
       async function procurement_counter() {
         let procurement_getter = await fetch(`${API_URL}/api/procurement`);
         let result = await procurement_getter.json();
+
         let procurement_count = 0;
+        let totalprocurement = 0;
+
+        const today = getTodayDate();
 
         for (let j = 0; j < result.data.length; j++) {
-          if (result.data[j].Produce_Cost) {
-            procurement_count += result.data[j].Produce_Cost;
+          let saleDate = new Date(result.data[j].createdAt)
+            .toISOString()
+            .split('T')[0];
+
+          if (saleDate === today) {
+            totalprocurement++;
+
+            if (result.data[j].Produce_Cost) {
+              procurement_count += result.data[j].Produce_Cost;
+            }
           }
         }
 
-        let totalprocurement = result.data.length;
         procurement_display.textContent = totalprocurement;
         ugxProcurement.textContent = procurement_count.toLocaleString();
       }
       procurement_counter();
+
+      function getTodayDate() {
+        const today = new Date();
+        return today.toISOString().split('T')[0];
+      }
     </script>
   </body>
 </html>

@@ -415,6 +415,15 @@
             </div>
 
             <!-- Dealer contact -->
+            <div class="input-box">
+              <label for="cost">Selling Price (Per Kg) </label>
+              <input
+                type="number"
+                id="selling_price"
+                required
+                placeholder="E.g 100,000"
+              />
+            </div>
 
             <!-- Sale Price -->
 
@@ -466,7 +475,7 @@
       // Select table body for procurement records
       const tableBody = document.querySelector('.recent tbody');
       let managerBranch = ''; // global variable
-      employee_name = document.querySelector('#employee-name');
+      let employee_name = document.querySelector('#employee-name');
 
       async function profile() {
         let response = await fetch(`${API_URL}/api/users`);
@@ -497,6 +506,7 @@
           Produce_Cost: Number(document.getElementById('cost').value),
           Dealer_Name: document.getElementById('Dealer_Name').value.trim(),
           Branch: document.getElementById('country').value,
+          Selling_price: document.getElementById('selling_price').value,
           Date_time:
             document.getElementById('Purchase_Date').value ||
             new Date().toISOString(),

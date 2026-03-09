@@ -1,4 +1,5 @@
 const CashModel = require('../Karibu-models/cash_sales-Model');
+const CreditModel = require('../Karibu-models/credit_sales-Model');
 const ProcurementModel = require('../Karibu-models/procurement-Model');
 
 /**
@@ -8,18 +9,23 @@ async function restoreStockOnDelete(req, res, next) {
   try {
     const saleId = req.params.id;
 
-    // 1️⃣ Find the sale first
+    // Find sale in both collections
     const sale = await CashModel.findById(saleId);
-    if (!sale) {
+    const credit = await CreditModel.findById(saleId);
+
+    if (!sale && !credit) {
       return res.status(404).json({
         success: false,
         message: 'Sale record not found',
       });
     }
 
-    const { Produce_name, Tonnage, Branch } = sale;
+    // Determine which sale exists
+    const record = sale || credit;
 
-    // 2️⃣ Restore stock
+    const { Produce_name, Tonnage, Branch } = record;
+
+    // Restore stock
     const produce = await ProcurementModel.findOne({
       Produce_name,
       Branch,
@@ -30,11 +36,13 @@ async function restoreStockOnDelete(req, res, next) {
       await produce.save();
     }
 
-    // 3️⃣ Attach sale to req object so route can delete it
-    req.saleToDelete = sale;
+    // Attach correct sale record
+    req.saleToDelete = record;
 
     next();
   } catch (err) {
+    console.error('RESTOCK ERROR:', err);
+
     res.status(500).json({
       success: false,
       message: 'Failed to restore stock before deletion',

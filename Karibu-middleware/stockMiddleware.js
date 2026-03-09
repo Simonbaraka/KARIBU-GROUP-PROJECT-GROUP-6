@@ -4,6 +4,14 @@ async function checkStock(req, res, next) {
   try {
     const { Produce_name, Tonnage, Branch } = req.body;
 
+    // Validate fields FIRST
+    if (!Produce_name || !Tonnage || !Branch) {
+      return res.status(400).json({
+        success: false,
+        message: 'Missing required fields',
+      });
+    }
+
     const produce = await ProcurementModel.findOne({
       Produce_name,
       Branch,
@@ -16,12 +24,7 @@ async function checkStock(req, res, next) {
       });
     }
 
-    // Validate required fields
-    if (!Produce_name || !Tonnage) {
-      return res.status(400).json({ message: 'Missing required fields' });
-    }
-
-    if (produce.Produce_tonnage < Tonnage) {
+    if (Number(produce.Produce_tonnage) < Number(Tonnage)) {
       return res.status(400).json({
         success: false,
         message: 'Not enough stock available',
@@ -32,9 +35,12 @@ async function checkStock(req, res, next) {
 
     next();
   } catch (err) {
+    console.error('CHECK STOCK ERROR:', err); // ⭐ IMPORTANT
+
     res.status(500).json({
       success: false,
       message: 'Stock check failed',
+      error: err.message,
     });
   }
 }

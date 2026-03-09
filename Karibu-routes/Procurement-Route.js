@@ -10,6 +10,7 @@ const {
   authenticateToken,
   authorizeRole,
 } = require('../Karibu-middleware/userAuth');
+const { authorizeBranch } = require('../Karibu-middleware/BranchMiddleware');
 
 // Create router instance
 const Router = express.Router();
@@ -66,6 +67,7 @@ Router.post(
   authenticateToken,
   authorizeRole('Manager', 'Director'),
   validateProcurement,
+  authorizeBranch,
   async (req, res) => {
     try {
       const { Produce_name, Produce_tonnage, Branch } = req.body;
@@ -78,6 +80,13 @@ Router.post(
           message: 'Produce_tonnage must be a positive number',
         });
       }
+
+      // ✅ Auto-update the Price collection so sales pages can fetch it
+      await Price.findOneAndUpdate(
+        { produce: Produce_name },
+        { price: Number(Selling_price), date: Date_time || new Date() },
+        { new: true, upsert: true }
+      );
 
       // Check if produce already exists in the same branch
       let produce = await Procurement_Model.findOne({ Produce_name, Branch });
@@ -122,6 +131,7 @@ Router.patch(
   authenticateToken,
   authorizeRole('Manager', 'Director'),
   validateProcurement,
+  authorizeBranch,
   async (req, res) => {
     try {
       const pro_id = req.params.id;
@@ -159,6 +169,7 @@ Router.delete(
   '/:id',
   authenticateToken,
   authorizeRole('Manager', 'Director'),
+  authorizeBranch,
   async (req, res) => {
     try {
       const procurementId = req.params.id;

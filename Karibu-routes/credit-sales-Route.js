@@ -13,6 +13,7 @@ const {
 const {
   restoreStockOnDelete,
 } = require('../Karibu-middleware/restoreStockMiddleware');
+const { authorizeBranch } = require('../Karibu-middleware/BranchMiddleware');
 
 // Create Express router instance
 const router = express.Router();
@@ -67,6 +68,7 @@ router.post(
   validateSale,
   checkStock,
   deductStock,
+  authorizeBranch,
   async (req, res) => {
     try {
       // Create new credit sale record
@@ -100,6 +102,7 @@ router.patch(
   authenticateToken,
   authorizeRole('Manager'),
   validateSale,
+  authorizeBranch,
   async (req, res) => {
     try {
       let id_ = req.params.id; // Extract ID
@@ -132,6 +135,7 @@ router.delete(
   authenticateToken,
   authorizeRole('Manager'),
   restoreStockOnDelete, // restores stock and attaches saleToDelete
+  authorizeBranch,
   async (req, res) => {
     try {
       // 4️⃣ Delete the credit sale

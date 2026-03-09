@@ -33,6 +33,11 @@ const Produce_Schema = new mongoose.Schema(
       type: String,
       required: true,
     },
+
+    Selling_price: {
+      type: String,
+      required: true,
+    },
   },
   {
     timestamps: true, // Adds createdAt and updatedAt fields

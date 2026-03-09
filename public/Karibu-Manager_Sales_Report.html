@@ -143,7 +143,8 @@
       }
 
       label {
-        font-size: 17px;
+        font-size: 14px;
+        font-weight: 500;
       }
 
       h2 {
@@ -155,8 +156,13 @@
         color: white;
         border: none;
         padding: 10px;
-        border-radius: 4px;
+        border-radius: 6px;
         cursor: pointer;
+        transition: background 0.25s;
+      }
+
+      button:hover {
+        background: #34345c;
       }
 
       .user-header {
@@ -195,27 +201,29 @@
         border-collapse: collapse;
         font-size: 14px;
         margin-top: 15px;
-        border-radius: 10px;
+        border-radius: 8px;
         overflow: hidden;
+        background: white;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
       }
 
       th {
         background: #1e1e2f;
         text-align: center;
-        padding: 10px;
+        padding: 12px;
         color: white;
+        font-weight: 500;
       }
 
       td {
         text-align: center;
-        padding: 5px;
+        padding: 10px;
         font-size: 14px;
         border-bottom: 1px solid #eee;
-        background: #fafafc;
       }
 
-      tr:hover {
-        background-color: #aeb9cb;
+      tr:hover td {
+        background-color: #e5e9f2;
       }
     </style>
   </head>
@@ -311,7 +319,7 @@
             </div>
 
             <div class="input-box">
-              <label for="Branch">Karibu Branch</label>
+              <label for="branch">Karibu Branch</label>
               <select id="branch" required>
                 <option value="">Select Branch</option>
                 <option value="Maganjo">Maganjo</option>
@@ -334,22 +342,31 @@
             </div>
           </div>
 
-          <table id="salesTable">
-            <thead>
-              <tr>
-                <th>No.</th>
-                <th>Date</th>
-                <th>Customer Name</th>
-                <th>Agent Name</th>
-                <th>Produce Name</th>
-                <th>Branch</th>
-                <th>Tonnage</th>
-                <th>Selling Price</th>
-                <th>Amount Due</th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
+          <div class="table-card">
+            <table id="salesTable">
+              <thead>
+                <tr>
+                  <th>No.</th>
+                  <th>Date</th>
+                  <th>Customer Name</th>
+                  <th>Agent Name</th>
+                  <th>Produce Name</th>
+                  <th>Branch</th>
+                  <th>Tonnage (kg)</th>
+                  <th>Selling Price</th>
+                  <th>Amount Due</th>
+                </tr>
+              </thead>
+              <tbody id="tableBody">
+                <tr class="state-row">
+                  <td colspan="9">
+                    <span class="material-icons">search</span>
+                    Select filters above and click Generate to view the report.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </form>
       </div>
     </div>
@@ -377,7 +394,7 @@
         try {
           const startDate = document.querySelector('#start').value;
           const endDate = document.querySelector('#end').value;
-          const branch = document.querySelector('#Branch').value;
+          const branch = document.querySelector('#branch').value;
           const ReportType = document.querySelector('#ReportType').value;
 
           let url = `${API_URL}/api/reports/sales-report`;

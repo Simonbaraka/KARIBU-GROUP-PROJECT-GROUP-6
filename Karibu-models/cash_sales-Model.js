@@ -22,10 +22,16 @@ const cashSchema = new mongoose.Schema(
       default: Date.now,
     },
 
+    Price_per_kg: {
+      type: Number,
+      required: true,
+      min: 0,
+    },
+
     Tonnage: {
       type: Number,
       required: true,
-      min: 1_000,
+      min: 0,
     },
 
     Amount_paid: {

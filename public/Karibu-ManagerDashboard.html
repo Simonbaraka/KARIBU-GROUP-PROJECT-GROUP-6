@@ -291,7 +291,7 @@
         <div class="manager-options">
           <ul>
             <li class="back">
-              <a href="Karibu_DashBoard.html"
+              <a href="Karibu-ManagerDashboard.html"
                 ><span class="material-icons">dashboard</span>Main DashBoard</a
               >
             </li>
@@ -349,7 +349,7 @@
           <div class="user-mini-profile">
             <div class="avatar">SB</div>
             <div class="user-info">
-              <div class="user-name">Simon</div>
+              <div id="employee-name"></div>
               <div class="user-role">Manager</div>
             </div>
           </div>
@@ -429,25 +429,52 @@
 
       // Backend API base URL
       const API_URL = 'http://localhost:3000';
+      const token = localStorage.getItem('token');
+      employee_name = document.querySelector('#employee-name');
+      let managerBranch = '';
+      async function profile() {
+        let response = await fetch(`${API_URL}/api/users`);
+        let result = await response.json();
+
+        result.data.forEach((user) => {
+          if (user.Role.includes('Manager')) {
+            employee_name.textContent = user.FirstName + ' ' + user.LastName;
+            managerBranch = user.Branch; // STORE MANAGER BRANCH
+          }
+        });
+      }
+      profile();
+
+      // Helper function to check if a date is today
+      function isToday(dateString) {
+        const today = new Date();
+        const date = new Date(dateString);
+        return (
+          date.getDate() === today.getDate() &&
+          date.getMonth() === today.getMonth() &&
+          date.getFullYear() === today.getFullYear()
+        );
+      }
 
       // ==========================================
       // 1️⃣ CASH SALES COUNT FUNCTION
       // ==========================================
       async function Cash_Count() {
         try {
-          // Fetch all cash sales from backend
           const response = await fetch(`${API_URL}/api/cashsales`);
           const result = await response.json();
 
-          // Calculate total UGX using reduce (cleaner than loop)
-          const cash_ugx = result.data.reduce((total, sale) => {
-            return total + (sale.Amount_paid || 0);
-          }, 0);
+          // Filter for today's sales only
+          const todaysSales = result.data.filter(
+            (sale) => isToday(sale.createdAt) && sale.Branch === managerBranch
+          );
 
-          // Total number of cash sales
-          const totalcashsales = result.data.length;
+          const cash_ugx = todaysSales.reduce(
+            (total, sale) => total + (sale.Amount_paid || 0),
+            0
+          );
+          const totalcashsales = todaysSales.length;
 
-          // Display results on dashboard
           cash_area.textContent = totalcashsales;
           ugxCash.textContent = cash_ugx.toLocaleString();
         } catch (error) {
@@ -463,26 +490,30 @@
       // ==========================================
       async function Credit_Count() {
         try {
-          // Fetch all credit sales
-          const response = await fetch(`${API_URL}/api/creditsales`);
+          const response = await fetch(`${API_URL}/api/creditsales`, {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`,
+            },
+          });
           const result = await response.json();
 
-          // Calculate total credit amount due
-          const credit_ugx = result.data.reduce((total, sale) => {
-            return total + (sale.Amount_Due || 0);
-          }, 0);
+          const todaysCreditSales = result.data.filter((sale) =>
+            isToday(sale.createdAt)
+          );
 
-          // Count total credit transactions
-          const totalCreditSales = result.data.length;
+          const credit_ugx = todaysCreditSales.reduce(
+            (total, sale) => total + (sale.Amount_Due || 0),
+            0
+          );
+          const totalCreditSales = todaysCreditSales.length;
 
-          // Display values
           credit_area.textContent = totalCreditSales;
           Credit_ugx_area.textContent = credit_ugx.toLocaleString();
         } catch (error) {
           console.error('Error fetching credit sales:', error);
         }
       }
-
       Credit_Count();
 
       // ==========================================
@@ -490,25 +521,29 @@
       // ==========================================
       async function Procurement_Count() {
         try {
-          // Fetch procurement records
-          const response = await fetch(`${API_URL}/api/procurement`);
+          const response = await fetch(`${API_URL}/api/procurement`, {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`,
+            },
+          });
           const result = await response.json();
 
-          // Calculate total procurement cost
-          const Procurement_ugx = result.data.reduce((total, item) => {
-            return total + (item.Produce_Cost || 0);
-          }, 0);
+          const todaysProcurements = result.data.filter((item) =>
+            isToday(item.createdAt)
+          );
 
-          // Count total procurement entries
-          const totalProcurement = result.data.length;
+          const Procurement_ugx = todaysProcurements.reduce(
+            (total, item) => total + (item.Produce_Cost || 0),
+            0
+          );
+          const totalProcurement = todaysProcurements.length;
 
-          // Display values
           procurement_area.textContent = totalProcurement;
           ugxProcurement.textContent = Procurement_ugx.toLocaleString();
 
-          // STOCK ALERT SYSTEM
-          // Check if any produce tonnage is below threshold
-          result.data.forEach((item) => {
+          // Stock alert (optional: could be for all time)
+          todaysProcurements.forEach((item) => {
             if (item.Produce_tonnage < 1500) {
               alert(`${item.Produce_name} needs restocking!`);
             }

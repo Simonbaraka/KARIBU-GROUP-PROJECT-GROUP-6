@@ -339,7 +339,7 @@
           <div class="Avatar">SB</div>
           <div class="user-info">
             <div class="user-name">
-              <h5>Simon</h5>
+              <h5 id="employee-name"></h5>
             </div>
             <div class="user-role">Manager</div>
           </div>
@@ -459,12 +459,27 @@
 
       // Backend API base URL
       const API_URL = 'http://localhost:3000';
-
+      const token = localStorage.getItem('token');
       // Used to know whether we are editing or creating
       let editingId = null;
 
       // Select table body for procurement records
       const tableBody = document.querySelector('.recent tbody');
+      let managerBranch = ''; // global variable
+      employee_name = document.querySelector('#employee-name');
+
+      async function profile() {
+        let response = await fetch(`${API_URL}/api/users`);
+        let result = await response.json();
+
+        result.data.forEach((user) => {
+          if (user.Role.includes('Manager')) {
+            employee_name.textContent = user.FirstName + ' ' + user.LastName;
+            managerBranch = user.Branch; // save the branch
+          }
+        });
+      }
+      profile();
 
       /* =========================================
    FORM SUBMISSION (CREATE / UPDATE)
@@ -517,7 +532,10 @@
           if (editingId) {
             response = await fetch(`${API_URL}/api/procurement/${editingId}`, {
               method: 'PATCH',
-              headers: { 'Content-Type': 'application/json' },
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+              },
               body: JSON.stringify(data),
             });
           }
@@ -525,7 +543,10 @@
           else {
             response = await fetch(`${API_URL}/api/procurement`, {
               method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+              },
               body: JSON.stringify(data),
             });
           }
@@ -557,18 +578,26 @@
 
       async function Load_Procurement() {
         try {
-          const response = await fetch(`${API_URL}/api/procurement`);
+          const response = await fetch(`${API_URL}/api/procurement`, {
+            headers: {
+              'Content-Type': 'Application/json',
+              Authorization: `Bearer ${token}`,
+            },
+          });
           const result = await response.json();
+
+          // Filter only the records for the manager's branch
+          const branchData = result.data.filter(
+            (item) => item.Branch === managerBranch
+          );
 
           let table_ = '';
 
-          result.data.forEach((procurements, index) => {
+          branchData.forEach((procurements, index) => {
             table_ += `
         <tr>
           <td>${index + 1}</td>
           <td>${procurements.Produce_name}</td>
-
-          <!-- Highlight low stock below 1000 -->
           <td>
             <button 
               id="button-1" 
@@ -576,18 +605,10 @@
               ${procurements.Produce_tonnage.toLocaleString()}
             </button>
           </td>
-
           <td>${procurements.Produce_Cost.toLocaleString()}</td>
           <td>${procurements.Dealer_Name}</td>
-
-          <!-- Format date properly -->
-          <td>
-            ${new Date(procurements.Date_time).toISOString().split('T')[0]}
-          </td>
-
+          <td>${new Date(procurements.Date_time).toISOString().split('T')[0]}</td>
           <td>${procurements.Branch}</td>
-
-          <!-- Action buttons -->
           <td style="text-align:right;">
             <button onclick="Edit_Procurement('${procurements._id}')" 
                     class="icon-btn come" 
@@ -628,6 +649,10 @@
         try {
           const response = await fetch(`${API_URL}/api/procurement/${Id}`, {
             method: 'DELETE',
+            headers: {
+              'Content-Type': 'Application/json',
+              Authorization: `Bearer ${token}`,
+            },
           });
 
           const result = await response.json();
@@ -653,7 +678,12 @@
           editingId = Id;
           btn.textContent = 'Update';
 
-          const response = await fetch(`${API_URL}/api/procurement/${Id}`);
+          const response = await fetch(`${API_URL}/api/procurement/${Id}`, {
+            headers: {
+              'Content-Type': 'Application/json',
+              Authorization: `Bearer ${token}`,
+            },
+          });
           const result = await response.json();
 
           const data = result.data;

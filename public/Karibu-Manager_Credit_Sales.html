@@ -364,7 +364,7 @@
           <div class="Avatar">SB</div>
           <div class="user-info">
             <div class="user-name">
-              <h5>Simon</h5>
+              <h5 id="employee-name"></h5>
             </div>
             <div class="user-role">Manager</div>
           </div>
@@ -519,8 +519,8 @@
 
     <script>
       /* ======================================
-   GLOBAL VARIABLES
-====================================== */
+         GLOBAL VARIABLES
+      ====================================== */
 
       let submitbutton = document.querySelector('#btn');
       let _form = document.querySelector('._Form');
@@ -528,10 +528,26 @@
 
       const API_URL = 'http://localhost:3000';
       const tableBody = document.querySelector('.recent tbody');
+      let managerBranch = ''; // global variable
+      const token = localStorage.getItem('token');
+
+      employee_name = document.querySelector('#employee-name');
+      async function profile() {
+        let response = await fetch(`${API_URL}/api/users`);
+        let result = await response.json();
+
+        result.data.forEach((user) => {
+          if (user.Role.includes('Manager')) {
+            employee_name.textContent = user.FirstName + ' ' + user.LastName;
+            managerBranch = user.Branch; // save the branch
+          }
+        });
+      }
+      profile();
 
       /* ======================================
-   FORM SUBMISSION (CREATE / UPDATE)
-====================================== */
+         FORM SUBMISSION (CREATE / UPDATE)
+      ====================================== */
 
       _form.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -588,13 +604,19 @@
           if (editingId) {
             response = await fetch(`${API_URL}/api/creditsales/${editingId}`, {
               method: 'PATCH',
-              headers: { 'Content-Type': 'application/json' },
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+              },
               body: JSON.stringify(dataObject),
             });
           } else {
             response = await fetch(`${API_URL}/api/creditsales`, {
               method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+              },
               body: JSON.stringify(dataObject),
             });
           }
@@ -620,43 +642,52 @@
       });
 
       /* ======================================
-   LOAD CREDIT SALES TABLE
-====================================== */
+         LOAD CREDIT SALES TABLE
+      ====================================== */
 
       async function LoadCreditSales() {
         try {
-          let response = await fetch(`${API_URL}/api/creditsales`);
+          let response = await fetch(`${API_URL}/api/creditsales`, {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`,
+            },
+          });
           let result = await response.json();
+          // Filter only the records for the manager's branch
+          const branchData = result.data.filter(
+            (item) => item.Branch === managerBranch
+          );
 
           let HTMLContent = '';
 
           result.data.forEach((credit, index) => {
             HTMLContent += `
-        <tr>
-          <td>${index + 1}</td>
-          <td>${credit.Buyer_name}</td>
-          <td>${credit.Agent_name}</td>
-          <td>${credit.Contact}</td>
-          <td>${credit.National_ID}</td>
-          <td>${credit.Location}</td>
-          <td>${credit.Produce_name}</td>
-          <td>${credit.Tonnage.toLocaleString()}</td>
-          <td>${credit.Amount_Due.toLocaleString()}</td>
-          <td>${new Date(credit.Date_time).toISOString().split('T')[0]}</td>
-          <td>${credit.Branch}</td>
-          <td style="text-align:right;">
-            <button onclick="Credit_Sales_Edit('${credit._id}')" 
-              class="icon-btn come" title="Edit">
-              <span class="material-icons-outlined">edit</span>
-            </button>
+              <tr>
+                <td>${index + 1}</td>
+                <td>${credit.Buyer_name}</td>
+                <td>${credit.Agent_name}</td>
+                <td>${credit.Contact}</td>
+                <td>${credit.National_ID}</td>
+                <td>${credit.Location}</td>
+                <td>${credit.Produce_name}</td>
+                <td>${credit.Tonnage.toLocaleString()}</td>
+                <td>${credit.Amount_Due.toLocaleString()}</td>
+                <td>${new Date(credit.Date_time).toISOString().split('T')[0]}</td>
+                <td>${credit.Branch}</td>
+                <td style="text-align:right;">
+                  <button onclick="Credit_Sales_Edit('${credit._id}')"
+                    class="icon-btn come" title="Edit">
+                    <span class="material-icons-outlined">edit</span>
+                  </button>
 
-            <button onclick="Credit_Sales_Delete('${credit._id}')" 
-              class="icon-btn delete" title="Delete">
-              <span class="material-icons-outlined">delete</span>
-            </button>
-          </td>
-        </tr>
-      `;
+                  <button onclick="Credit_Sales_Delete('${credit._id}')"
+                    class="icon-btn delete" title="Delete">
+                    <span class="material-icons-outlined">delete</span>
+                  </button>
+                </td>
+              </tr>
+            `;
           });
 
           tableBody.innerHTML = HTMLContent;
@@ -669,8 +700,8 @@
       LoadCreditSales();
 
       /* ======================================
-   DELETE CREDIT SALE
-====================================== */
+         DELETE CREDIT SALE
+      ====================================== */
 
       async function Credit_Sales_Delete(Id) {
         const confirmDelete = confirm(
@@ -681,6 +712,10 @@
         try {
           let response = await fetch(`${API_URL}/api/creditsales/${Id}`, {
             method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`,
+            },
           });
 
           let result = await response.json();
@@ -698,15 +733,20 @@
       }
 
       /* ======================================
-   EDIT CREDIT SALE
-====================================== */
+         EDIT CREDIT SALE
+      ====================================== */
 
       async function Credit_Sales_Edit(Id) {
         try {
           editingId = Id;
           submitbutton.textContent = 'Update Credit';
 
-          const response = await fetch(`${API_URL}/api/creditsales/${Id}`);
+          const response = await fetch(`${API_URL}/api/creditsales/${Id}`, {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`,
+            },
+          });
           const result = await response.json();
 
           if (!response.ok || !result.data) {

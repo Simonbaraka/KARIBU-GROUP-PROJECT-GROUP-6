@@ -14,6 +14,7 @@ const ProcurementRouter = require('./Karibu-routes/Procurement-Route');
 const userRouter = require('./Karibu-routes/UserRoute');
 const ReportRouter = require('./Karibu-routes/Report-Route');
 const priceRoutes = require('./Karibu-routes/priceRoute');
+const revenue = require('./Karibu-routes/Revenue-Route');
 
 const app = express();
 app.use(cors());
@@ -54,6 +55,7 @@ app.use('/api/creditsales', CreditSalesRouter);
 app.use('/api/users', userRouter);
 app.use('/api/reports', ReportRouter);
 app.use('/api/prices', priceRoutes);
+app.use('/api/dashboard', revenue);
 
 console.log('Cash Router:', cashSalesRouter);
 console.log('Report Router:', ReportRouter);

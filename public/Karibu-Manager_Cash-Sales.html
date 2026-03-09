@@ -337,7 +337,7 @@
           <div class="Avatar">SB</div>
           <div class="user-info">
             <div class="user-name">
-              <h5>Simon</h5>
+              <h5 id="employee-name"></h5>
             </div>
             <div class="user-role">Manager</div>
           </div>
@@ -393,6 +393,16 @@
               />
             </div>
 
+            <div class="input-box">
+              <label for="price_per_kg">Price per Kg (UGX)</label>
+              <input
+                type="number"
+                id="price_per_kg"
+                placeholder="Auto loaded"
+                readonly
+              />
+            </div>
+
             <!-- Purchase Date -->
             <div class="input-box">
               <label for="Purchase_Date"> Date/ Time </label>
@@ -405,8 +415,8 @@
               <input
                 type="number"
                 id="Amount_Paid"
-                placeholder=" Eg 100,000"
-                required
+                placeholder="Auto calculated"
+                readonly
               />
             </div>
             <div class="input-box">
@@ -446,19 +456,34 @@
 
     <script>
       /* ========================================
-   GLOBAL VARIABLES
-======================================== */
+         GLOBAL VARIABLES
+      ======================================== */
 
       const _form = document.querySelector('._Form');
       const API_URL = 'http://localhost:3000';
       const tableBody = document.querySelector('.recent tbody');
       const recordBtn = document.querySelector('#Record-btn');
-
+      const token = localStorage.getItem('token');
+      let managerBranch;
       let editingId = null;
 
+      employee_name = document.querySelector('#employee-name');
+      async function profile() {
+        let response = await fetch(`${API_URL}/api/users`);
+        let result = await response.json();
+
+        result.data.forEach((user) => {
+          if (user.Role.includes('Manager')) {
+            employee_name.textContent = user.FirstName + ' ' + user.LastName;
+            managerBranch = user.Branch; // save the branch
+          }
+        });
+      }
+      profile();
+
       /* ========================================
-   FORM SUBMISSION (CREATE / UPDATE)
-======================================== */
+         FORM SUBMISSION (CREATE / UPDATE)
+      ======================================== */
 
       _form.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -515,13 +540,19 @@
           if (editingId) {
             response = await fetch(`${API_URL}/api/cashsales/${editingId}`, {
               method: 'PATCH',
-              headers: { 'Content-Type': 'application/json' },
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+              },
               body: JSON.stringify(data),
             });
           } else {
             response = await fetch(`${API_URL}/api/cashsales`, {
               method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+              },
               body: JSON.stringify(data),
             });
           }
@@ -548,27 +579,27 @@
       });
 
       /* ========================================
-LOAD PRICE WHEN PRODUCE IS SELECTED
-======================================== */
+      LOAD PRICE WHEN PRODUCE IS SELECTED
+      ======================================== */
 
       document
         .querySelector('#Produce_Name')
         .addEventListener('change', async function () {
           const produce = this.value;
 
-          // stop if default option
           if (produce === 'Select Produce') return;
 
           try {
-            const response = await fetch(
-              `http://localhost:3000/api/prices/${produce}`
-            );
+            const response = await fetch(`${API_URL}/api/prices/${produce}`);
 
             const result = await response.json();
 
             if (response.ok) {
-              // automatically fill selling price
-              document.querySelector('#Amount_Paid').value = result.data.price;
+              const price = result.data.price;
+
+              document.querySelector('#price_per_kg').value = price;
+
+              calculateTotal();
             } else {
               alert('Price not found for this produce');
             }
@@ -579,40 +610,50 @@ LOAD PRICE WHEN PRODUCE IS SELECTED
         });
 
       /* ========================================
-   LOAD SALES TABLE
-======================================== */
+         LOAD SALES TABLE
+      ======================================== */
 
       async function loadSales() {
         try {
-          const res = await fetch(`${API_URL}/api/cashsales`);
+          const res = await fetch(`${API_URL}/api/cashsales`, {
+            headers: {
+              'Content-Type': 'Application/json',
+              Authorization: `Bearer ${token}`,
+            },
+          });
           const result = await res.json();
+          // Filter only the records for the manager's branch
+          const branchData = result.data.filter(
+            (item) => item.Branch === managerBranch && isToday(item.Date_time)
+          );
 
           let innerHTML = '';
 
           result.data.forEach((sale, index) => {
             innerHTML += `
-        <tr>
-          <td>${index + 1}</td>
-          <td>${sale.Produce_name}</td>
-          <td>${sale.Buyer_name}</td>
-          <td>${sale.Agent_name}</td>
-          <td>${sale.Tonnage.toLocaleString()}</td>
-          <td>${new Date(sale.Date_time).toISOString().split('T')[0]}</td>
-          <td>${sale.Amount_paid.toLocaleString()}</td>
-          <td>${sale.Branch}</td>
-          <td style="text-align:center;">
-            <button onclick="update_cashsale('${sale._id}')" 
-              class="icon-btn come" title="Edit">
-              <span class="material-icons-outlined">edit</span>
-            </button>
+              <tr>
+                <td>${index + 1}</td>
+                <td>${sale.Produce_name}</td>
+                <td>${sale.Buyer_name}</td>
+                <td>${sale.Agent_name}</td>
+                <td>${sale.Tonnage.toLocaleString()}</td>
+                <td>${new Date(sale.Date_time).toISOString().split('T')[0]}</td>
+                <td>${sale.Amount_paid.toLocaleString()}</td>
+                <td>${sale.Branch}</td>
 
-            <button onclick="deleteUser('${sale._id}')" 
-              class="icon-btn delete" title="Delete">
-              <span class="material-icons-outlined">delete</span>
-            </button>
-          </td>
-        </tr>
-      `;
+                <td style="text-align:center;">
+                  <button onclick="update_cashsale('${sale._id}')"
+                    class="icon-btn come" title="Edit">
+                    <span class="material-icons-outlined">edit</span>
+                  </button>
+
+                  <button onclick="deleteUser('${sale._id}')"
+                    class="icon-btn delete" title="Delete">
+                    <span class="material-icons-outlined">delete</span>
+                  </button>
+                </td>
+              </tr>
+            `;
           });
 
           tableBody.innerHTML = innerHTML;
@@ -625,8 +666,8 @@ LOAD PRICE WHEN PRODUCE IS SELECTED
       loadSales();
 
       /* ========================================
-   DELETE CASH SALE
-======================================== */
+         DELETE CASH SALE
+      ======================================== */
 
       async function deleteUser(id) {
         const confirmation = confirm(
@@ -638,6 +679,10 @@ LOAD PRICE WHEN PRODUCE IS SELECTED
         try {
           const response = await fetch(`${API_URL}/api/cashsales/${id}`, {
             method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`, // <-- add this!
+            },
           });
 
           const result = await response.json();
@@ -655,15 +700,19 @@ LOAD PRICE WHEN PRODUCE IS SELECTED
       }
 
       /* ========================================
-   EDIT CASH SALE
-======================================== */
+         EDIT CASH SALE
+      ======================================== */
 
       async function update_cashsale(Id) {
         try {
           editingId = Id;
           recordBtn.textContent = 'Update Sale';
 
-          const response = await fetch(`${API_URL}/api/cashsales/${Id}`);
+          const response = await fetch(`${API_URL}/api/cashsales/${Id}`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
           const result = await response.json();
 
           if (!response.ok || !result.data) {
@@ -688,6 +737,31 @@ LOAD PRICE WHEN PRODUCE IS SELECTED
           console.error(error);
           alert('❌ Network error');
         }
+      }
+      document
+        .querySelector('#produce_Tonnage')
+        .addEventListener('input', calculateTotal);
+
+      function calculateTotal() {
+        const tonnage = Number(
+          document.querySelector('#produce_Tonnage').value
+        );
+        const price = Number(document.querySelector('#price_per_kg').value);
+
+        const total = tonnage * price;
+
+        document.querySelector('#Amount_Paid').value = total;
+      }
+
+      function isToday(dateString) {
+        const today = new Date();
+        const date = new Date(dateString);
+
+        return (
+          date.getDate() === today.getDate() &&
+          date.getMonth() === today.getMonth() &&
+          date.getFullYear() === today.getFullYear()
+        );
       }
     </script>
   </body>

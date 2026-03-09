@@ -339,22 +339,38 @@
       cashArea = document.querySelector('#cash');
       creditArea = document.querySelector('#credit');
       ugxCredit = document.querySelector('#ugx_credit');
-      employee_name = document.querySelector('#employee-name');
+      const token = localStorage.getItem('token');
+
       ugxCash = document.querySelector('#ugx_cash');
       const API_URL = 'http://localhost:3000';
 
+      employee_name = document.querySelector('#employee-name');
       async function profile() {
-        let response = await fetch(`${API_URL}/api/users`);
+        let response = await fetch(`${API_URL}/api/users`, {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        });
         let result = await response.json();
 
-        employee_name.textContent =
-          result.data[0].FirstName + ' ' + result.data[0].LastName;
+        result.data.forEach((user) => {
+          if (user.Role.includes('Sales Agent')) {
+            employee_name.textContent = user.FirstName + ' ' + user.LastName;
+          }
+        });
       }
       profile();
 
       //Regular/cash sales count
       async function RegularSales_Count() {
-        let regular_Count = await fetch(`${API_URL}/api/cashsales`);
+        let regular_Count = await fetch(`${API_URL}/api/cashsales`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        });
         let result = await regular_Count.json();
         cash_counter = 0;
         for (let i = 0; i < result.data.length; i++) {

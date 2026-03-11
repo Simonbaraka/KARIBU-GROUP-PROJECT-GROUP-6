@@ -67,7 +67,7 @@
       li {
         padding: 15px;
         box-sizing: border-box;
-        margin: 10px 0; /* Only vertical margin between items */
+        margin: 10px 0;
         text-align: left;
         border-bottom: 1px solid rgba(63, 61, 61, 0.2);
         border-radius: 10px;
@@ -83,6 +83,7 @@
       .Agent-options li.active {
         background-color: rgb(227, 226, 223);
       }
+
       li:hover {
         background-color: rgb(185, 184, 182);
       }
@@ -93,7 +94,7 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-
+        padding: 0 20px;
         border-bottom: 1px solid #ddd;
       }
 
@@ -107,52 +108,75 @@
       .Right-panel {
         grid-area: Right-panel;
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
         gap: 20px;
         border-radius: 10px;
         margin: 5%;
+        align-content: start;
       }
 
+      /* ── Card styling ── */
       .Panel-1 {
-        background-color: rgba(255, 255, 255, 0.808);
-        border-radius: 5px;
-        padding: 25px;
-      }
-
-      .Panel-1 h1 {
-        text-align: right;
-        font-size: 50px;
-        color: green;
-        font-weight: bolder;
-      }
-
-      .recent {
-        grid-column: 1 / -1;
         background: white;
-        padding: 20px;
-        border-radius: 10px;
-        margin-top: 2%;
+        border-radius: 12px;
+        padding: 24px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
       }
 
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 5px;
+      .card-header {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin-bottom: 20px;
+        padding-bottom: 14px;
+        border-bottom: 1px solid #eee;
       }
 
-      th {
-        background-color: rgb(77, 192, 77);
-        text-align: left;
+      .card-icon {
+        font-size: 26px !important;
         padding: 10px;
-        border-left: 2px solid #ddd;
-      }
-      td {
-        text-align: left;
-        padding: 10px;
-        border-bottom: 1px solid #ddd;
-        border-left: 2px solid #ddd;
+        border-radius: 12px;
       }
 
+      .card-label {
+        font-size: 1.05rem;
+        font-weight: 700;
+        color: #1e1e2f;
+      }
+
+      .parameters {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        align-items: center;
+        gap: 6px;
+        row-gap: 12px;
+      }
+
+      .param-label {
+        font-size: 0.95rem;
+        color: #555;
+        font-weight: 600;
+      }
+
+      .param-value {
+        font-size: 2rem;
+        font-weight: 800;
+        text-align: right;
+        color: #1e1e2f;
+      }
+
+      .param-value.green {
+        color: #2e7d32;
+      }
+
+      .updated {
+        margin-top: 18px;
+        color: #aaa;
+        font-size: 0.78rem;
+        text-align: right;
+      }
+
+      /* ── Header user widget ── */
       .user-header {
         display: flex;
         border-radius: 25px;
@@ -165,272 +189,222 @@
       .Avatar {
         background-color: #1e1e2f;
         color: white;
-        padding: 5px;
+        padding: 5px 8px;
         border-radius: 20px;
         font-size: larger;
       }
 
       .user-info {
         display: block;
-        align-items: center;
-      }
-
-      .user-name {
-        font: 30px;
       }
 
       .user-role {
         font-size: 12px;
         color: gray;
       }
-
-      #cash {
-        font-size: 400%;
-      }
-
-      /*Working on the display area for credit title and its total number*/
-      /*Working on the display area for ugx title and its total amount*/
-      #cash {
-        font-size: 300%;
-        text-align: right;
-        color: green;
-      }
-
-      #cash-title {
-        font-size: 200%;
-      }
-
-      #ugx_credit {
-        font-size: 250%;
-        margin-top: 20px;
-        text-align: right;
-        color: green;
-      }
-
-      #ugx {
-        font-size: 200%;
-        margin-top: 30px;
-      }
-
-      /*Working on the display area for ugx title and its total amount*/
-      #credit {
-        font-size: 300%;
-        text-align: right;
-        color: green;
-      }
-
-      #credit_title {
-        font-size: 200%;
-      }
-
-      #ugx_cash {
-        font-size: 250%;
-        margin-top: 20px;
-        text-align: right;
-        color: green;
-      }
-
-      #number {
-        font-size: 200%;
-        margin-top: 30px;
-      }
-
-      .Panel-1 .parameters {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        margin: 0px;
-        gap: 5px;
-      }
     </style>
   </head>
   <body>
     <div class="main-panel">
-      <!--left side-->
+      <!-- Sidebar -->
       <aside class="sidebar">
-        <!--userprofile-->
-
         <div class="user-profile">
-          <img src="Karibu-logo.png" alt="Username" />
+          <img src="Karibu-logo.png" alt="Karibu Logo" />
         </div>
 
-        <!--Manager options-->
         <div class="Agent-options">
           <ul>
             <li class="active">
               <a href="Karibu_Sales_Agent_DashBoard.html">
-                <div class="material-icons">dashboard</div>
-                Main DashBoard</a
-              >
+                <span class="material-icons">dashboard</span>Main DashBoard
+              </a>
             </li>
-
             <li>
-              <a href="Karibu_Sales_Agent_Cash-Sales.html"
-                ><div class="material-icons">payments</div>
-                Cash Sales</a
-              >
+              <a href="Karibu_Sales_Agent_Cash-Sales.html">
+                <span class="material-icons">payments</span>Cash Sales
+              </a>
             </li>
-
             <li>
-              <a href="Karibu_Sales_Agent_CreditSales.html"
-                ><div class="material-icons">credit_card</div>
-                Credit Sales</a
-              >
+              <a href="Karibu_Sales_Agent_CreditSales.html">
+                <span class="material-icons">credit_card</span>Credit Sales
+              </a>
             </li>
-
             <li>
-              <a href="index.html"
-                ><div class="material-icons">logout</div>
-                Log Out</a
-              >
+              <a href="index.html">
+                <span class="material-icons">logout</span>Log Out
+              </a>
             </li>
           </ul>
         </div>
       </aside>
 
+      <!-- Header -->
       <header>
-        <h2>DashBoard</h2>
-
-        <input type="text" id="search" placeholder="search items" />
+        <h2>Dashboard</h2>
+        <input type="text" id="search" placeholder="Search items" />
         <div class="user-header">
-          <div class="Avatar">SB</div>
+          <div class="Avatar" id="avatar-initials">--</div>
           <div class="user-info">
-            <div class="user-name">
-              <h5 id="employee-name"></h5>
-            </div>
+            <h5 id="employee-name"></h5>
             <div class="user-role">Sales Agent</div>
           </div>
         </div>
       </header>
 
-      <!--Right-panel-->
+      <!-- Cards -->
       <main class="Right-panel">
-        <!--Sales  manager panel-->
-
+        <!-- Cash Sales Card -->
         <div class="Panel-1">
-          <div class="parameters">
-            <!--Display area for total cash sales-->
-            <h2 id="cash-title">Cash Sales.</h2>
-            <h1 id="cash"></h1>
-
-            <!--Display area for total ugx for cash sales-->
-            <h2 id="number">UGX.</h2>
-            <h2 id="ugx_cash"></h2>
-            <h5>Last Updated: <span id="today"></span></h5>
+          <div class="card-header">
+            <span
+              class="material-icons card-icon"
+              style="background: #e8f5e9; color: #2e7d32"
+              >payments</span
+            >
+            <span class="card-label">Cash Sales Today</span>
           </div>
+          <div class="parameters">
+            <span class="param-label">Transactions</span>
+            <span class="param-value green" id="cash">—</span>
+
+            <span class="param-label">UGX Total</span>
+            <span class="param-value green" id="ugx_cash">—</span>
+          </div>
+          <p class="updated">Last updated: <span id="today"></span></p>
         </div>
 
-        <!--Procurement manager panel 0779761960-->
+        <!-- Credit Sales Card -->
         <div class="Panel-1">
-          <div class="parameters">
-            <!--Display area for total credit sales-->
-            <h2 id="credit_title">Credit Sales.</h2>
-            <h2 id="credit"></h2>
-
-            <!--Display area for total ugx for credit sales-->
-            <h2 id="ugx">UGX.</h2>
-            <h3 id="ugx_credit"></h3>
-            <h5>Last Updated: <span id="today"></span></h5>
+          <div class="card-header">
+            <span
+              class="material-icons card-icon"
+              style="background: #fff3e0; color: #e65100"
+              >credit_card</span
+            >
+            <span class="card-label">Credit Sales Today</span>
           </div>
+          <div class="parameters">
+            <span class="param-label">Transactions</span>
+            <span class="param-value" style="color: #e65100" id="credit"
+              >—</span
+            >
+
+            <span class="param-label">UGX Total</span>
+            <span class="param-value" style="color: #e65100" id="ugx_credit"
+              >—</span
+            >
+          </div>
+          <p class="updated">Last updated: <span id="today2"></span></p>
         </div>
       </main>
     </div>
 
     <script>
-      cashArea = document.querySelector('#cash');
-      creditArea = document.querySelector('#credit');
-      ugxCredit = document.querySelector('#ugx_credit');
+      const cashArea = document.querySelector('#cash');
+      const creditArea = document.querySelector('#credit');
+      const ugxCredit = document.querySelector('#ugx_credit');
+      const ugxCash = document.querySelector('#ugx_cash');
+      const employeeName = document.querySelector('#employee-name');
+      const avatarEl = document.querySelector('#avatar-initials');
+
       const token = localStorage.getItem('token');
-      document.querySelector('#today').textContent =
-        new Date().toLocaleDateString();
-
-      ugxCash = document.querySelector('#ugx_cash');
       const API_URL = 'http://localhost:3000';
+      let agentBranch = '';
 
-      employee_name = document.querySelector('#employee-name');
-      async function profile() {
-        let response = await fetch(`${API_URL}/api/users`, {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        let result = await response.json();
+      // Set both date stamps
+      const dateStr = new Date().toLocaleDateString();
+      document.querySelector('#today').textContent = dateStr;
+      document.querySelector('#today2').textContent = dateStr;
 
-        result.data.forEach((user) => {
-          if (user.Role.includes('Sales Agent')) {
-            employee_name.textContent = user.FirstName + ' ' + user.LastName;
-          }
-        });
+      /* ── Profile (reads from JWT token) ── */
+      function profile() {
+        if (!token) {
+          alert('Not logged in');
+          window.location.href = 'index.html';
+          return;
+        }
+
+        const payload = JSON.parse(atob(token.split('.')[1]));
+
+        // Display name and initials
+        employeeName.textContent = payload.firstName + ' ' + payload.lastName;
+        avatarEl.textContent = (
+          payload.firstName[0] + payload.lastName[0]
+        ).toUpperCase();
+
+        // Set branch globally before loading counts
+        agentBranch = payload.branch;
+
+        RegularSales_Count();
+        Credit_Count();
       }
       profile();
 
-      //Regular/cash sales count
+      /* ── Cash sales count (today, this branch) ── */
       async function RegularSales_Count() {
-        let regular_Count = await fetch(`${API_URL}/api/cashsales`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        try {
+          const response = await fetch(`${API_URL}/api/cashsales`, {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          const result = await response.json();
 
-        let result = await regular_Count.json();
+          const today = new Date().toDateString();
+          let cashCounter = 0;
+          let totalSales = 0;
 
-        let today = new Date().toDateString();
+          result.data
+            .filter((sale) => sale.Branch === agentBranch)
+            .forEach((sale) => {
+              if (new Date(sale.createdAt).toDateString() === today) {
+                totalSales++;
+                if (sale.Amount_paid) cashCounter += sale.Amount_paid;
+              }
+            });
 
-        let cash_counter = 0;
-        let Total_Regular_sales = 0;
-
-        result.data.forEach((sale) => {
-          let saleDate = new Date(sale.createdAt).toDateString();
-
-          if (saleDate === today) {
-            Total_Regular_sales++;
-
-            if (sale.Amount_paid) {
-              cash_counter += sale.Amount_paid;
-            }
-          }
-        });
-
-        ugxCash.textContent = cash_counter.toLocaleString();
-        cashArea.textContent = Total_Regular_sales.toLocaleString();
+          ugxCash.textContent = cashCounter.toLocaleString();
+          cashArea.textContent = totalSales;
+        } catch (err) {
+          console.error('Failed to load cash sales:', err);
+          cashArea.textContent = 'Err';
+          ugxCash.textContent = 'Err';
+        }
       }
-      RegularSales_Count();
 
-      //Total credit sales count
+      /* ── Credit sales count (today, this branch) ── */
       async function Credit_Count() {
-        let credit_count = await fetch(`${API_URL}/api/creditsales`, {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        try {
+          const response = await fetch(`${API_URL}/api/creditsales`, {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          const result = await response.json();
 
-        let result = await credit_count.json();
+          const today = new Date().toDateString();
+          let creditCounter = 0;
+          let totalCredit = 0;
 
-        let today = new Date().toDateString();
+          result.data
+            .filter((sale) => sale.Branch === agentBranch)
+            .forEach((sale) => {
+              if (new Date(sale.createdAt).toDateString() === today) {
+                totalCredit++;
+                if (sale.Amount_Due) creditCounter += sale.Amount_Due;
+              }
+            });
 
-        let count = 0;
-        let Total_credit_sales = 0;
-
-        result.data.forEach((sale) => {
-          let saleDate = new Date(sale.createdAt).toDateString();
-
-          if (saleDate === today) {
-            Total_credit_sales++;
-
-            if (sale.Amount_Due) {
-              count += sale.Amount_Due;
-            }
-          }
-        });
-
-        ugxCredit.textContent = count.toLocaleString();
-        creditArea.textContent = Total_credit_sales.toLocaleString();
+          ugxCredit.textContent = creditCounter.toLocaleString();
+          creditArea.textContent = totalCredit;
+        } catch (err) {
+          console.error('Failed to load credit sales:', err);
+          creditArea.textContent = 'Err';
+          ugxCredit.textContent = 'Err';
+        }
       }
-
-      Credit_Count();
     </script>
   </body>
 </html>

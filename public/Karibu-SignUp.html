@@ -226,39 +226,39 @@
 
       // Function to fetch total Sales Agents
 
-      async function getSalesAgentCount() {
+      async function getSalesAgentCount(branch) {
         try {
           const response = await fetch(`${API_URL}/api/users`);
           const result = await response.json();
-
           if (!result.data) return 0;
-          return result.data.filter((user) => user.Role === 'Sales Agent')
-            .length;
+          // ✅ Filter by both role AND branch
+          return result.data.filter(
+            (user) => user.Role === 'Sales Agent' && user.Branch === branch
+          ).length;
         } catch (err) {
           console.error('Error fetching users:', err);
           return 0;
         }
       }
 
-      async function getManagerCount() {
+      async function getDirectorCount() {
         try {
+          const response = await fetch(`${API_URL}/api/users`);
+          const result = await response.json();
           if (!result.data) return 0;
-          return result.data.forEach((manager) => manager.Role === 'Manager')
-            .length;
+          return result.data.filter((user) => user.Role === 'Director').length;
         } catch (err) {
           console.error('Error fetching users:', err);
           return 0;
         }
       }
 
-      // Listen for form submission
       form.addEventListener('submit', async (e) => {
-        e.preventDefault(); // prevent default form submission
+        e.preventDefault();
         errorMessage.style.display = 'none';
         successMessage.style.display = 'none';
-        submitBtn.disabled = true; // prevent double submission
+        submitBtn.disabled = true;
 
-        // Get input values
         const fname = document.getElementById('fname').value.trim();
         const lname = document.getElementById('lname').value.trim();
         const email = document
@@ -271,20 +271,26 @@
         const branch = document.getElementById('branch').value;
 
         // Client-side validation
-        if (!fname || !lname || !email || !role || !password || !confirm) {
+        if (
+          !fname ||
+          !lname ||
+          !email ||
+          !role ||
+          !branch ||
+          !password ||
+          !confirm
+        ) {
           errorMessage.textContent = 'All fields are required.';
           errorMessage.style.display = 'block';
           submitBtn.disabled = false;
           return;
         }
-
         if (password.length < 6) {
           errorMessage.textContent = 'Password must be at least 6 characters.';
           errorMessage.style.display = 'block';
           submitBtn.disabled = false;
           return;
         }
-
         if (password !== confirm) {
           errorMessage.textContent = 'Passwords do not match.';
           errorMessage.style.display = 'block';
@@ -292,7 +298,28 @@
           return;
         }
 
-        // Prepare user object to send to backend
+        // ✅ Check Sales Agent cap per branch BEFORE hitting register endpoint
+        if (role === 'Sales Agent') {
+          const agentCount = await getSalesAgentCount(branch);
+          if (agentCount >= 2) {
+            errorMessage.textContent =
+              'Contact Director For Clearance: Max 2 Sales Agents per branch.';
+            errorMessage.style.display = 'block';
+            submitBtn.disabled = false;
+            return;
+          }
+        }
+
+        if (role === 'Director') {
+          const directorCount = await getDirectorCount();
+          if (directorCount >= 1) {
+            errorMessage.textContent =
+              '❌ A Director already exists in the system.';
+            errorMessage.style.display = 'block';
+            submitBtn.disabled = false;
+            return;
+          }
+        }
         const user = {
           FirstName: fname,
           LastName: lname,
@@ -303,57 +330,32 @@
         };
 
         try {
-          // Send POST request to backend API
           const response = await fetch(`${API_URL}/api/users/register`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(user),
           });
 
-          //Checks if there are more than 2 sales agent per branch
-
           const result = await response.json();
-          console.log('RESULT OF USER: ', result);
 
-          const counter = await getSalesAgentCount();
-          const managerCounter = await getManagerCount();
-
-          if (role === 'Sales Agent' && counter > 2) {
-            errorMessage.textContent =
-              'Contact Director For Clearance: Max 2 Sales Agents';
-            errorMessage.style.color = 'red';
-            errorMessage.style.display = 'block';
-            submitBtn.disabled = false;
-            return;
-          } else if (role === 'Manager' && managerCounter > 2) {
-            errorMessage.textContent =
-              'Contact Director For Clearance: Max 2 Managers';
-            errorMessage.style.color = 'red';
-            errorMessage.style.display = 'block';
-            submitBtn.disabled = false;
-          }
-
-          // Handle backend response
           if (response.ok) {
             successMessage.textContent = '✅ Account created successfully!';
             successMessage.style.display = 'block';
             form.reset();
-
-            // Redirect to login page after 2 seconds
             setTimeout(() => {
               window.location.href = 'index.html';
             }, 2000);
           } else {
+            // ✅ Backend error message (covers manager conflict) shown directly
             errorMessage.textContent = '❌ ' + result.message;
             errorMessage.style.display = 'block';
           }
         } catch (error) {
-          console.error('Network error:', error);
           errorMessage.textContent =
             '❌ Cannot connect to server. Try again later.';
           errorMessage.style.display = 'block';
         } finally {
-          submitBtn.disabled = false; // re-enable submit button
+          submitBtn.disabled = false;
         }
       });
     </script>

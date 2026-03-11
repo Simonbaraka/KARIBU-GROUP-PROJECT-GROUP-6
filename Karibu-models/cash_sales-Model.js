@@ -10,11 +10,13 @@ const cashSchema = new mongoose.Schema(
     Buyer_name: {
       type: String,
       required: true,
+      minlength: 2,
     },
 
     Agent_name: {
       type: String,
       required: true,
+      minlength: 2,
     },
 
     Date_time: {
@@ -37,7 +39,7 @@ const cashSchema = new mongoose.Schema(
     Amount_paid: {
       type: Number,
       required: true,
-      min: 10_000,
+      min: 10000,
     },
 
     Branch: {

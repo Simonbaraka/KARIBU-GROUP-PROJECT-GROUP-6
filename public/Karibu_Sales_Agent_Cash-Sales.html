@@ -449,16 +449,32 @@
       const API_URL = 'http://localhost:3000';
 
       employee_name = document.querySelector('#employee-name');
-      async function profile() {
-        let response = await fetch(`${API_URL}/api/users`);
-        let result = await response.json();
+      function profile() {
+        if (!token) {
+          alert('Not logged in');
+          window.location.href = 'login.html';
+          return;
+        }
 
-        result.data.forEach((user) => {
-          if (user.Role.includes('Sales Agent')) {
-            employee_name.textContent = user.FirstName + ' ' + user.LastName;
-            AgentBranch = user.Branch;
-          }
-        });
+        // Decode JWT payload (middle part) without a library
+        const payload = JSON.parse(atob(token.split('.')[1]));
+
+        // Set the manager's name in the header
+        employee_name.textContent = payload.firstName + ' ' + payload.lastName;
+        document.querySelector('.Avatar').textContent = (
+          payload.firstName[0] + payload.lastName[0]
+        ).toUpperCase();
+
+        // ✅ Set branch from the logged-in user's own token
+        AgentBranch = payload.branch;
+
+        //✅ Auto-select and lock the branch dropdown
+        const branchSelect = document.querySelector('#Branch');
+        branchSelect.value = AgentBranch;
+        branchSelect.disabled = true;
+
+        // Now load the table AFTER branch is set
+        loadSales(); // or loadSales() on the sales pages
       }
       profile();
 
@@ -614,10 +630,18 @@
           });
           const result = await res.json();
 
+          const branchData = result.data.filter((item) => {
+            const saleDate = new Date(item.Date_time)
+              .toISOString()
+              .split('T')[0];
+            const today = new Date().toISOString().split('T')[0];
+            return item.Branch === AgentBranch && saleDate === today;
+          });
+
           let innerHTML1 = '';
 
           // Loop through each sale record and create a table row
-          result.data.forEach((sale, index) => {
+          branchData.forEach((sale, index) => {
             innerHTML1 += `
         <tr>
             <!-- Row number -->
@@ -660,7 +684,6 @@
       }
 
       // Load sales on page load
-      loadSales();
 
       /* ===========================================
    EDIT CASH SALE

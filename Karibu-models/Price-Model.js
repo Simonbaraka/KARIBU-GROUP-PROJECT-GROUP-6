@@ -18,4 +18,5 @@ const priceSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model('Price', priceSchema);
+// ✅ Only change is this line
+module.exports = mongoose.models.Price || mongoose.model('Price', priceSchema);

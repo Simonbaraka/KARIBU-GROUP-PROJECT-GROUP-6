@@ -84,6 +84,7 @@ router.post(
         data: newSale,
       });
     } catch (err) {
+      console.error('SALE ERROR:', err);
       res.status(500).json({
         message: 'Failed to save sales data',
       });

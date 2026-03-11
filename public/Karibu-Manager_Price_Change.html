@@ -203,7 +203,7 @@
         <div class="manager-options">
           <ul>
             <li>
-              <a href="Karibu_DashBoard.html"
+              <a href="Karibu-ManagerDashboard.html"
                 ><span class="material-icons">dashboard</span>Main DashBoard</a
               >
             </li>
@@ -249,7 +249,7 @@
         <h2>PRICE CHANGES</h2>
         <input type="text" id="search" placeholder="search items" />
         <div class="user-header">
-          <div class="Avatar">SB</div>
+          <div class="Avatar"></div>
           <div class="user-info">
             <div class="user-name">
               <h5 id="employee-name"></h5>
@@ -309,6 +309,10 @@ GLOBAL VARIABLES
             }
           });
         });
+
+        document.querySelector('.Avatar').textContent = (
+          payload.firstName[0] + payload.lastName[0]
+        ).toUpperCase();
       }
       profile();
 
@@ -330,8 +334,8 @@ SUBMIT PRICE CHANGE
           return;
         }
 
-        if (price <= 10_000) {
-          alert('❌ Price must be greater than 0');
+        if (price <= 1000) {
+          alert('❌ Price must be greater than 1,000');
           return;
         }
 

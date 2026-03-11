@@ -1,6 +1,6 @@
 // Import express
 const express = require('express');
-
+const Price = require('../Karibu-models/price-Model'); // adjust path to match your project
 // Import Procurement model
 const Procurement_Model = require('../Karibu-models/procurement-Model');
 const {
@@ -70,44 +70,46 @@ Router.post(
   authorizeBranch,
   async (req, res) => {
     try {
-      const { Produce_name, Produce_tonnage, Branch } = req.body;
+      const {
+        Produce_name,
+        Produce_tonnage,
+        Branch,
+        Selling_price,
+        Date_time,
+      } = req.body; // ✅ fixed
 
-      // Convert to number
       const tonnageNumber = Number(Produce_tonnage);
 
       if (isNaN(tonnageNumber) || tonnageNumber <= 0) {
-        return res.status(400).json({
-          message: 'Produce_tonnage must be a positive number',
-        });
+        return res
+          .status(400)
+          .json({ message: 'Produce_tonnage must be a positive number' });
       }
 
-      // ✅ Auto-update the Price collection so sales pages can fetch it
+      // ✅ Now Price and Selling_price are both defined
       await Price.findOneAndUpdate(
         { produce: Produce_name },
         { price: Number(Selling_price), date: Date_time || new Date() },
         { new: true, upsert: true }
       );
 
-      // Check if produce already exists in the same branch
       let produce = await Procurement_Model.findOne({ Produce_name, Branch });
 
       if (produce) {
-        // Merge stock
-        produce.Produce_tonnage += tonnageNumber;
-        await produce.save();
-
-        return res.status(200).json({
-          message: 'Stock updated successfully',
-          data: produce,
-        });
+        const updated = await Procurement_Model.findOneAndUpdate(
+          { Produce_name, Branch },
+          { $inc: { Produce_tonnage: tonnageNumber } }, // $inc adds to existing value safely
+          { new: true }
+        );
+        return res
+          .status(200)
+          .json({ message: 'Stock updated successfully', data: updated });
       }
 
-      // Create new procurement record
       const _procurement = new Procurement_Model({
         ...req.body,
         Produce_tonnage: tonnageNumber,
       });
-
       await _procurement.save();
 
       res.status(201).json({
@@ -115,6 +117,7 @@ Router.post(
         data: _procurement,
       });
     } catch (err) {
+      console.error('ERROR ', err);
       res.status(500).json({
         message: 'Failed to Create Procurement Data',
         error: err.message,
@@ -122,7 +125,6 @@ Router.post(
     }
   }
 );
-
 // ===============================
 // UPDATE PROCUREMENT RECORD
 // ===============================

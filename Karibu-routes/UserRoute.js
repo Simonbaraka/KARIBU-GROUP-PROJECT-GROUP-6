@@ -59,6 +59,8 @@ router.post('/login', async (req, res) => {
         id: user._id,
         role: user.Role,
         branch: user.Branch,
+        firstName: user.FirstName,
+        lastName: user.LastName,
       },
       process.env.JWT_SECRET,
       { expiresIn: '10h' }
@@ -82,31 +84,52 @@ router.post('/login', async (req, res) => {
 //POST USER (Create new user)
 router.post('/register', async (req, res) => {
   try {
-    const { Password, ...rest } = req.body;
+    const { Password, Role, Branch, ...rest } = req.body;
 
     // Check if user already exists
     const existingUser = await userModel.findOne({ Email: req.body.Email });
     if (existingUser) {
-      return res.status(400).json({
-        success: false,
-        message: 'User already exists',
-      });
+      return res
+        .status(400)
+        .json({ success: false, message: 'User already exists' });
     }
 
-    // Hash password
-    const hashedPassword = await bcrypt.hash(Password, 10);
+    // ✅ Branch-specific manager check
+    if (Role === 'Manager') {
+      const existingManager = await userModel.findOne({
+        Role: 'Manager',
+        Branch,
+      });
+      if (existingManager) {
+        return res.status(400).json({
+          success: false,
+          message: `A Manager for the ${Branch} branch already exists. Contact the Director.`,
+        });
+      }
+    }
 
+    if (Role === 'Director') {
+      const existingDirector = await userModel.findOne({ Role: 'Director' });
+      if (existingDirector) {
+        return res.status(400).json({
+          success: false,
+          message: 'A Director already exists in the system.',
+        });
+      }
+    }
+
+    const hashedPassword = await bcrypt.hash(Password, 10);
     const user = new userModel({
       ...rest,
       Password: hashedPassword,
+      Role,
+      Branch,
     });
-
     await user.save();
 
-    res.status(201).json({
-      success: true,
-      message: 'User account created successfully',
-    });
+    res
+      .status(201)
+      .json({ success: true, message: 'User account created successfully' });
   } catch (err) {
     res.status(500).json({
       success: false,
@@ -115,6 +138,7 @@ router.post('/register', async (req, res) => {
     });
   }
 });
+
 //UPDATE USER
 router.patch('/:id', async (req, res) => {
   try {

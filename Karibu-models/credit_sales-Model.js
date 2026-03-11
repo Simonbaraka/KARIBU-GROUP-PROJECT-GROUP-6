@@ -6,6 +6,7 @@ const CreditSchema = new mongoose.Schema(
     Buyer_name: {
       type: String,
       required: true,
+      minlength: 2,
     },
 
     Agent_name: {
@@ -14,16 +15,17 @@ const CreditSchema = new mongoose.Schema(
     },
 
     Contact: {
-      type: Number,
+      type: String,
       required: true,
     },
 
     Location: {
       type: String,
       required: true,
+      minlength: 2,
     },
     National_ID: {
-      type: Number,
+      type: String,
       required: true, // Auto set date
     },
 
@@ -41,6 +43,7 @@ const CreditSchema = new mongoose.Schema(
     Amount_Due: {
       type: Number, // Better as Number
       required: true,
+      min: 10000,
     },
 
     Date_time: {

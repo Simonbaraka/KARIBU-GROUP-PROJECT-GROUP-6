@@ -240,7 +240,7 @@
         <div class="manager-options">
           <ul>
             <li>
-              <a href="Karibu_DashBoard.html"
+              <a href="Karibu-ManagerDashboard.html"
                 ><span class="material-icons">dashboard</span>Main DashBoard</a
               >
             </li>
@@ -377,17 +377,33 @@
       employee_name = document.querySelector('#employee-name');
       let managerBranch = '';
 
-      async function profile() {
-        let response = await fetch(`${API_URL}/api/users`);
-        let result = await response.json();
+      function profile() {
+        if (!token) {
+          alert('Not logged in');
+          window.location.href = 'login.html';
+          return;
+        }
 
-        result.data.forEach((role) => {
-          if (role.Role.includes('Manager')) {
-            employee_name.textContent = role.FirstName + ' ' + role.LastName;
-            managerBranch = role.Branch;
-          }
-        });
+        // Decode JWT payload (middle part) without a library
+        const payload = JSON.parse(atob(token.split('.')[1]));
+
+        // Set the manager's name in the header
+        document.querySelector('#employee-name').textContent =
+          payload.firstName + ' ' + payload.lastName;
+        document.querySelector('.Avatar').textContent = (
+          payload.firstName[0] + payload.lastName[0]
+        ).toUpperCase();
+
+        // ✅ Set branch from the logged-in user's own token
+        managerBranch = payload.branch;
+
+        const branchSelect = document.querySelector('#branch');
+        branchSelect.value = managerBranch;
+        branchSelect.disabled = true;
+        // Now load the table AFTER branch is set
+        Load_Procurement(); // or loadSales() on the sales pages
       }
+
       profile();
 
       async function Load_Report() {
@@ -404,7 +420,7 @@
           if (startDate) params.append('startDate', startDate);
           if (endDate) params.append('endDate', endDate);
           if (branch && branch !== 'Select Branch') {
-            params.append('Branch', branch);
+            params.append('Branch', managerBranch);
           }
           if (ReportType && ReportType !== 'Select Report') {
             params.append('ReportType', ReportType);

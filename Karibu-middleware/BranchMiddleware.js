@@ -1,6 +1,23 @@
 function authorizeBranch(req, res, next) {
   try {
-    const userBranch = req.user.branch; // from JWT
+    if (!req.user) {
+      return res.status(401).json({
+        success: false,
+        message: 'Unauthorized: no user found',
+      });
+    }
+
+    // Directors can access any branch
+    if (req.user.role === 'Director') {
+      return next();
+    }
+
+    // ✅ Skip branch check if there's no body (GET, DELETE requests)
+    if (!req.body || !req.body.Branch) {
+      return next();
+    }
+
+    const userBranch = req.user.branch;
     const requestBranch = req.body.Branch;
 
     if (userBranch !== requestBranch) {
@@ -12,6 +29,7 @@ function authorizeBranch(req, res, next) {
 
     next();
   } catch (error) {
+    console.error('ERROR ', error);
     res.status(500).json({
       success: false,
       message: 'Branch authorization failed',

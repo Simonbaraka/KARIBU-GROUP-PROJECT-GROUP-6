@@ -306,7 +306,7 @@
         <div class="manager-options">
           <ul>
             <li>
-              <a href="Karibu_DashBoard.html"
+              <a href="Karibu-ManagerDashboard.html"
                 ><span class="material-icons">dashboard</span>Main DashBoard</a
               >
             </li>
@@ -531,18 +531,35 @@
       let managerBranch = ''; // global variable
       const token = localStorage.getItem('token');
 
-      employee_name = document.querySelector('#employee-name');
-      async function profile() {
-        let response = await fetch(`${API_URL}/api/users`);
-        let result = await response.json();
+      let employee_name = document.querySelector('#employee-name');
+      function profile() {
+        if (!token) {
+          alert('Not logged in');
+          window.location.href = 'login.html';
+          return;
+        }
 
-        result.data.forEach((user) => {
-          if (user.Role.includes('Manager')) {
-            employee_name.textContent = user.FirstName + ' ' + user.LastName;
-            managerBranch = user.Branch; // save the branch
-          }
-        });
+        // Decode JWT payload (middle part) without a library
+        const payload = JSON.parse(atob(token.split('.')[1]));
+
+        // Set the manager's name in the header
+        employee_name.textContent = payload.firstName + ' ' + payload.lastName;
+        document.querySelector('.Avatar').textContent = (
+          payload.firstName[0] + payload.lastName[0]
+        ).toUpperCase();
+
+        // ✅ Set branch from the logged-in user's own token
+        managerBranch = payload.branch;
+
+        //✅ Auto-select and lock the branch dropdown
+        const branchSelect = document.querySelector('#Branch');
+        branchSelect.value = managerBranch;
+        branchSelect.disabled = true;
+
+        // Now load the table AFTER branch is set
+        LoadCreditSales(); // or loadSales() on the sales pages
       }
+
       profile();
 
       /* ======================================
@@ -586,6 +603,12 @@
           return;
         }
 
+        const ninRegex = /^[A-Z]{2}[0-9]{7}[A-Z]{1}[0-9]{1}$/;
+        if (!ninRegex.test(dataObject.National_ID)) {
+          alert('❌ Enter a valid National ID e.g. CM12345678PE');
+          return;
+        }
+
         if (dataObject.Branch === 'Select Branch') {
           alert('❌ Please select a branch');
           return;
@@ -593,6 +616,11 @@
 
         if (dataObject.Produce_name === 'Select Produce') {
           alert('❌ Please select a Produce ');
+          return;
+        }
+
+        if (dataObject.Amount_Due <= 10000) {
+          alert('❌ Amount due must be grater than 10,000');
           return;
         }
 
@@ -661,7 +689,7 @@
 
           let HTMLContent = '';
 
-          result.data.forEach((credit, index) => {
+          branchData.forEach((credit, index) => {
             HTMLContent += `
               <tr>
                 <td>${index + 1}</td>
@@ -696,8 +724,6 @@
           alert('❌ Failed to load records');
         }
       }
-
-      LoadCreditSales();
 
       /* ======================================
          DELETE CREDIT SALE

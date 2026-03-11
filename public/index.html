@@ -175,6 +175,7 @@
               type="password"
               id="Password"
               name="password"
+              autocomplete="off"
               placeholder="Enter your password"
               autocomplete="current-password"
             />
@@ -226,6 +227,11 @@
             // Save token
             localStorage.setItem('token', result.token);
             localStorage.setItem('role', result.role);
+
+            // ✅ Clear the form
+            form.reset();
+            document.querySelector('#mail').value = '';
+            document.querySelector('#Password').value = '';
 
             // Redirect by role
             if (result.role === 'Director') {

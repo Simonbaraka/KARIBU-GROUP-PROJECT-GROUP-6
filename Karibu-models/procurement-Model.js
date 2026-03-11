@@ -6,20 +6,28 @@ const Produce_Schema = new mongoose.Schema(
     Produce_name: {
       type: String,
       required: true,
+      minlength: 2,
     },
 
     Produce_tonnage: {
       type: Number,
       required: true,
-      min: 0,
+      min: 100,
     },
 
     Produce_Cost: {
       type: Number,
       required: true,
+      min: 10000,
     },
 
     Dealer_Name: {
+      type: String,
+      required: true,
+      minlength: 2,
+    },
+
+    Dealer_Contact: {
       type: String,
       required: true,
     },

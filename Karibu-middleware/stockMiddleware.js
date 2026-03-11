@@ -50,12 +50,18 @@ async function deductStock(req, res, next) {
     const produce = req.produce;
     const tonnage = req.body.Tonnage;
 
-    produce.Produce_tonnage -= tonnage;
+    const newTonnage = Number(produce.Produce_tonnage) - Number(tonnage);
 
-    await produce.save();
+    // Use findByIdAndUpdate to avoid re-validating the whole document
+    await ProcurementModel.findByIdAndUpdate(
+      produce._id,
+      { Produce_tonnage: newTonnage },
+      { runValidators: false } // Only updating tonnage, skip full doc validation
+    );
 
     next();
   } catch (err) {
+    console.error('DEDUCT STOCK ERROR:', err);
     res.status(500).json({
       success: false,
       message: 'Failed to update stock',

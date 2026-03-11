@@ -457,40 +457,51 @@
 
     <script>
       /* ========================================
-         GLOBAL VARIABLES
-      ======================================== */
+             GLOBAL VARIABLES
+          ======================================== */
 
       const _form = document.querySelector('._Form');
       const API_URL = 'http://localhost:3000';
       const tableBody = document.querySelector('.recent tbody');
       const recordBtn = document.querySelector('#Record-btn');
       const token = localStorage.getItem('token');
-      let managerBranch;
+      let managerBranch = '';
       let editingId = null;
 
-      employee_name = document.querySelector('#employee-name');
-      async function profile() {
-        let response = await fetch(`${API_URL}/api/users`, {
-          headers: {
-            'Content-Type': 'Application/json',
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        let result = await response.json();
+      let employee_name = document.querySelector('#employee-name');
+      function profile() {
+        if (!token) {
+          alert('Not logged in');
+          window.location.href = 'login.html';
+          return;
+        }
 
-        result.data.forEach((user) => {
-          if (user.Role.includes('Manager')) {
-            employee_name.textContent = user.FirstName + ' ' + user.LastName;
-            managerBranch = user.Branch; // save the branch
-          }
-        });
-        loadSales();
+        // Decode JWT payload (middle part) without a library
+        const payload = JSON.parse(atob(token.split('.')[1]));
+
+        // Set the manager's name in the header
+        employee_name.textContent = payload.firstName + ' ' + payload.lastName;
+        document.querySelector('.Avatar').textContent = (
+          payload.firstName[0] + payload.lastName[0]
+        ).toUpperCase();
+
+        // ✅ Set branch from the logged-in user's own token
+        managerBranch = payload.branch;
+
+        //✅ Auto-select and lock the branch dropdown
+        const branchSelect = document.querySelector('#Branch');
+        branchSelect.value = managerBranch;
+        branchSelect.disabled = true;
+
+        // Now load the table AFTER branch is set
+        loadSales(); // or loadSales() on the sales pages
       }
+
       profile();
 
       /* ========================================
-         FORM SUBMISSION (CREATE / UPDATE)
-      ======================================== */
+             FORM SUBMISSION (CREATE / UPDATE)
+          ======================================== */
 
       _form.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -588,8 +599,8 @@
       });
 
       /* ========================================
-      LOAD PRICE WHEN PRODUCE IS SELECTED
-      ======================================== */
+          LOAD PRICE WHEN PRODUCE IS SELECTED
+          ======================================== */
 
       document
         .querySelector('#Produce_Name')
@@ -619,8 +630,8 @@
         });
 
       /* ========================================
-         LOAD SALES TABLE
-      ======================================== */
+             LOAD SALES TABLE
+          ======================================== */
 
       async function loadSales() {
         try {
@@ -641,37 +652,37 @@
 
           branchData.forEach((sale, index) => {
             innerHTML += `
-              <tr>
-                <td>${index + 1}</td>
-                <td>${sale.Produce_name}</td>
-                <td>${sale.Buyer_name}</td>
-                <td>${sale.Agent_name}</td>
-                <td>${sale.Tonnage.toLocaleString()}</td>
-                <td>${new Date(sale.Date_time).toISOString().split('T')[0]}</td>
-                <td>${sale.Amount_paid.toLocaleString()}</td>
-                <td>${sale.Branch}</td>
-                <td>${sale.Price_per_kg}</td>
+                  <tr>
+                    <td>${index + 1}</td>
+                    <td>${sale.Produce_name}</td>
+                    <td>${sale.Buyer_name}</td>
+                    <td>${sale.Agent_name}</td>
+                    <td>${sale.Tonnage.toLocaleString()}</td>
+                    <td>${new Date(sale.Date_time).toISOString().split('T')[0]}</td>
+                    <td>${sale.Amount_paid.toLocaleString()}</td>
+                    <td>${sale.Branch}</td>
+                    <td>${sale.Price_per_kg}</td>
 
-                <td style="text-align:center;">
-                  <button onclick="update_cashsale('${sale._id}')"
-                    class="icon-btn come" title="Edit">
-                    <span class="material-icons-outlined">edit</span>
-                  </button>
+                    <td style="text-align:center;">
+                      <button onclick="update_cashsale('${sale._id}')"
+                        class="icon-btn come" title="Edit">
+                        <span class="material-icons-outlined">edit</span>
+                      </button>
 
-                  <button onclick="deleteUser('${sale._id}')"
-                    class="icon-btn delete" title="Delete">
-                    <span class="material-icons-outlined">delete</span>
-                  </button>
+                      <button onclick="deleteUser('${sale._id}')"
+                        class="icon-btn delete" title="Delete">
+                        <span class="material-icons-outlined">delete</span>
+                      </button>
 
-                  <button onclick="generateReceipt('${sale._id}')"
-                    class="icon-btn" title="Receipt">
-                    <span class="material-icons-outlined">receipt_long</span>
-                  </button>
-                </td>
+                      <button onclick="generateReceipt('${sale._id}')"
+                        class="icon-btn" title="Receipt">
+                        <span class="material-icons-outlined">receipt_long</span>
+                      </button>
+                    </td>
 
-                
-              </tr>
-            `;
+
+                  </tr>
+                `;
           });
 
           tableBody.innerHTML = innerHTML;
@@ -682,8 +693,8 @@
       }
 
       /* ========================================
-         DELETE CASH SALE
-      ======================================== */
+             DELETE CASH SALE
+          ======================================== */
 
       async function deleteUser(id) {
         const confirmation = confirm(
@@ -716,8 +727,8 @@
       }
 
       /* ========================================
-         EDIT CASH SALE
-      ======================================== */
+             EDIT CASH SALE
+          ======================================== */
 
       async function update_cashsale(Id) {
         try {

@@ -288,7 +288,7 @@
         <div class="manager-options">
           <ul>
             <li>
-              <a href="Karibu_DashBoard.html"
+              <a href="Karibu-ManagerDashboard.html"
                 ><span class="material-icons">dashboard</span>Main DashBoard</a
               >
             </li>
@@ -397,6 +397,17 @@
               />
             </div>
 
+            <!-- Dealer Contact - MISSING FROM FORM -->
+            <div class="input-box">
+              <label for="Dealer_Contact">Dealer Contact</label>
+              <input
+                type="tel"
+                id="Dealer_Contact"
+                placeholder="Eg 0761498549"
+                required
+              />
+            </div>
+
             <!-- Purchase Date -->
 
             <div class="input-box">
@@ -442,8 +453,9 @@
                   <th>Produce Tonnage (Kgs)</th>
                   <th>Buying Price (Ugx)</th>
                   <th>Dealer Name</th>
+                  <th>Dealer Contact</th>
                   <th>Date/ Time</th>
-                  <th>Karibu Branches</th>
+                  <th>Branches</th>
                   <th>Action</th>
                 </tr>
               </thead>
@@ -475,19 +487,36 @@
       // Select table body for procurement records
       const tableBody = document.querySelector('.recent tbody');
       let managerBranch = ''; // global variable
-      let employee_name = document.querySelector('#employee-name');
 
-      async function profile() {
-        let response = await fetch(`${API_URL}/api/users`);
-        let result = await response.json();
+      function profile() {
+        if (!token) {
+          alert('Not logged in');
+          window.location.href = 'login.html';
+          return;
+        }
 
-        result.data.forEach((user) => {
-          if (user.Role.includes('Manager')) {
-            employee_name.textContent = user.FirstName + ' ' + user.LastName;
-            managerBranch = user.Branch; // save the branch
-          }
-        });
+        // Decode JWT payload (middle part) without a library
+        const payload = JSON.parse(atob(token.split('.')[1]));
+
+        // Set the manager's name in the header
+        document.querySelector('#employee-name').textContent =
+          payload.firstName + ' ' + payload.lastName;
+        document.querySelector('.Avatar').textContent = (
+          payload.firstName[0] + payload.lastName[0]
+        ).toUpperCase();
+
+        // ✅ Set branch from the logged-in user's own token
+        managerBranch = payload.branch;
+
+        //✅ Auto-select and lock the branch dropdown
+        const branchSelect = document.querySelector('#country');
+        branchSelect.value = managerBranch;
+        branchSelect.disabled = true;
+
+        // Now load the table AFTER branch is set
+        Load_Procurement(); // or loadSales() on the sales pages
       }
+
       profile();
 
       /* =========================================
@@ -505,6 +534,9 @@
           ),
           Produce_Cost: Number(document.getElementById('cost').value),
           Dealer_Name: document.getElementById('Dealer_Name').value.trim(),
+          Dealer_Contact: document
+            .getElementById('Dealer_Contact')
+            .value.trim(),
           Branch: document.getElementById('country').value,
           Selling_price: document.getElementById('selling_price').value,
           Date_time:
@@ -528,8 +560,19 @@
           return;
         }
 
-        if (data.Produce_tonnage <= 1000) {
-          alert('Produce must be 1,000 or more');
+        if (data.Dealer_Name === 'Individual dealer') {
+          if (data.Tonnage < 1000) {
+            alert('Tonnage must be greater than 1000');
+          }
+        }
+
+        if (data.Produce_tonnage <= 100) {
+          alert('Produce must be 100 or more');
+          return;
+        }
+
+        if (data.Produce_Cost <= 10_000) {
+          alert('Produce cost must be 10000 or more');
           return;
         }
 
@@ -617,6 +660,7 @@
           </td>
           <td>${procurements.Produce_Cost.toLocaleString()}</td>
           <td>${procurements.Dealer_Name}</td>
+          <td>${procurements.Dealer_Contact}</td>
           <td>${new Date(procurements.Date_time).toISOString().split('T')[0]}</td>
           <td>${procurements.Branch}</td>
           <td style="text-align:right;">

@@ -132,6 +132,7 @@
         transition:
           box-shadow 0.2s,
           transform 0.2s;
+        margin-top: 30px;
       }
       .Panel-1:hover {
         box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
@@ -142,13 +143,15 @@
         display: flex;
         justify-content: space-between;
         align-items: flex-start;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #eee;
       }
       .card-label {
-        font-size: 10px;
+        font-size: 15px;
         font-weight: 700;
         text-transform: uppercase;
         letter-spacing: 1px;
-        color: #8a93a2;
+        color: #222324;
       }
       .card-icon {
         width: 38px;
@@ -190,54 +193,26 @@
       }
 
       .card-count {
-        font-family: 'DM Mono', monospace;
-        font-size: 38px;
+        font-size: 25px;
         font-weight: 500;
         color: #1e1e2f;
         line-height: 1;
       }
       .card-ugx {
-        font-family: 'DM Mono', monospace;
         font-size: 13px;
         font-weight: 500;
-        color: #8a93a2;
+        color: #303133;
       }
       .card-ugx span {
         color: #1e1e2f;
-        font-weight: 600;
+        margin-left: 15px;
+        font-weight: 500;
       }
       .card-footer {
-        font-size: 10px;
-        color: #d1d5db;
+        font-size: 12px;
+        color: #444547;
         font-weight: 500;
-        letter-spacing: 0.3px;
-      }
-
-      .recent {
-        grid-column: 1 / -1;
-        background: white;
-        padding: 20px;
-        border-radius: 10px;
-        margin-top: 2%;
-      }
-
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 5px;
-      }
-
-      th {
-        background-color: rgb(77, 192, 77);
-        text-align: left;
-        padding: 10px;
-        border-left: 2px solid #ddd;
-      }
-      td {
-        text-align: left;
-        padding: 10px;
-        border-bottom: 1px solid #ddd;
-        border-left: 2px solid #ddd;
+        letter-spacing: 0.5px;
       }
 
       .header-right {
@@ -412,7 +387,7 @@
             </li>
 
             <li>
-              <a href="Karibu_DashBoard.html"
+              <a href="index.html"
                 ><div class="material-icons">logout</div>
                 Log Out</a
               >
@@ -529,6 +504,10 @@
             managerBranch = user.Branch; // STORE MANAGER BRANCH
           }
         });
+
+        document.querySelector('.Avatar').textContent = (
+          payload.firstName[0] + payload.lastName[0]
+        ).toUpperCase();
       }
       profile();
 

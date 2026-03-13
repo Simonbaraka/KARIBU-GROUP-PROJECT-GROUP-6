@@ -420,7 +420,7 @@
                 type="text"
                 id="NIN"
                 name="UnitPrice"
-                placeholder="12345678901234"
+                placeholder="CM123456781234"
                 required
               />
             </div>
@@ -441,11 +441,7 @@
             <div class="input-box">
               <label for="Produce_Name">Produce Name/Type </label>
               <select id="Produce_Name" required>
-                <option>Select Produce</option>
-                <option>Grain Maize</option>
-                <option>Cow peas</option>
-                <option>Soybeans</option>
-                <option>Beans</option>
+                <option value="">Loading produce...</option>
               </select>
             </div>
 
@@ -550,7 +546,7 @@
 
         // ✅ Set branch from the logged-in user's own token
         managerBranch = payload.branch;
-
+        loadAvailableProduce();
         //✅ Auto-select and lock the branch dropdown
         const branchSelect = document.querySelector('#Branch');
         branchSelect.value = managerBranch;
@@ -603,9 +599,9 @@
           return;
         }
 
-        const ninRegex = /^[A-Z]{2}[0-9]{7}[A-Z]{1}[0-9]{1}$/;
+        const ninRegex = /^[A-Z]{2}[0-9]{12}/;
         if (!ninRegex.test(dataObject.National_ID)) {
-          alert('❌ Enter a valid National ID e.g. CM12345678PE');
+          alert('❌ Enter a valid National ID e.g. CM123456781234');
           return;
         }
 
@@ -800,6 +796,43 @@
         } catch (err) {
           console.error(err);
           alert('❌ Error loading record');
+        }
+      }
+
+      async function loadAvailableProduce() {
+        try {
+          const response = await fetch(`${API_URL}/api/procurement`, {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`,
+            },
+          });
+
+          const result = await response.json();
+
+          const select = document.querySelector('#Produce_Name');
+          select.innerHTML = '<option value="">Select Produce</option>';
+
+          // Filter only produce with stock > 0 and matching branch
+          const available = result.data.filter(
+            (item) => item.Produce_tonnage > 0 && item.Branch === managerBranch
+          );
+
+          if (available.length === 0) {
+            select.innerHTML = '<option value="">No produce in stock</option>';
+            return;
+          }
+
+          available.forEach((item) => {
+            const option = document.createElement('option');
+            option.value = item.Produce_name;
+            option.textContent = `${item.Produce_name} (${item.Produce_tonnage.toLocaleString()} kg available)`;
+            select.appendChild(option);
+          });
+        } catch (err) {
+          console.error('Failed to load produce:', err);
+          document.querySelector('#Produce_Name').innerHTML =
+            '<option value="">Failed to load produce</option>';
         }
       }
     </script>
